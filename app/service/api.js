@@ -51,3 +51,7 @@ export const requestBook = async (params) => {
 export const getBorrowedBooks = async (params) => {
   return await post("/api/borrowBook", params);
 };
+
+export const updateRequestBook = async (params) => {
+  return await post("/api/borrowBook/updateStatus", params);
+};

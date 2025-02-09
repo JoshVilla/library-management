@@ -1,6 +1,6 @@
 "use client";
 
-import { getBorrowedBooks } from "@/app/service/api";
+import { getBorrowedBooks, updateRequestBook } from "@/app/service/api";
 import TitlePage from "@/components/titlePage/titlePage";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -33,10 +33,15 @@ import { Badge } from "@/components/ui/badge";
 import { STATUS } from "@/utils/constant";
 import { format } from "date-fns";
 import { Ban } from "lucide-react";
+import Image from "next/image";
+import EmptyData from "@/components/empty-data/emptyData";
+import LoadingComp from "@/components/loading/loadingComp";
+import { useToast } from "@/hooks/use-toast";
 const Page = () => {
+  const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
   const [dataRequest, setDataRequest] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     try {
       const res = await getBorrowedBooks({ studentId: state._id });
@@ -44,7 +49,11 @@ const Page = () => {
       if (res.data) {
         setDataRequest(res.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderStatus = (val) => {
@@ -78,6 +87,21 @@ const Page = () => {
     const formattedDate = format(newDate, "MMM dd, yyyy");
 
     return <div>{formattedDate}</div>;
+  };
+
+  const handleCancelRequest = async (id) => {
+    try {
+      console.log(id);
+      const res = await updateRequestBook({ id, isApproved: 0 });
+      if (res) {
+        fetchData();
+        toast({
+          title: "Request Cancelled Successfully",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -126,22 +150,40 @@ const Page = () => {
                 <TableCell className="flex justify-center gap-6 items-center">
                   {request.isApproved === STATUS.APPROVED ||
                   request.isApproved === STATUS.CANCELLED ? null : (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Ban width={15} />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Cancel Borrow</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Ban width={15} />
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure want to cancel your request?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            cancelled your request.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction
+                            onClick={() => handleCancelRequest(request._id)}
+                          >
+                            Yes
+                          </AlertDialogAction>
+                          <AlertDialogCancel>
+                            No, I changed my mind
+                          </AlertDialogCancel>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        {dataRequest.length === 0 && !loading && <EmptyData />}
+        {loading && <LoadingComp />}
       </div>
     </div>
   );

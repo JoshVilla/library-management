@@ -13,6 +13,7 @@ const BorrowBooksSchema = new mongoose.Schema(
     bookId: { type: String, required: true },
     titleBook: { type: String, required: true },
     authorBook: { type: String, required: true },
+    reasonToChangeStatus: { type: String, default: "" },
   },
   { timestamps: true }
 );

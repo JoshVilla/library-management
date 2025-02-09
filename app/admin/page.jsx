@@ -25,7 +25,6 @@ export default function Home() {
           value,
         }));
         setData(result);
-        console.log(result);
       }
     } catch (error) {
       console.log(error);

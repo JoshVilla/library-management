@@ -2069,10 +2069,6 @@ video {
   background-color: hsl(var(--sidebar-accent));
 }
 
-.hover\:uppercase:hover {
-  text-transform: uppercase;
-}
-
 .hover\:text-accent-foreground:hover {
   color: hsl(var(--accent-foreground));
 }

@@ -1,5 +1,5 @@
 "use client";
-import { getBorrowedBooks } from "@/app/service/api";
+import { getBorrowedBooks, updateRequestBook } from "@/app/service/api";
 import Status from "@/components/status/status";
 import TitlePage from "@/components/titlePage/titlePage";
 import { Separator } from "@/components/ui/separator";
@@ -26,17 +26,26 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-const request = () => {
-  const form = useForm();
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+
+const Request = () => {
+  const { toast } = useToast();
   const params = useParams();
   const [requestDetails, setRequestDetails] = useState({});
-
-  const fethData = async () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const form = useForm({
+    defaultValues: {
+      isApproved: requestDetails.isApproved,
+      reasonToChangeStatus: "",
+    },
+  });
+  const fetchData = async () => {
     try {
       const res = await getBorrowedBooks({ id: params.id });
       if (res.data) {
         setRequestDetails(res.data[0]);
-        console.log(res.data[0]);
       }
     } catch (error) {
       console.log(error);
@@ -59,9 +68,28 @@ const request = () => {
     return `${formattedFromDate} - ${formattedToDate}`;
   };
 
+  const handleUpdate = async (data) => {
+    try {
+      setLoading(true);
+      const res = await updateRequestBook({ id: params.id, ...data });
+      if (res) {
+        fetchData();
+        setOpenModal(false);
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fethData();
-  }, []);
+    fetchData();
+  }, [params.id]);
 
   return (
     <div>
@@ -72,8 +100,8 @@ const request = () => {
             <div className="text-2xl font-semibold">Requested Book</div>
             <div className="flex items-center gap-2">
               <Status status={requestDetails.isApproved} />
-              {requestDetails.isApproved !== 1 && (
-                <Dialog>
+              {requestDetails.isApproved === 2 && (
+                <Dialog open={openModal} onOpenChange={setOpenModal}>
                   <DialogTrigger className="text-xs text-blue-500 hover:underline">
                     Change Status
                   </DialogTrigger>
@@ -82,10 +110,10 @@ const request = () => {
                       <DialogTitle>Change Status</DialogTitle>
                       <Separator />
                       <Form {...form}>
-                        <form>
+                        <form onSubmit={form.handleSubmit(handleUpdate)}>
                           <FormField
                             control={form.control}
-                            name="type"
+                            name="isApproved"
                             render={({ field }) => (
                               <FormItem className="space-y-3 mt-4">
                                 <FormControl>
@@ -94,14 +122,14 @@ const request = () => {
                                     defaultValue={requestDetails.isApproved}
                                     className="flex flex-col space-y-1"
                                   >
-                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                    {/* <FormItem className="flex items-center space-x-3 space-y-0">
                                       <FormControl>
                                         <RadioGroupItem value={2} />
                                       </FormControl>
                                       <FormLabel className="font-normal">
                                         Pending
                                       </FormLabel>
-                                    </FormItem>
+                                    </FormItem> */}
                                     <FormItem className="flex items-center space-x-3 space-y-0">
                                       <FormControl>
                                         <RadioGroupItem value={1} />
@@ -124,11 +152,30 @@ const request = () => {
                               </FormItem>
                             )}
                           />
+                          <FormField
+                            key="reasonToChangeStatus"
+                            control={form.control}
+                            name="reasonToChangeStatus"
+                            render={({
+                              field: { onChange, value, ...fieldProps },
+                            }) => (
+                              <FormItem className="mt-6">
+                                <FormLabel>Reason</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    onChange={(e) => onChange(e.target.value)}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <DialogFooter>
+                            <Button type="submit" className="mt-4">
+                              {loading ? "Saving..." : "Save changes"}
+                            </Button>
+                          </DialogFooter>
                         </form>
                       </Form>
-                      <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                      </DialogFooter>
                     </DialogHeader>
                   </DialogContent>
                 </Dialog>
@@ -176,4 +223,4 @@ const request = () => {
   );
 };
 
-export default request;
+export default Request;
