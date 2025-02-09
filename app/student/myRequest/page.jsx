@@ -50,6 +50,7 @@ const Page = () => {
     init: true,
     delete: false,
   });
+  const [dataId, setDataId] = useState(""); // use for loading in deleting a data
   const fetchData = async () => {
     try {
       const res = await getBorrowedBooks({ studentId: state._id });
@@ -99,7 +100,6 @@ const Page = () => {
 
   const handleCancelRequest = async (id) => {
     try {
-      console.log(id);
       const res = await updateRequestBook({ id, isApproved: 0 });
       if (res) {
         fetchData();
@@ -114,6 +114,7 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
+      setDataId(id);
       setLoadingState((prev) => ({ ...prev, delete: true }));
       const res = await deleteRequest({ id });
       if (res) {
@@ -126,6 +127,7 @@ const Page = () => {
     } catch (error) {
       console.log(error);
     } finally {
+      setDataId("");
       setLoadingState((prev) => ({ ...prev, delete: true }));
     }
   };
@@ -210,32 +212,41 @@ const Page = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Trash width={15} fill={true} />{" "}
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure want to delete your request?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your request from the database.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogAction
-                          onClick={() => handleDelete(request._id)}
-                        >
-                          Yes
-                        </AlertDialogAction>
-                        <AlertDialogCancel>
-                          No, I changed my mind
-                        </AlertDialogCancel>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  {dataId === request._id ? (
+                    <Image
+                      src={"/assets/Loading.gif"}
+                      width={10}
+                      height={10}
+                      alt="loading"
+                    />
+                  ) : (
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Trash width={15} fill="true" />{" "}
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure want to delete your request?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your request from the database.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(request._id)}
+                          >
+                            Yes
+                          </AlertDialogAction>
+                          <AlertDialogCancel>
+                            No, I changed my mind
+                          </AlertDialogCancel>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
