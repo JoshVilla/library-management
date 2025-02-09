@@ -20,14 +20,27 @@ import { getBooks } from "@/app/service/api";
 import { Badge } from "@/components/ui/badge";
 import { Hand } from "lucide-react";
 import { useRouter } from "next/navigation";
+import SearchForm from "@/components/searchForm/searchForm";
+import { searchProps } from "./searchBooksProps";
+import Image from "next/image";
+import PaginationComponent from "@/components/pagination/Pagination";
 const Page = () => {
   const [dataBooks, setDataBooks] = useState([]);
+  const [pageState, setPageState] = useState({
+    currentPage: 1,
+    totalPage: 0,
+  });
   const router = useRouter();
   const fetchData = async (params = {}) => {
     try {
       const res = await getBooks(params);
       if (res) {
         setDataBooks(res.data);
+        console.log(res.pagination);
+        setPageState({
+          currentPage: res.pagination.currentPage,
+          totalPage: res.pagination.totalPages,
+        });
       }
     } catch (error) {
       console.log(res);
@@ -41,21 +54,46 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="List of Books" />
-      <Table className="mt-10">
+      <SearchForm
+        api={fetchData}
+        result={setDataBooks}
+        searchProps={searchProps}
+      />
+      <Table className="mt-6">
         <TableHeader>
           <TableRow>
-            {["Title", "Author", "Category", "Quantity", "Actions"].map(
-              (heading) => (
-                <TableHead key={heading} className="uppercase text-center">
-                  {heading}
-                </TableHead>
-              )
-            )}
+            {[
+              "Book Cover",
+              "Title",
+              "Author",
+              "Category",
+              "Quantity",
+              "Actions",
+            ].map((heading) => (
+              <TableHead key={heading} className="uppercase text-center">
+                {heading}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {dataBooks.map((book) => (
             <TableRow key={book._id}>
+              <TableCell className="text-center">
+                <div className="flex justify-center">
+                  <Image
+                    src={
+                      book.pictureUrl
+                        ? book.pictureUrl
+                        : "/assets/book-placeholder.png"
+                    }
+                    width={50} // Adjust as needed
+                    height={50}
+                    alt="Book Cover"
+                    className="max-w-[50px] max-h-[30px] object-contain"
+                  />
+                </div>
+              </TableCell>
               <TableCell className="text-center">{book.title}</TableCell>
               <TableCell className="text-center">{book.author}</TableCell>
               <TableCell className="text-center">
@@ -81,6 +119,15 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
+      <div className="mt-10">
+        <PaginationComponent
+          pageState={pageState}
+          onChangePage={(page) => {
+            fetchData({ page });
+            setPageState((prev) => ({ currentPage: page, ...prev }));
+          }}
+        />
+      </div>
     </div>
   );
 };

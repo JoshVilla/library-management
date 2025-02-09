@@ -1,7 +1,19 @@
-import Navbar from "@/components/navbar/navbar";
 import Sidebar from "@/components/sidebar/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { menuProps, sidebarTitle } from "./menuProps";
+import { DoorOpen } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Link from "next/link";
 
 export const metadata = {
   title: "Create Next App",
@@ -12,9 +24,33 @@ export default function RootLayout({ children }) {
   return (
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
-      <div className="flex-1 p-6">
-        <div className="p-4 bg-[#f9f9f9] flex justify-start items-end">
-          asdsad
+      <div className="flex-1 p-4">
+        <div className="p-4 bg-[#f9f9f9] flex justify-end items-end mb-10">
+          <div className="flex hover:underline cursor-pointer">
+            <AlertDialog>
+              <AlertDialogTrigger className="flex">
+                <DoorOpen />
+                <div>Logout</div>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to logout?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    You will be signed out of your account. Any unsaved changes
+                    will be lost. Do you want to proceed with logging out?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>
+                    <Link href="/">Logout</Link>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
         {children}
       </div>

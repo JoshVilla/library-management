@@ -112,23 +112,17 @@ const Page = () => {
           <div className="flex-1">
             <div className="text-xl font-semibold mb-10">Book Information</div>
             <div className="flex">
-              {bookInfo?.pictureUrl ? (
-                <Image
-                  src={bookInfo?.pictureUrl}
-                  width={40}
-                  height={40}
-                  alt="book-cover"
-                />
-              ) : (
-                <Image
-                  src="/assets/book-placeholder.png"
-                  width={400}
-                  height={400}
-                  alt="book-cover"
-                  className="max-w-[200px] max-h-[200px] object-contain"
-                />
-              )}
-              <div className="flex flex-col gap-4 p-2">
+              <Image
+                src={
+                  bookInfo?.pictureUrl
+                    ? bookInfo?.pictureUrl
+                    : "/assets/book-placeholder.png"
+                }
+                width={200}
+                height={200}
+                alt="book-cover"
+              />
+              <div className="flex flex-col gap-4 p-2 ml-10">
                 <div>
                   <Badge>{bookInfo?.category}</Badge>
                 </div>

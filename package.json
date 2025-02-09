@@ -46,7 +46,6 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.5.2",
     "formidable": "^3.5.2",
-    "fs": "^0.0.1-security",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.474.0",
     "mongoose": "^8.9.6",

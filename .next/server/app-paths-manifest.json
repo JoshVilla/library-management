@@ -1,10 +1,15 @@
 {
-  "/api/book/route": "app/api/book/route.js",
-  "/api/requestBook/deleteRequest/route": "app/api/requestBook/deleteRequest/route.js",
   "/api/borrowBook/route": "app/api/borrowBook/route.js",
+  "/api/login/route": "app/api/login/route.js",
+  "/api/book/route": "app/api/book/route.js",
+  "/api/requestBook/route": "app/api/requestBook/route.js",
+  "/api/borrowBook/updateStatus/route": "app/api/borrowBook/updateStatus/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/page": "app/page.js",
+  "/student/page": "app/student/page.js",
   "/student/myRequest/page": "app/student/myRequest/page.js",
-  "/student/books/page": "app/student/books/page.js",
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js",
   "/student/books/[id]/page": "app/student/books/[id]/page.js",
-  "/student/page": "app/student/page.js"
+  "/admin/page": "app/admin/page.js",
+  "/student/books/page": "app/student/books/page.js"
 }
