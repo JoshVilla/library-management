@@ -20,6 +20,7 @@ import { STATUS } from "@/utils/constant";
 import { Badge } from "@/components/ui/badge";
 import { Bolt, View } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { isExpired } from "@/utils/helpers";
 
 const RequestTable = () => {
   const router = useRouter();
@@ -96,7 +97,11 @@ const RequestTable = () => {
                 {renderDate(request.createdAt)}
               </TableCell>
               <TableCell className="text-center">
-                {renderStatus(request.isApproved)}
+                {isExpired(request.fromDate) ? (
+                  <Badge variant="destructive">Expired</Badge>
+                ) : (
+                  renderStatus(request.isApproved)
+                )}
               </TableCell>
               <TableCell className="flex justify-center items-center gap-4">
                 <TooltipProvider>

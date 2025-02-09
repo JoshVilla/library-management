@@ -37,6 +37,7 @@ import Image from "next/image";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import { useToast } from "@/hooks/use-toast";
+import { isExpired } from "@/utils/helpers";
 const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
@@ -139,7 +140,13 @@ const Page = () => {
                   {request.authorBook}
                 </TableCell>
                 <TableCell className="text-center">
-                  {renderStatus(request.isApproved)}
+                  {/* If the borrowed date is passed the current date, 
+                  it means that it is already expired */}
+                  {isExpired(request.fromDate) ? (
+                    <Badge variant="destructive">Expired</Badge>
+                  ) : (
+                    renderStatus(request.isApproved)
+                  )}
                 </TableCell>
                 <TableCell className="text-center">
                   {renderDateRange(request.fromDate, request.toDate)}

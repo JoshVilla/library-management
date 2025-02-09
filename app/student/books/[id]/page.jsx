@@ -43,6 +43,7 @@ const Page = () => {
   const [bookInfo, setBookInfo] = useState({});
   const [loadingState, setLoadingState] = useState({
     init: true,
+    borrowing: false,
   });
 
   const fetchBook = async () => {
@@ -64,6 +65,7 @@ const Page = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoadingState((prev) => ({ ...prev, borrowing: true }));
       const borrowParams = {
         ...data,
         bookId: params.id,
@@ -81,9 +83,12 @@ const Page = () => {
           title: res.message,
           className: "bg-black text-white",
         });
+        form.reset();
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingState((prev) => ({ ...prev, borrowing: false }));
     }
   };
 
@@ -248,7 +253,9 @@ const Page = () => {
                 </div>
 
                 <Button type="submit" className="mt-4">
-                  Submit Borrow Request
+                  {loadingState.borrowing
+                    ? "Submitting Request..."
+                    : "Submit Borrow Request"}
                 </Button>
               </form>
             </Form>

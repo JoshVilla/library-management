@@ -53,3 +53,7 @@ export const renderDate = (date) => {
   const newDate = new Date(date);
   return format(newDate, "MMM dd, yyyy");
 };
+
+export const isExpired = (fromDate) => {
+  return new Date(fromDate).getTime() < new Date().setHours(0, 0, 0, 0);
+};

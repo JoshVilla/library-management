@@ -28,6 +28,8 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { isExpired } from "@/utils/helpers";
+import { Badge } from "@/components/ui/badge";
 
 const Request = () => {
   const { toast } = useToast();
@@ -98,31 +100,34 @@ const Request = () => {
         <div className="w-full">
           <div className=" mb-4 flex items-center w-full justify-between">
             <div className="text-2xl font-semibold">Requested Book</div>
-            <div className="flex items-center gap-2">
-              <Status status={requestDetails.isApproved} />
-              {requestDetails.isApproved === 2 && (
-                <Dialog open={openModal} onOpenChange={setOpenModal}>
-                  <DialogTrigger className="text-xs text-blue-500 hover:underline">
-                    Change Status
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Change Status</DialogTitle>
-                      <Separator />
-                      <Form {...form}>
-                        <form onSubmit={form.handleSubmit(handleUpdate)}>
-                          <FormField
-                            control={form.control}
-                            name="isApproved"
-                            render={({ field }) => (
-                              <FormItem className="space-y-3 mt-4">
-                                <FormControl>
-                                  <RadioGroup
-                                    onValueChange={field.onChange}
-                                    defaultValue={requestDetails.isApproved}
-                                    className="flex flex-col space-y-1"
-                                  >
-                                    {/* <FormItem className="flex items-center space-x-3 space-y-0">
+            {isExpired(requestDetails.fromDate) ? (
+              <Badge variant="destructive">Expired</Badge>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Status status={requestDetails.isApproved} />
+                {requestDetails.isApproved === 2 && (
+                  <Dialog open={openModal} onOpenChange={setOpenModal}>
+                    <DialogTrigger className="text-xs text-blue-500 hover:underline">
+                      Change Status
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Change Status</DialogTitle>
+                        <Separator />
+                        <Form {...form}>
+                          <form onSubmit={form.handleSubmit(handleUpdate)}>
+                            <FormField
+                              control={form.control}
+                              name="isApproved"
+                              render={({ field }) => (
+                                <FormItem className="space-y-3 mt-4">
+                                  <FormControl>
+                                    <RadioGroup
+                                      onValueChange={field.onChange}
+                                      defaultValue={requestDetails.isApproved}
+                                      className="flex flex-col space-y-1"
+                                    >
+                                      {/* <FormItem className="flex items-center space-x-3 space-y-0">
                                       <FormControl>
                                         <RadioGroupItem value={2} />
                                       </FormControl>
@@ -130,57 +135,58 @@ const Request = () => {
                                         Pending
                                       </FormLabel>
                                     </FormItem> */}
-                                    <FormItem className="flex items-center space-x-3 space-y-0">
-                                      <FormControl>
-                                        <RadioGroupItem value={1} />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        Approve
-                                      </FormLabel>
-                                    </FormItem>
-                                    <FormItem className="flex items-center space-x-3 space-y-0">
-                                      <FormControl>
-                                        <RadioGroupItem value={0} />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        Cancel
-                                      </FormLabel>
-                                    </FormItem>
-                                  </RadioGroup>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            key="reasonToChangeStatus"
-                            control={form.control}
-                            name="reasonToChangeStatus"
-                            render={({
-                              field: { onChange, value, ...fieldProps },
-                            }) => (
-                              <FormItem className="mt-6">
-                                <FormLabel>Reason</FormLabel>
-                                <FormControl>
-                                  <Textarea
-                                    onChange={(e) => onChange(e.target.value)}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                          <DialogFooter>
-                            <Button type="submit" className="mt-4">
-                              {loading ? "Saving..." : "Save changes"}
-                            </Button>
-                          </DialogFooter>
-                        </form>
-                      </Form>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
-              )}
-            </div>
+                                      <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormControl>
+                                          <RadioGroupItem value={1} />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                          Approve
+                                        </FormLabel>
+                                      </FormItem>
+                                      <FormItem className="flex items-center space-x-3 space-y-0">
+                                        <FormControl>
+                                          <RadioGroupItem value={0} />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                          Cancel
+                                        </FormLabel>
+                                      </FormItem>
+                                    </RadioGroup>
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              key="reasonToChangeStatus"
+                              control={form.control}
+                              name="reasonToChangeStatus"
+                              render={({
+                                field: { onChange, value, ...fieldProps },
+                              }) => (
+                                <FormItem className="mt-6">
+                                  <FormLabel>Reason</FormLabel>
+                                  <FormControl>
+                                    <Textarea
+                                      onChange={(e) => onChange(e.target.value)}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                            <DialogFooter>
+                              <Button type="submit" className="mt-4">
+                                {loading ? "Saving..." : "Save changes"}
+                              </Button>
+                            </DialogFooter>
+                          </form>
+                        </Form>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
+            )}
             <div className="text-gray-500 text-sm">
               Requested last: {renderDate(requestDetails.createdAt)}
             </div>
