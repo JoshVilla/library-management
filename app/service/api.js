@@ -1,0 +1,53 @@
+import { post } from "./service";
+
+export const getStudents = async (params) => {
+  return await post("/api/admin", params);
+};
+
+export const addStudents = async (params) => {
+  return await post("/api/admin/addAdmin", params);
+};
+
+export const deleteStudent = async (params) => {
+  return await post("/api/admin/deleteStudent", params);
+};
+
+export const getBooks = async (params) => {
+  return await post("/api/book", params);
+};
+
+export const addBook = async (params, hasFormData) => {
+  return await post("/api/book/addBook", params, hasFormData);
+};
+
+export const deleteBook = async (params) => {
+  return await post("/api/book/deleteBook", params);
+};
+
+export const testUpload = async (params, isFileUpload) => {
+  return await post("/api/test/testUpload", params, isFileUpload);
+};
+
+export const updateBook = async (params, hasFormData) => {
+  return await post("/api/book/editBook", params, hasFormData);
+};
+
+export const dashboard = async () => {
+  return await post("/api/dashboard");
+};
+
+export const login = async (params) => {
+  return await post("/api/login", params);
+};
+
+export const register = async (params) => {
+  return await post("/api/register", params);
+};
+
+export const requestBook = async (params) => {
+  return await post("/api/requestBook", params);
+};
+
+export const getBorrowedBooks = async (params) => {
+  return await post("/api/borrowBook", params);
+};
