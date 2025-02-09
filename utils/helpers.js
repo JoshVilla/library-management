@@ -1,6 +1,7 @@
 // helpers.js
 import cloudinary from "@/lib/cloudinaryConfig";
 import { connectToDatabase } from "@/lib/mongodb";
+import { format } from "date-fns";
 
 export const getCloudinaryPublicId = (url) => {
   if (!url) return null;
@@ -46,4 +47,9 @@ export const replaceNewImagefromCurrentImage = async (collection, id) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const renderDate = (date) => {
+  const newDate = new Date(date);
+  return format(newDate, "MMM dd, yyyy");
 };

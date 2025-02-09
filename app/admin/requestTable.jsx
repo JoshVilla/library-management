@@ -36,7 +36,6 @@ const RequestTable = () => {
   const fetchData = async () => {
     try {
       const res = await getBorrowedBooks();
-      console.log(res.data);
       if (res.data) {
         setRequestData(res.data);
       }

@@ -1,4 +1,7 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js"
+  "/api/borrowBook/route": "app/api/borrowBook/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/page": "app/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js"
 }
