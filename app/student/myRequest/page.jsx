@@ -1,6 +1,10 @@
 "use client";
 
-import { getBorrowedBooks, updateRequestBook } from "@/app/service/api";
+import {
+  deleteRequest,
+  getBorrowedBooks,
+  updateRequestBook,
+} from "@/app/service/api";
 import TitlePage from "@/components/titlePage/titlePage";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -32,7 +36,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { STATUS } from "@/utils/constant";
 import { format } from "date-fns";
-import { Ban } from "lucide-react";
+import { Ban, Trash } from "lucide-react";
 import Image from "next/image";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
@@ -42,7 +46,10 @@ const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
   const [dataRequest, setDataRequest] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingState, setLoadingState] = useState({
+    init: true,
+    delete: false,
+  });
   const fetchData = async () => {
     try {
       const res = await getBorrowedBooks({ studentId: state._id });
@@ -53,7 +60,7 @@ const Page = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setLoadingState((prev) => ({ ...prev, init: false }));
     }
   };
 
@@ -102,6 +109,24 @@ const Page = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setLoadingState((prev) => ({ ...prev, delete: true }));
+      const res = await deleteRequest({ id });
+      if (res) {
+        fetchData();
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingState((prev) => ({ ...prev, delete: true }));
     }
   };
 
@@ -155,7 +180,8 @@ const Page = () => {
                   {renderDate(request.createdAt)}
                 </TableCell>
                 <TableCell className="flex justify-center gap-6 items-center">
-                  {request.isApproved === STATUS.APPROVED ||
+                  {isExpired(request.fromDate) ||
+                  request.isApproved === STATUS.APPROVED ||
                   request.isApproved === STATUS.CANCELLED ? null : (
                     <AlertDialog>
                       <AlertDialogTrigger>
@@ -184,13 +210,39 @@ const Page = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Trash width={15} fill={true} />{" "}
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure want to delete your request?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your request from the database.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(request._id)}
+                        >
+                          Yes
+                        </AlertDialogAction>
+                        <AlertDialogCancel>
+                          No, I changed my mind
+                        </AlertDialogCancel>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        {dataRequest.length === 0 && !loading && <EmptyData />}
-        {loading && <LoadingComp />}
+        {dataRequest.length === 0 && !loadingState.init && <EmptyData />}
+        {loadingState.init && <LoadingComp />}
       </div>
     </div>
   );

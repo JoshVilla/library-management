@@ -13,7 +13,9 @@ export default function RootLayout({ children }) {
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="flex-1 p-6">
-        <Navbar />
+        <div className="p-4 bg-[#f9f9f9] flex justify-start items-end">
+          asdsad
+        </div>
         {children}
       </div>
       <Toaster />

@@ -55,3 +55,7 @@ export const getBorrowedBooks = async (params) => {
 export const updateRequestBook = async (params) => {
   return await post("/api/borrowBook/updateStatus", params);
 };
+
+export const deleteRequest = async (params) => {
+  return await post("/api/requestBook/deleteRequest", params);
+};

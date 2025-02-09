@@ -129,15 +129,15 @@ const Page = () => {
                 />
               )}
               <div className="flex flex-col gap-4 p-2">
+                <div>
+                  <Badge>{bookInfo?.category}</Badge>
+                </div>
                 <div className="text-2xl font-bold">{bookInfo?.title}</div>
                 <div className="text-lg font-semibold">
                   By: {bookInfo?.author}
                 </div>
                 <div className="max-w-[500px] text-sm text-gray-500">
                   {bookInfo?.description}
-                </div>
-                <div>
-                  <Badge>{bookInfo?.category}</Badge>
                 </div>
                 <div className="text-sm">
                   Item Available: {bookInfo?.quantity}
@@ -248,8 +248,17 @@ const Page = () => {
                   )}
                 />
                 <div className="text-sm text-gray-500">
-                  Note: Your request must be approved by the librarian before
-                  you can collect the book.
+                  Note:
+                  <ul>
+                    <li>
+                      Your request must be approved by the librarian before you
+                      can collect the book.
+                    </li>
+                    <li>
+                      Your request will automatically expire if it is earlier
+                      than today's date.
+                    </li>
+                  </ul>
                 </div>
 
                 <Button type="submit" className="mt-4">

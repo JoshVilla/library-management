@@ -26,16 +26,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/student/page.js"
     ],
-    "/student/books/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/books/page.js"
-    ],
-    "/api/book/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/book/route.js"
-    ],
     "/student/myRequest/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -46,25 +36,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/borrowBook/route.js"
     ],
-    "/admin/layout": [
+    "/student/books/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/layout.js"
+      "static/chunks/app/student/books/page.js"
     ],
-    "/admin/page": [
+    "/api/book/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
+      "static/chunks/app/api/book/route.js"
     ],
-    "/api/dashboard/route": [
+    "/student/books/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/dashboard/route.js"
+      "static/chunks/app/student/books/[id]/page.js"
     ],
-    "/admin/studentRequest/[id]/page": [
+    "/api/borrowBook/updateStatus/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/studentRequest/[id]/page.js"
+      "static/chunks/app/api/borrowBook/updateStatus/route.js"
+    ],
+    "/api/requestBook/deleteRequest/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/requestBook/deleteRequest/route.js"
     ]
   }
 }
