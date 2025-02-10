@@ -6,30 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/layout.js"
-    ],
-    "/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
-    ],
-    "/api/borrowBook/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/borrowBook/route.js"
-    ],
-    "/api/dashboard/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/dashboard/route.js"
     ],
     "/admin/announcements/page": [
       "static/chunks/webpack.js",
@@ -41,15 +21,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/announcement/route.js"
     ],
+    "/api/announcement/deleteAnnouncement/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/announcement/deleteAnnouncement/route.js"
+    ],
     "/api/announcement/addAnnouncement/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/announcement/addAnnouncement/route.js"
     ],
-    "/api/announcement/deleteAnnouncement/route": [
+    "/api/announcement/updateAnnouncement/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/announcement/deleteAnnouncement/route.js"
+      "static/chunks/app/api/announcement/updateAnnouncement/route.js"
     ]
   }
 }

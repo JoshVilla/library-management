@@ -71,3 +71,6 @@ export const addAnnouncement = async (params) => {
 export const deleteAnnouncement = async (params) => {
   return await post("/api/announcement/deleteAnnouncement", params);
 };
+export const updateAnnouncement = async (params) => {
+  return await post("/api/announcement/updateAnnouncement", params);
+};

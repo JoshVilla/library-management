@@ -1,7 +1,5 @@
 {
-  "/api/announcement/addAnnouncement/route": "app/api/announcement/addAnnouncement/route.js",
+  "/api/announcement/updateAnnouncement/route": "app/api/announcement/updateAnnouncement/route.js",
   "/api/announcement/route": "app/api/announcement/route.js",
-  "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js",
   "/admin/announcements/page": "app/admin/announcements/page.js"
 }

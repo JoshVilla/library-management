@@ -796,6 +796,9 @@ video {
 .mt-auto {
   margin-top: auto;
 }
+.mt-3 {
+  margin-top: 0.75rem;
+}
 .block {
   display: block;
 }
@@ -1004,6 +1007,9 @@ video {
 .w-px {
   width: 1px;
 }
+.w-\[80\%\] {
+  width: 80%;
+}
 .min-w-0 {
   min-width: 0px;
 }
@@ -1040,26 +1046,20 @@ video {
 .max-w-\[50px\] {
   max-width: 50px;
 }
+.max-w-\[550px\] {
+  max-width: 550px;
+}
 .max-w-lg {
   max-width: 32rem;
 }
 .max-w-max {
   max-width: max-content;
 }
-.max-w-96 {
-  max-width: 24rem;
+.max-w-\[40\%\] {
+  max-width: 40%;
 }
-.max-w-56 {
-  max-width: 14rem;
-}
-.max-w-\[600px\] {
-  max-width: 600px;
-}
-.max-w-\[400px\] {
-  max-width: 400px;
-}
-.max-w-\[550px\] {
-  max-width: 550px;
+.max-w-\[80\%\] {
+  max-width: 80%;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1274,19 +1274,8 @@ video {
 .overflow-y-scroll {
   overflow-y: scroll;
 }
-.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .whitespace-nowrap {
   white-space: nowrap;
-}
-.text-wrap {
-  text-wrap: wrap;
-}
-.text-nowrap {
-  text-wrap: nowrap;
 }
 .break-words {
   overflow-wrap: break-word;
@@ -1500,11 +1489,11 @@ video {
 .p-6 {
   padding: 1.5rem;
 }
-.p-\[1px\] {
-  padding: 1px;
-}
 .p-8 {
   padding: 2rem;
+}
+.p-\[1px\] {
+  padding: 1px;
 }
 .px-1 {
   padding-left: 0.25rem;
@@ -2123,6 +2112,11 @@ video {
 
 .hover\:text-sidebar-accent-foreground:hover {
   color: hsl(var(--sidebar-accent-foreground));
+}
+
+.hover\:text-red-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity, 1));
 }
 
 .hover\:underline:hover {
@@ -3028,6 +3022,10 @@ video {
     border-radius: var(--radius);
   }
 
+  .sm\:p-6 {
+    padding: 1.5rem;
+  }
+
   .sm\:text-left {
     text-align: left;
   }
@@ -3061,6 +3059,10 @@ video {
 
   .md\:max-w-\[420px\] {
     max-width: 420px;
+  }
+
+  .md\:p-8 {
+    padding: 2rem;
   }
 
   .md\:text-sm {
@@ -3097,6 +3099,13 @@ video {
     --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .lg\:flex-row {
+    flex-direction: row;
   }
 }
 
