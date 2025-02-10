@@ -1061,6 +1061,15 @@ video {
 .max-w-\[80\%\] {
   max-width: 80%;
 }
+.max-w-28 {
+  max-width: 7rem;
+}
+.max-w-96 {
+  max-width: 24rem;
+}
+.max-w-\[400px\] {
+  max-width: 400px;
+}
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -3063,6 +3072,10 @@ video {
 
   .md\:p-8 {
     padding: 2rem;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:text-sm {

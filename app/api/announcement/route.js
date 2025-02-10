@@ -6,7 +6,7 @@ export async function POST(req) {
     await connectToDatabase();
 
     // Parse request body for pagination
-    const { page = 1, limit = 10 } = await req.json();
+    const { page = 1, limit = 5 } = await req.json();
     const pageNumber = Math.max(1, parseInt(page, 10));
     const limitNumber = Math.max(1, parseInt(limit, 10));
 
