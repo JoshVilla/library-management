@@ -67,3 +67,7 @@ export const getAnnouncement = async (params) => {
 export const addAnnouncement = async (params) => {
   return await post("/api/announcement/addAnnouncement", params);
 };
+
+export const deleteAnnouncement = async (params) => {
+  return await post("/api/announcement/deleteAnnouncement", params);
+};

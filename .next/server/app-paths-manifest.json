@@ -1,8 +1,7 @@
 {
-  "/api/borrowBook/route": "app/api/borrowBook/route.js",
+  "/api/announcement/addAnnouncement/route": "app/api/announcement/addAnnouncement/route.js",
   "/api/announcement/route": "app/api/announcement/route.js",
-  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/page": "app/page.js",
-  "/admin/announcements/page": "app/admin/announcements/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/admin/page": "app/admin/page.js",
+  "/admin/announcements/page": "app/admin/announcements/page.js"
 }

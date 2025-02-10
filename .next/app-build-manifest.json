@@ -40,6 +40,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/announcement/route.js"
+    ],
+    "/api/announcement/addAnnouncement/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/announcement/addAnnouncement/route.js"
+    ],
+    "/api/announcement/deleteAnnouncement/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/announcement/deleteAnnouncement/route.js"
     ]
   }
 }
