@@ -6,12 +6,25 @@ export async function POST(req) {
     await connectToDatabase();
 
     const body = await req.json(); // ✅ Await JSON parsing
-    const { studentId, page = 1, limit = 5, id } = body; // Extract studentId, page, and limit
+    const {
+      studentId,
+      page = 1,
+      limit = 5,
+      id,
+      authorBook,
+      titleBook,
+      isApproved,
+    } = body; // Extract studentId, page, and limit
 
     let params = {};
     if (studentId) params.studentId = studentId;
     if (id) params._id = id;
-
+    if (authorBook) params.authorBook = authorBook;
+    if (titleBook) params.titleBook = titleBook;
+    if (isApproved) {
+      params.isApproved = isApproved;
+    }
+    console.log(typeof isApproved === "string" ? +isApproved : isApproved);
     // Convert page and limit to integers
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);

@@ -42,6 +42,8 @@ import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import { useToast } from "@/hooks/use-toast";
 import { isExpired } from "@/utils/helpers";
+import SearchForm from "@/components/searchForm/searchForm";
+import { searchProps } from "./searchProps";
 const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
@@ -51,9 +53,9 @@ const Page = () => {
     delete: false,
   });
   const [dataId, setDataId] = useState(""); // use for loading in deleting a data
-  const fetchData = async () => {
+  const fetchData = async (params = {}) => {
     try {
-      const res = await getBorrowedBooks({ studentId: state._id });
+      const res = await getBorrowedBooks({ studentId: state._id, ...params });
       console.log(res.data);
       if (res.data) {
         setDataRequest(res.data);
@@ -140,7 +142,12 @@ const Page = () => {
     <div>
       <TitlePage title="My Request" />
       <div>
-        <Table className="mt-10">
+        {/* <SearchForm
+          searchProps={searchProps}
+          api={fetchData}
+          result={setDataRequest}
+        /> */}
+        <Table className="mt-6">
           <TableHeader>
             <TableRow>
               {[

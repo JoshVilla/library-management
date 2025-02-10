@@ -6,6 +6,10 @@ export const menuProps = [
     path: "/admin/",
   },
   {
+    label: "Announcements",
+    path: "/admin/announcements",
+  },
+  {
     label: "Students",
     path: "/admin/students",
   },

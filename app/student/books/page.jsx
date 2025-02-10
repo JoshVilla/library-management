@@ -24,19 +24,21 @@ import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchBooksProps";
 import Image from "next/image";
 import PaginationComponent from "@/components/pagination/Pagination";
+import EmptyData from "@/components/empty-data/emptyData";
+import LoadingComp from "@/components/loading/loadingComp";
 const Page = () => {
   const [dataBooks, setDataBooks] = useState([]);
   const [pageState, setPageState] = useState({
     currentPage: 1,
     totalPage: 0,
   });
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const fetchData = async (params = {}) => {
     try {
       const res = await getBooks(params);
       if (res) {
         setDataBooks(res.data);
-        console.log(res.pagination);
         setPageState({
           currentPage: res.pagination.currentPage,
           totalPage: res.pagination.totalPages,
@@ -44,6 +46,8 @@ const Page = () => {
       }
     } catch (error) {
       console.log(res);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,11 +58,11 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="List of Books" />
-      <SearchForm
+      {/* <SearchForm
         api={fetchData}
         result={setDataBooks}
         searchProps={searchProps}
-      />
+      /> */}
       <Table className="mt-6">
         <TableHeader>
           <TableRow>
@@ -119,15 +123,19 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
-      <div className="mt-10">
-        <PaginationComponent
-          pageState={pageState}
-          onChangePage={(page) => {
-            fetchData({ page });
-            setPageState((prev) => ({ currentPage: page, ...prev }));
-          }}
-        />
-      </div>
+      {!loading && dataBooks.length === 0 && <EmptyData />}
+      {loading && <LoadingComp />}
+      {dataBooks.length > 1 && (
+        <div className="mt-10">
+          <PaginationComponent
+            pageState={pageState}
+            onChangePage={(page) => {
+              fetchData({ page });
+              setPageState((prev) => ({ currentPage: page, ...prev }));
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

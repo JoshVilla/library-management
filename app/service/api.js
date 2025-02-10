@@ -59,3 +59,11 @@ export const updateRequestBook = async (params) => {
 export const deleteRequest = async (params) => {
   return await post("/api/requestBook/deleteRequest", params);
 };
+
+export const getAnnouncement = async (params) => {
+  return await post("/api/announcement", params);
+};
+
+export const addAnnouncement = async (params) => {
+  return await post("/api/announcement/addAnnouncement", params);
+};
