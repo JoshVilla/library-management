@@ -1,7 +1,4 @@
 {
-  "/api/login/route": "app/api/login/route.js",
-  "/api/announcement/route": "app/api/announcement/route.js",
-  "/page": "app/page.js",
-  "/student/page": "app/student/page.js",
-  "/student/profile/page": "app/student/profile/page.js"
+  "/api/notification/route": "app/api/notification/route.js",
+  "/api/notification/getNotif/route": "app/api/notification/getNotif/route.js"
 }

@@ -1,45 +1,19 @@
 {
   "pages": {
-    "/layout": [
+    "/api/notification/addNotification/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
+      "static/chunks/app/api/notification/addNotification/route.js"
     ],
-    "/page": [
+    "/api/notification/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/api/notification/route.js"
     ],
-    "/api/login/route": [
+    "/api/notification/getNotif/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/login/route.js"
-    ],
-    "/student/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/layout.js"
-    ],
-    "/student/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/page.js"
-    ],
-    "/api/announcement/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/announcement/route.js"
-    ],
-    "/student/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/profile/page.js"
-    ],
-    "/api/admin/editAdmin/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/editAdmin/route.js"
+      "static/chunks/app/api/notification/getNotif/route.js"
     ]
   }
 }

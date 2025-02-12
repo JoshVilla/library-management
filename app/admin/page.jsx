@@ -2,15 +2,18 @@
 
 import DashCard from "@/components/dashCard/dashCard";
 import TitlePage from "@/components/titlePage/titlePage";
-import { Users } from "lucide-react";
+import { Users, BookOpen } from "lucide-react"; // Import relevant icons
 import { useEffect, useState } from "react";
 import { dashboard } from "@/app/service/api";
 import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
 import Captcha from "@/components/captcha/captcha";
 import RequestTable from "./requestTable";
+import Graphs from "./graphs";
+
 export default function Home() {
   const [data, setData] = useState([]);
   const skeleteonArr = new Array(4).fill("skel");
+
   const fetchData = async () => {
     try {
       const res = await dashboard();
@@ -20,9 +23,21 @@ export default function Home() {
             .replace(/([a-z])([A-Z])/g, "$1 $2")
             .replace(/\b\w/g, (char) => char.toUpperCase());
 
+        const getIcon = (key) => {
+          switch (key) {
+            case "totalBooks":
+              return <BookOpen width={30} height={30} />;
+            case "totalStudents":
+              return <Users width={30} height={30} />;
+            default:
+              return <Users width={30} height={30} />; // Default icon
+          }
+        };
+
         const result = Object.entries(res).map(([key, value]) => ({
           name: formatKey(key),
           value,
+          icon: getIcon(key),
         }));
         setData(result);
       }
@@ -38,23 +53,23 @@ export default function Home() {
   return (
     <div>
       <TitlePage title="Dashboard" />
-      {}
       <div className="flex items-center flex-wrap gap-10 my-10">
         {data.length === 0
           ? skeleteonArr.map((_, idx) => <DashCardSkeleton key={idx} />)
-          : data.map((data) => (
+          : data.map((item) => (
               <DashCard
-                key={data.name}
-                icon={<Users width={30} height={30} />}
-                title={data.name}
-                data={data.value}
+                key={item.name}
+                icon={item.icon}
+                title={item.name}
+                data={item.value}
               />
             ))}
       </div>
       <div>
-        <div className="text-xl font-semibold">Student`s Request</div>
+        <div className="text-xl font-semibold">Student's Request</div>
         <RequestTable />
       </div>
+      {/* <Graphs /> */}
     </div>
   );
 }
