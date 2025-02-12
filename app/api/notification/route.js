@@ -7,7 +7,7 @@ export async function POST(req) {
 
     const { studentId } = await req.json();
 
-    const res = await Notification.find({ studentId, isRead: false });
+    const res = await Notification.find({ studentId });
 
     return new Response(JSON.stringify({ notifications: res }), {
       status: 200,

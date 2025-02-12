@@ -78,3 +78,14 @@ export const deleteAnnouncement = async (params) => {
 export const updateAnnouncement = async (params) => {
   return await post("/api/announcement/updateAnnouncement", params);
 };
+export const getNotification = async (params) => {
+  return await post("/api/notification", params);
+};
+
+export const notificationItem = async (params) => {
+  return await post("/api/notification/getNotif", params);
+};
+
+export const readNotification = async (params) => {
+  return await post("/api/notification/readNotification", params);
+};

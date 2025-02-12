@@ -1,4 +1,9 @@
 {
-  "/api/notification/route": "app/api/notification/route.js",
-  "/api/notification/getNotif/route": "app/api/notification/getNotif/route.js"
+  "/api/announcement/route": "app/api/announcement/route.js",
+  "/api/borrowBook/route": "app/api/borrowBook/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/page": "app/page.js",
+  "/student/page": "app/student/page.js",
+  "/student/notification/[id]/page": "app/student/notification/[id]/page.js",
+  "/admin/page": "app/admin/page.js"
 }

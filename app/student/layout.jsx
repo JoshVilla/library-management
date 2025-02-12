@@ -1,9 +1,16 @@
 "use client";
 import Sidebar from "@/components/sidebar/sidebar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { menuProps, sidebarTitle } from "./menuProps";
 import { useDispatch, useSelector } from "react-redux";
-import { Bell, BellDot, DoorOpen } from "lucide-react";
+import {
+  Bell,
+  BellDot,
+  DoorOpen,
+  Mail,
+  MailCheck,
+  MailOpen,
+} from "lucide-react";
 import { persistor } from "../redux/store";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "../redux/slices/studentInfoSlice";
@@ -24,13 +31,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
+import { getNotification, readNotification } from "../service/api";
+import { renderDate } from "@/utils/helpers";
+import { Separator } from "@/components/ui/separator";
 
 const Layout = ({ children }) => {
   const router = useRouter();
   const userInfo = useSelector((state) => state.user?.userInfo) || {};
   const dispatch = useDispatch();
-  const [unreadCount, setUnreadCount] = useState(2); // Simulated unread count
-
+  const [unreadCount, setUnreadCount] = useState(null); // Simulated unread count
+  const [notifData, setNotifData] = useState([]);
+  const [openNotif, setOpenNotif] = useState(false);
   const logout = () => {
     dispatch(logoutUser());
     persistor.purge();
@@ -39,8 +50,40 @@ const Layout = ({ children }) => {
     router.push("/");
   };
 
-  const handleNotificationClick = () => {
-    setUnreadCount(0); // Mark all notifications as read
+  const arr = new Array(10).fill({
+    message: "hello",
+    createdAt: "Feb 12 2025",
+  });
+
+  useEffect(() => {
+    fetchNotification();
+  }, []);
+
+  const fetchNotification = async () => {
+    try {
+      const res = await getNotification({ studentId: userInfo._id });
+      if (res) {
+        const unReadNotif = res.notifications.filter(
+          (el) => el.isRead === false
+        );
+        const sortNotifs = res.notifications.sort(
+          (a, b) => a.isRead - b.isRead
+        );
+        setNotifData(sortNotifs);
+        setUnreadCount(unReadNotif.length);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleReadNotification = async (id) => {
+    try {
+      await readNotification({ id });
+      await fetchNotification();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -66,9 +109,9 @@ const Layout = ({ children }) => {
           </div>
           <div className="flex items-center gap-10 relative">
             {/* Notification Bell with Badge */}
-            <Popover>
+            <Popover open={openNotif} onOpenChange={setOpenNotif}>
               <PopoverTrigger
-                onClick={handleNotificationClick}
+                // onClick={handleNotificationClick}
                 className="relative"
               >
                 {unreadCount > 0 ? (
@@ -83,23 +126,38 @@ const Layout = ({ children }) => {
                   </span>
                 )}
               </PopoverTrigger>
-              <PopoverContent className="w-72">
-                <div className="p-2">
+              <PopoverContent className="w-72 max-h-80 overflow-scroll">
+                <div className="">
                   <p className="font-semibold">Notifications</p>
-                  {unreadCount > 0 ? (
-                    <ul className="mt-2 space-y-2">
-                      <li className="p-2 bg-gray-100 rounded">
-                        New request received
-                      </li>
-                      <li className="p-2 bg-gray-100 rounded">
-                        Your book is due soon
-                      </li>
-                    </ul>
-                  ) : (
+                  {unreadCount === 0 && (
                     <p className="text-gray-500 text-sm mt-2">
                       No new notifications
                     </p>
                   )}
+                  <Separator />
+                  <ul className="mt-2 space-y-4">
+                    {notifData.map((notif, idx) => (
+                      <li
+                        onClick={() => {
+                          router.push(`/student/notification/${notif._id}`);
+                          setOpenNotif(false);
+                          handleReadNotification(notif._id);
+                        }}
+                        key={idx}
+                        className=" text-gray-600 text-xs cursor-pointer space-y-1 hover:underline"
+                      >
+                        <div className="flex items-center gap-1">
+                          {notif.isRead ? (
+                            <MailOpen size={15} />
+                          ) : (
+                            <Mail size={15} />
+                          )}
+                          <div className="w-full truncate">{notif.message}</div>
+                        </div>
+                        <div>{renderDate(notif.createdAt)}</div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </PopoverContent>
             </Popover>
