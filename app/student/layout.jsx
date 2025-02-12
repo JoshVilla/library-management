@@ -141,7 +141,7 @@ const Layout = ({ children }) => {
                         onClick={() => {
                           router.push(`/student/notification/${notif._id}`);
                           setOpenNotif(false);
-                          handleReadNotification(notif._id);
+                          !notif.isRead && handleReadNotification(notif._id);
                         }}
                         key={idx}
                         className=" text-gray-600 text-xs cursor-pointer space-y-1 hover:underline"
