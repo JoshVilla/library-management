@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
     totalOfBooksBorrowed: { type: Number, default: 0 },
     usn: { type: String, required: true },
     isRegistered: { type: Boolean, default: false },
+    pictureUrl: { type: String, default: null },
     password: {
       type: String,
       default: "",

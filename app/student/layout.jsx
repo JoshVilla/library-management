@@ -39,7 +39,10 @@ const Layout = ({ children }) => {
         <div className="p-4 bg-[#f9f9f9] flex justify-between items-center">
           <div>
             <span className="text-lg font-semibold">Hello! </span>
-            <span className="cursor-pointer hover:underline">
+            <span
+              className="cursor-pointer hover:underline"
+              onClick={() => router.push("student/profile")}
+            >
               {userInfo.firstname ? userInfo.firstname : "Guest"}
             </span>
           </div>

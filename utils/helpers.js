@@ -49,7 +49,8 @@ export const replaceNewImagefromCurrentImage = async (collection, id) => {
   }
 };
 
-export const renderDate = (date) => {
+export const renderDate = (date = "") => {
+  if (!date) return "";
   const newDate = new Date(date);
   return format(newDate, "MMM dd, yyyy");
 };

@@ -12,6 +12,10 @@ export const deleteStudent = async (params) => {
   return await post("/api/admin/deleteStudent", params);
 };
 
+export const editStudent = async (params, hasFormData) => {
+  return await post("/api/admin/editAdmin", params, hasFormData);
+};
+
 export const getBooks = async (params) => {
   return await post("/api/book", params);
 };

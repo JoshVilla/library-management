@@ -6,15 +6,18 @@ export async function POST(req) {
     await connectToDatabase();
 
     // Parse request body for pagination
-    const { page = 1, limit = 5 } = await req.json();
+    const { page = 1, limit = 5, isPinned } = await req.json();
     const pageNumber = Math.max(1, parseInt(page, 10));
     const limitNumber = Math.max(1, parseInt(limit, 10));
 
     // Get total count for pagination
     const total = await Announcement.countDocuments();
 
+    let params = {};
+    if (isPinned) params.isPinned = isPinned;
+
     // Fetch paginated announcements, sorted from latest to oldest
-    const announcements = await Announcement.find({})
+    const announcements = await Announcement.find(params)
       .sort({ _id: -1 }) // Sort by ID in descending order (latest first)
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber);
