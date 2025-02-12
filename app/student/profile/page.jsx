@@ -78,6 +78,7 @@ const Page = () => {
 
       // Make sure to include USN in the form data
       formData.append("usn", state.usn);
+      formData.append("id", state._id);
 
       Object.keys(filteredData).forEach((key) => {
         if (key !== "picture" && filteredData[key]) {

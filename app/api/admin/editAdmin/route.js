@@ -1,6 +1,11 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/app/models/admin";
 import cloudinary from "@/lib/cloudinaryConfig";
+import {
+  deleteCloudinaryImage,
+  getCloudinaryPublicId,
+  replaceNewImagefromCurrentImage,
+} from "@/utils/helpers";
 
 export async function POST(req) {
   try {
@@ -29,6 +34,7 @@ export async function POST(req) {
 
     // Handle image upload if present
     const picture = formData.get("picture");
+    const studentId = formData.get("id");
     if (picture) {
       try {
         const buffer = Buffer.from(await picture.arrayBuffer());
@@ -53,6 +59,11 @@ export async function POST(req) {
             )
             .end(buffer);
         });
+        const res = await User.findById(studentId);
+        if (res) {
+          const publicId = getCloudinaryPublicId(res.pictureUrl);
+          if (publicId) await deleteCloudinaryImage(publicId);
+        }
         userData.pictureUrl = imageUrl;
       } catch (uploadError) {
         console.error("Error uploading to Cloudinary:", uploadError);
