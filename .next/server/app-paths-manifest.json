@@ -1,6 +1,7 @@
 {
-  "/api/admin/editAdmin/route": "app/api/admin/editAdmin/route.js",
+  "/api/login/route": "app/api/login/route.js",
+  "/api/announcement/route": "app/api/announcement/route.js",
   "/page": "app/page.js",
-  "/student/profile/page": "app/student/profile/page.js",
-  "/student/page": "app/student/page.js"
+  "/student/page": "app/student/page.js",
+  "/student/profile/page": "app/student/profile/page.js"
 }

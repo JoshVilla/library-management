@@ -129,6 +129,7 @@ const Login = () => {
               <Button type="submit">
                 {loading ? (
                   <Image
+                    unoptimized
                     src="/assets/Loading.gif"
                     width={10}
                     height={10}
