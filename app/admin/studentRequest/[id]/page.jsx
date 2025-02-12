@@ -1,5 +1,9 @@
 "use client";
-import { getBorrowedBooks, updateRequestBook } from "@/app/service/api";
+import {
+  addNotification,
+  getBorrowedBooks,
+  updateRequestBook,
+} from "@/app/service/api";
 import Status from "@/components/status/status";
 import TitlePage from "@/components/titlePage/titlePage";
 import { Separator } from "@/components/ui/separator";
@@ -74,6 +78,7 @@ const Request = () => {
     try {
       setLoading(true);
       const res = await updateRequestBook({ id: params.id, ...data });
+      await handleAddNotification(data);
       if (res) {
         fetchData();
         setOpenModal(false);
@@ -86,6 +91,27 @@ const Request = () => {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddNotification = async (data) => {
+    try {
+      let message = "";
+      message = data.isApproved
+        ? "The Librarian approved your request"
+        : "The Librarian cancelled your request";
+      const { titleBook, authorBook, studentId, toDate, fromDate } =
+        requestDetails;
+      await addNotification({
+        message,
+        studentId,
+        titleBook,
+        authorBook,
+        borrowDuration: `${renderDate(fromDate)}-${renderDate(toDate)}`,
+        reason: data.reasonToChangeStatus,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 

@@ -89,3 +89,7 @@ export const notificationItem = async (params) => {
 export const readNotification = async (params) => {
   return await post("/api/notification/readNotification", params);
 };
+
+export const addNotification = async (params) => {
+  return await post("/api/notification/addNotification", params);
+};

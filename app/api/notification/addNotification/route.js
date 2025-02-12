@@ -10,8 +10,8 @@ export async function POST(req) {
       message,
       isRead,
       reason,
-      bookTitle,
-      author,
+      titleBook,
+      authorBook,
       borrowDuration,
     } = await req.json();
 
@@ -20,8 +20,8 @@ export async function POST(req) {
       message,
       isRead,
       reason,
-      bookTitle,
-      author,
+      titleBook,
+      authorBook,
       borrowDuration,
     });
 
@@ -31,7 +31,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error adding student:", error);
+    console.error("Error notifying student:", error);
     return new Response(JSON.stringify({ error: "Failed to notify student" }), {
       status: 500,
     });

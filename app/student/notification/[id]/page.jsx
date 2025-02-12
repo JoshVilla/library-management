@@ -47,8 +47,8 @@ const Page = () => {
           <div className="my-10">Reason of aprrove: {data?.reason}</div>
           <div className="space-y-4">
             <div className="text-lg font-semibold">Request Details</div>
-            <div className="text-sm">Book Title: {data?.bookTitle}</div>
-            <div className="text-sm">Book Author: {data?.author}</div>
+            <div className="text-sm">Book Title: {data?.titleBook}</div>
+            <div className="text-sm">Book Author: {data?.authorBook}</div>
             <div className="text-sm">
               Dueation of Borrowing: {data?.borrowDuration}
             </div>
