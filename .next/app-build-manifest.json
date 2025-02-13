@@ -1,20 +1,15 @@
 {
   "pages": {
-    "/api/borrowBook/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/borrowBook/route.js"
-    ],
-    "/api/dashboard/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/dashboard/route.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
     ],
     "/admin/layout": [
       "static/chunks/webpack.js",
@@ -26,25 +21,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/page.js"
     ],
-    "/admin/studentRequest/[id]/page": [
+    "/api/borrowBook/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/studentRequest/[id]/page.js"
+      "static/chunks/app/api/borrowBook/route.js"
     ],
-    "/api/borrowBook/updateStatus/route": [
+    "/api/dashboard/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/borrowBook/updateStatus/route.js"
+      "static/chunks/app/api/dashboard/route.js"
     ],
-    "/api/notification/addNotification/route": [
+    "/admin/announcements/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/addNotification/route.js"
+      "static/chunks/app/admin/announcements/page.js"
     ],
-    "/page": [
+    "/api/announcement/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/api/announcement/route.js"
     ],
     "/api/login/route": [
       "static/chunks/webpack.js",
@@ -61,35 +56,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/student/page.js"
     ],
-    "/api/announcement/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/announcement/route.js"
-    ],
     "/api/notification/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/notification/route.js"
-    ],
-    "/api/notification/readNotification/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/readNotification/route.js"
-    ],
-    "/student/notification/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/notification/[id]/page.js"
-    ],
-    "/api/notification/getNotif/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/getNotif/route.js"
-    ],
-    "/student/myRequest/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/myRequest/page.js"
     ],
     "/student/books/page": [
       "static/chunks/webpack.js",
@@ -106,10 +76,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/student/books/[id]/page.js"
     ],
-    "/api/requestBook/route": [
+    "/admin/studentRequest/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/requestBook/route.js"
+      "static/chunks/app/admin/studentRequest/[id]/page.js"
+    ],
+    "/admin/books/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/books/loading.js"
+    ],
+    "/admin/books/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/books/[id]/page.js"
     ]
   }
 }

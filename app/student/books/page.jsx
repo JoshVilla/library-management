@@ -125,7 +125,7 @@ const Page = () => {
       </Table>
       {!loading && dataBooks.length === 0 && <EmptyData />}
       {loading && <LoadingComp />}
-      {dataBooks.length > 1 && (
+      {dataBooks.length > 0 && (
         <div className="mt-10">
           <PaginationComponent
             pageState={pageState}
