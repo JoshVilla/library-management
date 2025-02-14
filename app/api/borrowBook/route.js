@@ -25,7 +25,7 @@ export async function POST(req) {
     if (titleBook) params.titleBook = titleBook;
     if (studentName) params.studentName = studentName;
     if (usn) params.usn = usn;
-    if (isApproved) {
+    if (isApproved !== undefined) {
       params.isApproved = isApproved;
     }
     console.log(typeof isApproved === "string" ? +isApproved : isApproved);

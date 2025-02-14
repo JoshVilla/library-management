@@ -1,11 +1,9 @@
 {
-  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/api/borrowBook/route": "app/api/borrowBook/route.js",
-  "/page": "app/page.js",
-  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js",
   "/student/myRequest/page": "app/student/myRequest/page.js",
   "/student/page": "app/student/page.js",
   "/admin/page": "app/admin/page.js",
+  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
   "/student/notification/[id]/page": "app/student/notification/[id]/page.js",
-  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js"
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js"
 }

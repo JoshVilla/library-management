@@ -36,6 +36,10 @@ export const searchProps = [
         label: "Returned",
       },
       {
+        value: STATUS.FAILED,
+        label: "Failed to returned",
+      },
+      {
         value: STATUS.CANCELLED,
         label: "Cancelled",
       },
