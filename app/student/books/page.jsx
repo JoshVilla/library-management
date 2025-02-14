@@ -58,11 +58,11 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="List of Books" />
-      {/* <SearchForm
+      <SearchForm
         api={fetchData}
         result={setDataBooks}
         searchProps={searchProps}
-      /> */}
+      />
       <Table className="mt-6">
         <TableHeader>
           <TableRow>
@@ -71,7 +71,7 @@ const Page = () => {
               "Title",
               "Author",
               "Category",
-              "Quantity",
+              "Book Code",
               "Actions",
             ].map((heading) => (
               <TableHead key={heading} className="uppercase text-center">
@@ -104,7 +104,7 @@ const Page = () => {
                 {" "}
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
-              <TableCell className="text-center">{book.quantity}</TableCell>
+              <TableCell className="text-center">{book.bookCode}</TableCell>
               <TableCell className="flex justify-center gap-6 items-center">
                 <TooltipProvider>
                   <Tooltip>
