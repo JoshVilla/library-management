@@ -23,7 +23,7 @@ import Image from "next/image";
 const SearchForm = ({ api, result, searchProps }) => {
   const form = useForm();
   const [loadingSearch, setLoadingSearch] = useState(false);
-
+  const [selected, setSelected] = useState("");
   // Reset the form inputs
   const handleReset = () => {
     form.reset(); // Reset form fields
@@ -94,18 +94,35 @@ const SearchForm = ({ api, result, searchProps }) => {
                   <FormItem>
                     <FormControl>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value) => {
+                          let parsedValue =
+                            value === "true"
+                              ? true
+                              : value === "false"
+                              ? false
+                              : isNaN(Number(value))
+                              ? value
+                              : Number(value);
+                          field.onChange(parsedValue);
+                          setSelected(parsedValue);
+                        }}
                         value={field.value}
                       >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder={prop.placeholder} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a value">
+                            {prop.options.find((o) => o.value === selected)
+                              ?.label || "Select a value"}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
                             <SelectLabel>Categories</SelectLabel>
                             {prop.options.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
+                              <SelectItem
+                                key={category.value}
+                                value={category.value.toString()}
+                              >
+                                {category.label}
                               </SelectItem>
                             ))}
                           </SelectGroup>

@@ -9,4 +9,19 @@ export const searchProps = [
       return event.target.value.replace(REGEX.NUMBER_ONLY, "");
     },
   },
+  {
+    name: "isRegistered",
+    placeholder: "Search Status",
+    type: "select",
+    options: [
+      {
+        value: true,
+        label: "Registered",
+      },
+      {
+        value: false,
+        label: "Not Registered",
+      },
+    ],
+  },
 ];

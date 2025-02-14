@@ -94,6 +94,21 @@ const Request = () => {
     }
   };
 
+  const handleUpdateInProgress = async () => {
+    try {
+      const res = await updateRequestBook({ id: params.id, isApproved: 3 });
+      if (res) {
+        fetchData();
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleAddNotification = async (data) => {
     try {
       let message = "";
@@ -126,9 +141,11 @@ const Request = () => {
         <div className="w-full">
           <div className=" mb-4 flex items-center w-full justify-between">
             <div className="text-2xl font-semibold">Requested Book</div>
-            {isExpired(requestDetails.fromDate) ? (
+            {/* {isExpired(requestDetails.fromDate) ? (
               <Badge variant="destructive">Expired</Badge>
-            ) : (
+            ) : ( */}
+
+            <div>
               <div className="flex items-center gap-2">
                 <Status status={requestDetails.isApproved} />
                 {requestDetails.isApproved === 2 && (
@@ -212,7 +229,22 @@ const Request = () => {
                   </Dialog>
                 )}
               </div>
-            )}
+              {requestDetails.isApproved === 1 && (
+                <div className="space-y-1 mt-2">
+                  <div className="text-xs text-gray-500">
+                    Once the student get the book, change the status to
+                    Borrworing in Progress
+                  </div>
+                  <div
+                    onClick={handleUpdateInProgress}
+                    className="text-xs text-blue-500 hover:underline cursor-pointer"
+                  >
+                    Change Status
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* // )} */}
             <div className="text-gray-500 text-sm">
               Requested last: {renderDate(requestDetails.createdAt)}
             </div>

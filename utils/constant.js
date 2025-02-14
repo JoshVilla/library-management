@@ -14,6 +14,8 @@ export const bookCategories = [
 ];
 
 export const STATUS = {
+  RETURNED: 4,
+  INPROGRESS: 3,
   PENDING: 2,
   APPROVED: 1,
   CANCELLED: 0,

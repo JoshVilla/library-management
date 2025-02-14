@@ -17,4 +17,8 @@ export const menuProps = [
     label: "Books",
     path: "/admin/books",
   },
+  {
+    label: "Borrowed Books",
+    path: "/admin/borrowedBooks",
+  },
 ];

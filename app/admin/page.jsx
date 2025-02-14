@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <div>
       <TitlePage title="Dashboard" />
-      <div className="flex items-center flex-wrap gap-10 my-10">
+      <div className="flex items-center flex-wrap gap-10 my-4">
         {data.length === 0
           ? skeleteonArr.map((_, idx) => <DashCardSkeleton key={idx} />)
           : data.map((item) => (

@@ -21,11 +21,13 @@ import { Badge } from "@/components/ui/badge";
 import { Bolt, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { isExpired } from "@/utils/helpers";
+import EmptyData from "@/components/empty-data/emptyData";
+import LoadingComp from "@/components/loading/loadingComp";
 
 const RequestTable = () => {
   const router = useRouter();
   const [requestData, setRequestData] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   const tableHeaders = [
     "Name",
     "Usn",
@@ -36,12 +38,14 @@ const RequestTable = () => {
   ];
   const fetchData = async () => {
     try {
-      const res = await getBorrowedBooks();
+      const res = await getBorrowedBooks({ isApproved: 2 });
       if (res.data) {
         setRequestData(res.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -97,11 +101,7 @@ const RequestTable = () => {
                 {renderDate(request.createdAt)}
               </TableCell>
               <TableCell className="text-center">
-                {isExpired(request.fromDate) ? (
-                  <Badge variant="destructive">Expired</Badge>
-                ) : (
-                  renderStatus(request.isApproved)
-                )}
+                {renderStatus(request.isApproved)}
               </TableCell>
               <TableCell className="flex justify-center items-center gap-4">
                 <TooltipProvider>
@@ -137,6 +137,8 @@ const RequestTable = () => {
           ))}
         </TableBody>
       </Table>
+      {isLoading && <LoadingComp />}
+      {requestData.length === 0 && !isLoading && <EmptyData />}
     </div>
   );
 };

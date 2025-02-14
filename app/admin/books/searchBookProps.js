@@ -23,6 +23,13 @@ export const searchProps = [
     name: "category",
     placeholder: "Search Category",
     type: "select",
-    options: bookCategories,
+    options: [
+      { value: "Educational", label: "Educational" },
+      { value: "English", label: "English" },
+      { value: "History", label: "History" },
+      { value: "Science", label: "Science" },
+      { value: "Math", label: "Math" },
+      { value: "Horror", label: "Horror" },
+    ],
   },
 ];

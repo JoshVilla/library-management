@@ -17,6 +17,10 @@ const Status = ({ status }) => {
     text = "Cancelled";
     style.backgroundColor = "red";
   }
+  if (status === STATUS.INPROGRESS) {
+    text = "Borrowing in Progress";
+    style.backgroundColor = "yellow";
+  }
 
   return (
     <div className="flex items-center gap-2">

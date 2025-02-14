@@ -174,13 +174,7 @@ const Page = () => {
                   {request.authorBook}
                 </TableCell>
                 <TableCell className="text-center">
-                  {/* If the borrowed date is passed the current date, 
-                  it means that it is already expired */}
-                  {isExpired(request.fromDate) ? (
-                    <Badge variant="destructive">Expired</Badge>
-                  ) : (
-                    renderStatus(request.isApproved)
-                  )}
+                  {renderStatus(request.isApproved)}
                 </TableCell>
                 <TableCell className="text-center">
                   {renderDateRange(request.fromDate, request.toDate)}

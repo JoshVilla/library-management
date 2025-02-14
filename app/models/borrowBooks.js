@@ -14,6 +14,7 @@ const BorrowBooksSchema = new mongoose.Schema(
     titleBook: { type: String, required: true },
     authorBook: { type: String, required: true },
     reasonToChangeStatus: { type: String, default: "" },
+    dateReturned: { type: String, default: "" },
   },
   { timestamps: true }
 );

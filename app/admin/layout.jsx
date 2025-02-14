@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="flex-1 p-4">
-        <div className="p-4 bg-[#f9f9f9] flex justify-end items-end mb-10">
+        <div className="p-4 bg-[#f9f9f9] flex justify-end items-end mb-4">
           <div className="flex hover:underline cursor-pointer">
             <AlertDialog>
               <AlertDialogTrigger className="flex">

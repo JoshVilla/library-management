@@ -5,12 +5,13 @@ export async function POST(req) {
   try {
     await connectToDatabase();
 
-    const { page = 1, limit = 5, usn, id } = await req.json();
+    const { page = 1, limit = 5, usn, id, isRegistered } = await req.json();
     let query = {};
 
     if (usn) query.usn = usn;
     if (id) query._id = id;
-
+    if (isRegistered !== undefined) query.isRegistered = isRegistered;
+    console.log(isRegistered);
     const skip = (page - 1) * limit;
 
     // Fetch data and count in parallel
