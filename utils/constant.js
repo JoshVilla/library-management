@@ -19,4 +19,5 @@ export const STATUS = {
   PENDING: 2,
   APPROVED: 1,
   CANCELLED: 0,
+  FAILED: -1,
 };

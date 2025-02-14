@@ -70,6 +70,61 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/admin/editAdmin/route.js"
+    ],
+    "/student/books/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/student/books/page.js"
+    ],
+    "/api/book/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/book/route.js"
+    ],
+    "/student/books/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/student/books/[id]/page.js"
+    ],
+    "/api/requestBook/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/requestBook/route.js"
+    ],
+    "/admin/studentRequest/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/studentRequest/[id]/page.js"
+    ],
+    "/api/borrowBook/updateStatus/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/borrowBook/updateStatus/route.js"
+    ],
+    "/api/notification/addNotification/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notification/addNotification/route.js"
+    ],
+    "/admin/borrowedBooks/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/borrowedBooks/page.js"
+    ],
+    "/api/notification/readNotification/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notification/readNotification/route.js"
+    ],
+    "/student/notification/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/student/notification/[id]/page.js"
+    ],
+    "/api/notification/getNotif/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notification/getNotif/route.js"
     ]
   }
 }

@@ -44,7 +44,7 @@ const Page = () => {
           <div className="text-sm">
             Notified last: {renderDate(data?.createdAt)}
           </div>
-          <div className="my-10">Reason of aprrove: {data?.reason}</div>
+          <div className="my-10">Reason: {data?.reason}</div>
           <div className="space-y-4">
             <div className="text-lg font-semibold">Request Details</div>
             <div className="text-sm">Book Title: {data?.titleBook}</div>

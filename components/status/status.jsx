@@ -21,6 +21,15 @@ const Status = ({ status }) => {
     text = "Borrowing in Progress";
     style.backgroundColor = "yellow";
   }
+  if (status === STATUS.RETURNED) {
+    text = "Succesfully returned";
+    style.backgroundColor = "blue";
+  }
+  if (status === STATUS.FAILED) {
+    console.log("hello");
+    text = "Failed to returned";
+    style.backgroundColor = "black";
+  }
 
   return (
     <div className="flex items-center gap-2">

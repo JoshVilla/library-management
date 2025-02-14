@@ -44,6 +44,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isExpired } from "@/utils/helpers";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
+import StatusBadge from "@/components/statusBadge/page";
 const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
@@ -178,7 +179,7 @@ const Page = () => {
                   {request.authorBook}
                 </TableCell>
                 <TableCell className="text-center">
-                  {renderStatus(request.isApproved)}
+                  <StatusBadge status={request.isApproved} />
                 </TableCell>
                 <TableCell className="text-center">
                   {renderDateRange(request.fromDate, request.toDate)}

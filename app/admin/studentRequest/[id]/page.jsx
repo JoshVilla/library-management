@@ -34,6 +34,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { isExpired } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
+import { STATUS } from "@/utils/constant";
 
 const Request = () => {
   const { toast } = useToast();
@@ -103,8 +104,11 @@ const Request = () => {
           title: res.message,
           className: "bg-black text-white",
         });
-        if (value === 0) {
-          await handleAddNotification(value);
+        if (value === 0 || value === -1 || value === 4) {
+          await handleAddNotification({
+            isApproved: value,
+            reasonToChangeStatus: messageOfUpdatingStatus(value),
+          });
         }
       }
     } catch (error) {
@@ -114,14 +118,10 @@ const Request = () => {
 
   const handleAddNotification = async (data) => {
     try {
-      let message = "";
-      message = data.isApproved
-        ? "The Librarian approved your request"
-        : "The Librarian cancelled your request";
       const { titleBook, authorBook, studentId, toDate, fromDate } =
         requestDetails;
       await addNotification({
-        message,
+        message: messageOfUpdatingStatus(data.isApproved),
         studentId,
         titleBook,
         authorBook,
@@ -131,6 +131,21 @@ const Request = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const messageOfUpdatingStatus = (status) => {
+    let message;
+
+    if (status === STATUS.APPROVED) {
+      message = "The Librarian approved your request.";
+    } else if (status === STATUS.CANCELLED) {
+      message = "The Librarian cancelled your request.";
+    } else if (status === STATUS.RETURNED) {
+      message = "You have successfully returned the book!";
+    } else if (status === STATUS.FAILED) {
+      message = "You have failed to return the book on time.";
+    }
+
+    return message;
   };
 
   useEffect(() => {
@@ -173,14 +188,6 @@ const Request = () => {
                                       defaultValue={requestDetails.isApproved}
                                       className="flex flex-col space-y-1"
                                     >
-                                      {/* <FormItem className="flex items-center space-x-3 space-y-0">
-                                      <FormControl>
-                                        <RadioGroupItem value={2} />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        Pending
-                                      </FormLabel>
-                                    </FormItem> */}
                                       <FormItem className="flex items-center space-x-3 space-y-0">
                                         <FormControl>
                                           <RadioGroupItem value={1} />
@@ -250,6 +257,28 @@ const Request = () => {
                       className="text-xs text-blue-500 hover:underline cursor-pointer"
                     >
                       Cancel
+                    </span>
+                  </div>
+                </div>
+              )}
+              {requestDetails.isApproved === 3 && (
+                <div className="space-y-1 mt-2">
+                  <div className="text-xs text-gray-500">
+                    Update the status depending on whether the student
+                    successfully returned the book.
+                  </div>
+                  <div className="space-x-6">
+                    <span
+                      onClick={() => handleUpdateStatus(4)}
+                      className="text-xs text-blue-500 hover:underline cursor-pointer"
+                    >
+                      Successfully returned the book
+                    </span>
+                    <span
+                      onClick={() => handleUpdateStatus(-1)}
+                      className="text-xs text-blue-500 hover:underline cursor-pointer"
+                    >
+                      Failed to returned the book
                     </span>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
 
 import { getBorrowedBooks } from "@/app/service/api";
 import TitlePage from "@/components/titlePage/titlePage";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -24,6 +24,7 @@ import LoadingComp from "@/components/loading/loadingComp";
 import { renderDate } from "@/utils/helpers";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
+import Link from "next/link";
 const Page = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ const Page = () => {
     "Status",
     "Borrow Duration",
     "Requested Last",
+    "Actions",
   ];
   const fetchData = async (params = {}) => {
     try {
@@ -55,26 +57,6 @@ const Page = () => {
 
     return <div>{`${formattedFromDate} - ${formattedToDate}`}</div>;
   };
-
-  const borrowStatus = useMemo(() => {
-    const statusGroups = {
-      pending: [],
-      approved: [],
-      inProgress: [],
-      returned: [],
-      cancelled: [],
-    };
-
-    data.forEach((status) => {
-      if (status.isApproved === 0) statusGroups.cancelled.push(status);
-      else if (status.isApproved === 1) statusGroups.approved.push(status);
-      else if (status.isApproved === 2) statusGroups.pending.push(status);
-      else if (status.isApproved === 3) statusGroups.inProgress.push(status);
-      else if (status.isApproved === 4) statusGroups.returned.push(status);
-    });
-
-    return statusGroups;
-  }, [data]);
 
   useEffect(() => {
     fetchData();
@@ -110,6 +92,9 @@ const Page = () => {
                 </TableCell>
                 <TableCell className="text-center">
                   {renderDate(dataTable.createdAt)}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Link href={`studentRequest/${dataTable._id}`}>View</Link>
                 </TableCell>
               </TableRow>
             ))}
