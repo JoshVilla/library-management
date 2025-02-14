@@ -4,25 +4,56 @@ import { getBorrowedBooks } from "@/app/service/api";
 import TitlePage from "@/components/titlePage/titlePage";
 import React, { useEffect, useState, useMemo } from "react";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
+  Table,
+  TableHeader,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { format } from "date-fns";
+import StatusBadge from "@/components/statusBadge/page";
+import EmptyData from "@/components/empty-data/emptyData";
+import LoadingComp from "@/components/loading/loadingComp";
+import { renderDate } from "@/utils/helpers";
+import SearchForm from "@/components/searchForm/searchForm";
+import { searchProps } from "./searchProps";
 const Page = () => {
   const [data, setData] = useState([]);
-
-  const fetchData = async () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const tableHeaders = [
+    "Student",
+    "USN",
+    "Status",
+    "Borrow Duration",
+    "Requested Last",
+  ];
+  const fetchData = async (params = {}) => {
     try {
-      const res = await getBorrowedBooks();
+      const res = await getBorrowedBooks(params);
       if (res) {
         setData(res.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const renderDateRange = (from, to) => {
+    const newFrom = new Date(from);
+    const newTo = new Date(to);
+    const formattedFromDate = format(newFrom, "MMM dd, yyyy");
+    const formattedToDate = format(newTo, "MMM dd, yyyy");
+
+    return <div>{`${formattedFromDate} - ${formattedToDate}`}</div>;
   };
 
   const borrowStatus = useMemo(() => {
@@ -45,12 +76,6 @@ const Page = () => {
     return statusGroups;
   }, [data]);
 
-  const options = [
-    { value: 1, label: "One" },
-    { value: 2, label: "Two" },
-    { value: 3, label: "Three" },
-  ];
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -58,6 +83,41 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="Borrowed Books" />
+      <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
+      <div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {tableHeaders.map((header) => (
+                <TableHead key={header} className="uppercase text-center">
+                  {header}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((dataTable) => (
+              <TableRow key={dataTable._id}>
+                <TableCell className="text-center">
+                  {dataTable.studentName}
+                </TableCell>
+                <TableCell className="text-center">{dataTable.usn}</TableCell>
+                <TableCell className="text-center">
+                  <StatusBadge status={dataTable.isApproved} />
+                </TableCell>
+                <TableCell className="text-center">
+                  {renderDateRange(dataTable.toDate, dataTable.fromDate)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {renderDate(dataTable.createdAt)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {isLoading && <LoadingComp />}
+        {data.length === 0 && !isLoading && <EmptyData />}
+      </div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ export async function POST(req) {
     if (usn) query.usn = usn;
     if (id) query._id = id;
     if (isRegistered !== undefined) query.isRegistered = isRegistered;
-    console.log(isRegistered);
+
     const skip = (page - 1) * limit;
 
     // Fetch data and count in parallel

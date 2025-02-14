@@ -11,14 +11,14 @@ export const searchProps = [
     placeholder: "Search Author",
     type: "input",
   },
-  // {
-  //   name: "bookCode",
-  //   placeholder: "Search Book Codes",
-  //   type: "input",
-  //   onChange: (event) => {
-  //     return event.target.value.replace(REGEX.NUMBER_ONLY, "");
-  //   },
-  // },
+  {
+    name: "bookCode",
+    placeholder: "Search Book Codes",
+    type: "input",
+    onChange: (event) => {
+      return event.target.value.replace(REGEX.NUMBER_ONLY, "");
+    },
+  },
   {
     name: "category",
     placeholder: "Search Category",

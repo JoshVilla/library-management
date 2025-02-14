@@ -14,6 +14,8 @@ export async function POST(req) {
       authorBook,
       titleBook,
       isApproved,
+      studentName,
+      usn,
     } = body; // Extract studentId, page, and limit
 
     let params = {};
@@ -21,6 +23,8 @@ export async function POST(req) {
     if (id) params._id = id;
     if (authorBook) params.authorBook = authorBook;
     if (titleBook) params.titleBook = titleBook;
+    if (studentName) params.studentName = studentName;
+    if (usn) params.usn = usn;
     if (isApproved) {
       params.isApproved = isApproved;
     }
