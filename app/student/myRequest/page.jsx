@@ -81,6 +81,10 @@ const Page = () => {
     if (val === STATUS.CANCELLED) {
       (text = "Cancelled"), (className = "bg-black text-white");
     }
+    if (val === STATUS.INPROGRESS) {
+      (text = "Borrowing in Progress"),
+        (className = "bg-yellow-500 text-white");
+    }
     return <Badge className={className}>{text}</Badge>;
   };
 

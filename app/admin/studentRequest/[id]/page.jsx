@@ -94,15 +94,18 @@ const Request = () => {
     }
   };
 
-  const handleUpdateInProgress = async () => {
+  const handleUpdateStatus = async (value) => {
     try {
-      const res = await updateRequestBook({ id: params.id, isApproved: 3 });
+      const res = await updateRequestBook({ id: params.id, isApproved: value });
       if (res) {
         fetchData();
         toast({
           title: res.message,
           className: "bg-black text-white",
         });
+        if (value === 0) {
+          await handleAddNotification(value);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -235,11 +238,19 @@ const Request = () => {
                     Once the student get the book, change the status to
                     Borrworing in Progress
                   </div>
-                  <div
-                    onClick={handleUpdateInProgress}
-                    className="text-xs text-blue-500 hover:underline cursor-pointer"
-                  >
-                    Change Status
+                  <div className="space-x-6">
+                    <span
+                      onClick={() => handleUpdateStatus(3)}
+                      className="text-xs text-blue-500 hover:underline cursor-pointer"
+                    >
+                      Change Status
+                    </span>
+                    <span
+                      onClick={() => handleUpdateStatus(0)}
+                      className="text-xs text-blue-500 hover:underline cursor-pointer"
+                    >
+                      Cancel
+                    </span>
                   </div>
                 </div>
               )}

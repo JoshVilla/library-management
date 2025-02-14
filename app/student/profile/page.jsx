@@ -25,6 +25,7 @@ const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
   const form = useForm({ defaultValues: state });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [editMode, setEditMode] = useState({
     firstname: false,
@@ -32,8 +33,6 @@ const Page = () => {
     lastname: false,
     image: false,
   });
-
-  console.log(state.pictureUrl);
 
   const validateImageFile = (file) => {
     // Check if file exists
@@ -66,7 +65,7 @@ const Page = () => {
   const handleSave = async (data) => {
     try {
       const filteredData = getParams(data);
-
+      setIsLoading(true);
       if (filteredData.picture && !validateImageFile(filteredData.picture)) {
         return;
       }
@@ -118,6 +117,8 @@ const Page = () => {
         description: error.message || "Failed to update profile",
         className: "bg-red-500 text-white",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -241,7 +242,7 @@ const Page = () => {
                   ))}
                   <div className="mt-10">
                     {Object.values(editMode).includes(true) && (
-                      <Button>Save</Button>
+                      <Button>{isLoading ? "Saving..." : "Save"}</Button>
                     )}
                   </div>
                 </div>
