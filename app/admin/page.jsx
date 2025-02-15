@@ -9,6 +9,7 @@ import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
 import Captcha from "@/components/captcha/captcha";
 import RequestTable from "./requestTable";
 import Graphs from "./graphs";
+import PieGraphSkeleton from "@/components/skeleton/pieGraphSkeleton";
 
 export default function Home() {
   const [data, setData] = useState([]);

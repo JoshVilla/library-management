@@ -6,11 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -26,11 +21,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/borrowBook/route.js"
     ],
-    "/api/dashboard/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/dashboard/route.js"
-    ],
     "/api/adminGraphs/getAdminGraphs/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -40,6 +30,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/adminGraphs/route.js"
+    ],
+    "/api/dashboard/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/dashboard/route.js"
     ],
     "/admin/borrowedBooks/page": [
       "static/chunks/webpack.js",
