@@ -11,26 +11,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/student/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/layout.js"
-    ],
-    "/student/myRequest/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/myRequest/page.js"
-    ],
-    "/api/borrowBook/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/borrowBook/route.js"
-    ],
-    "/api/notification/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/route.js"
-    ],
     "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -41,90 +21,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/page.js"
     ],
+    "/api/borrowBook/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/borrowBook/route.js"
+    ],
     "/api/dashboard/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/dashboard/route.js"
     ],
-    "/api/login/route": [
+    "/api/adminGraphs/getAdminGraphs/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/login/route.js"
+      "static/chunks/app/api/adminGraphs/getAdminGraphs/route.js"
     ],
-    "/student/page": [
+    "/api/adminGraphs/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/student/page.js"
-    ],
-    "/api/announcement/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/announcement/route.js"
-    ],
-    "/student/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/profile/page.js"
-    ],
-    "/api/admin/editAdmin/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/admin/editAdmin/route.js"
-    ],
-    "/student/books/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/books/page.js"
-    ],
-    "/api/book/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/book/route.js"
-    ],
-    "/student/books/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/books/[id]/page.js"
-    ],
-    "/api/requestBook/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/requestBook/route.js"
-    ],
-    "/admin/studentRequest/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/studentRequest/[id]/page.js"
-    ],
-    "/api/borrowBook/updateStatus/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/borrowBook/updateStatus/route.js"
-    ],
-    "/api/notification/addNotification/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/addNotification/route.js"
+      "static/chunks/app/api/adminGraphs/route.js"
     ],
     "/admin/borrowedBooks/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/admin/borrowedBooks/page.js"
-    ],
-    "/api/notification/readNotification/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/readNotification/route.js"
-    ],
-    "/student/notification/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/notification/[id]/page.js"
-    ],
-    "/api/notification/getNotif/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/getNotif/route.js"
     ]
   }
 }

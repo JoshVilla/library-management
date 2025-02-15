@@ -25,9 +25,14 @@ import { renderDate } from "@/utils/helpers";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import Link from "next/link";
+import PaginationComponent from "@/components/pagination/Pagination";
 const Page = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageState, setPageState] = useState({
+    currentPage: 1,
+    totalPage: 0,
+  });
   const tableHeaders = [
     "Student",
     "USN",
@@ -41,6 +46,10 @@ const Page = () => {
       const res = await getBorrowedBooks(params);
       if (res) {
         setData(res.data);
+        setPageState({
+          currentPage: res.currentPage,
+          totalPage: res.totalPages,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -102,6 +111,16 @@ const Page = () => {
         </Table>
         {isLoading && <LoadingComp />}
         {data.length === 0 && !isLoading && <EmptyData />}
+
+        <div className="mt-10">
+          <PaginationComponent
+            pageState={pageState}
+            onChangePage={(page) => {
+              fetchData({ page });
+              setPageState((prev) => ({ ...prev, currentPage: page }));
+            }}
+          />
+        </div>
       </div>
     </div>
   );

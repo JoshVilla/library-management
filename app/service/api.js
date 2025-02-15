@@ -93,3 +93,11 @@ export const readNotification = async (params) => {
 export const addNotification = async (params) => {
   return await post("/api/notification/addNotification", params);
 };
+
+export const updateMonthlyBorrowedBooksStats = async (params) => {
+  return await post("/api/adminGraphs", params);
+};
+
+export const getMonthlyBorrowedBooksStats = async (params) => {
+  return await post("/api/adminGraphs/getAdminGraphs", params);
+};

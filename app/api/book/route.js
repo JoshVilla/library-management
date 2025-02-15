@@ -6,7 +6,6 @@ export async function POST(req) {
     await connectToDatabase();
 
     const body = await req.json();
-    console.log("Received Body:", body); // Log body to inspect
 
     const { page = 1, limit = 5, title, bookCode, category, id, author } = body;
     const pageNumber = Number(page) || 1;
