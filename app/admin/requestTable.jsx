@@ -22,11 +22,16 @@ import { Bolt, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
+import PaginationComponent from "@/components/pagination/Pagination";
 
 const RequestTable = () => {
   const router = useRouter();
   const [requestData, setRequestData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageState, setPageState] = useState({
+    currentPage: 1,
+    totalPage: 0,
+  });
   const tableHeaders = [
     "Name",
     "Usn",
@@ -35,11 +40,15 @@ const RequestTable = () => {
     "Status",
     "Actions",
   ];
-  const fetchData = async () => {
+  const fetchData = async (params = {}) => {
     try {
-      const res = await getBorrowedBooks({ isApproved: 2 });
+      const res = await getBorrowedBooks({ isApproved: 2, ...params });
       if (res.data) {
         setRequestData(res.data);
+        setPageState({
+          currentPage: res.currentPage,
+          totalPage: res.totalPages,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -138,6 +147,15 @@ const RequestTable = () => {
       </Table>
       {isLoading && <LoadingComp />}
       {requestData.length === 0 && !isLoading && <EmptyData />}
+      {renderDate.length > 0 && (
+        <PaginationComponent
+          pageState={pageState}
+          onChangePage={(page) => {
+            setPageState((prev) => ({ ...prev, currentPage: page }));
+            fetchData({ page });
+          }}
+        />
+      )}
     </div>
   );
 };

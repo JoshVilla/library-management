@@ -98,12 +98,11 @@ const Graphs = () => {
   }, []);
   return (
     <div>
-      <Card className="flex flex-col">
-        <CardHeader className="items-center pb-0">
-          <CardTitle>Pie Chart - Label</CardTitle>
-          <CardDescription>{graphs.monthYear}</CardDescription>
-        </CardHeader>
-        <CardContent className="flex-1 pb-0">
+      <div className="flex flex-col">
+        <div className="text-center">
+          <div className="font-semibold">{graphs.monthYear}</div>
+        </div>
+        <div className="flex-1 pb-0">
           <ChartContainer
             config={chartConfig}
             className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
@@ -118,16 +117,13 @@ const Graphs = () => {
               />
             </PieChart>
           </ChartContainer>
-        </CardContent>
-        <CardFooter className="flex-col gap-2 text-sm">
-          <div className="flex items-center gap-2 font-medium leading-none">
-            <p className="text-gray-500 text-center">
-              Graph showing the number of students who borrowed, returned, had
-              expired, or cancelled transactions.
-            </p>
-          </div>
-        </CardFooter>
-      </Card>
+        </div>
+        <div className="flex-col gap-2 text-sm justify-center">
+          <p className="text-gray-500 text-center">
+            Monthly borrowing books data graph
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
