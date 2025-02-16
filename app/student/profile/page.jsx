@@ -19,12 +19,18 @@ import { Button } from "@/components/ui/button";
 import { editStudent } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { setUserInfo } from "@/app/redux/slices/studentInfoSlice";
+import { Eye, EyeOff } from "lucide-react";
 
 const Page = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
   const form = useForm({ defaultValues: state });
+  const passworForm = useForm({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   const [editMode, setEditMode] = useState({
@@ -32,6 +38,12 @@ const Page = () => {
     middleinitial: false,
     lastname: false,
     image: false,
+  });
+
+  const [showPassword, setShowPassword] = useState({
+    current: false,
+    new: false,
+    confirm: false,
   });
 
   const validateImageFile = (file) => {
@@ -251,17 +263,56 @@ const Page = () => {
           </div>
         </div>
         <div className="flex-1">
-          <div className="text-lg font-semibold">Other Information</div>
-          <Separator />
-          <div className="space-y-4 mt-6">
-            <div className="text-sm">
-              <span className="text-gray-500">USN: </span>
-              {state.usn}
+          <div>
+            <div className="text-lg font-semibold">Other Information</div>
+            <Separator />
+            <div className="space-y-4 mt-6">
+              <div className="text-sm">
+                <span className="text-gray-500">USN: </span>
+                {state.usn}
+              </div>
+              <div className="text-sm">
+                <span className="text-gray-500">Registered Since: </span>
+                {renderDate(state.createdAt)}
+              </div>
             </div>
-            <div className="text-sm">
-              <span className="text-gray-500">Registered Since: </span>
-              {renderDate(state.createdAt)}
-            </div>
+          </div>
+          <div className="mt-10">
+            <div className="text-lg font-semibold">Change Password</div>
+            <Separator />
+            <Form {...passworForm}>
+              <form action="">
+                <FormField
+                  control={passworForm.control}
+                  name="currentPassword"
+                  render={({ field: { onChange, value, ...fieldProps } }) => (
+                    <FormItem>
+                      <FormLabel>Current Password</FormLabel>
+                      <FormControl>
+                        <div className="relative w-full max-w-md">
+                          <Input
+                            placeholder="Enter your current password"
+                            type={showPassword.current ? "text" : "password"}
+                            {...fieldProps}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black focus:outline-none"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
           </div>
         </div>
       </div>

@@ -36,7 +36,11 @@ const page = () => {
           <div className="flex flex-row gap-6 items-center">
             <Avatar>
               <AvatarImage
-                src="/assets/defaultProfile.jpg"
+                src={
+                  studentInfo.pictureUrl
+                    ? studentInfo.pictureUrl
+                    : "/assets/defaultProfile.jpg"
+                }
                 style={{ objectFit: "cover", width: "100%", height: "100%" }}
               />
               <AvatarFallback>
@@ -55,45 +59,6 @@ const page = () => {
             </div>
           </div>
         )}
-        <div className="mt-10 flex gap-10">
-          <div className="flex-1">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {[
-                    "Name of Book",
-                    "Book Borrowed",
-                    "Book Returned",
-                    "Completed",
-                  ].map((heading) => (
-                    <TableHead key={heading} className="uppercase text-center">
-                      {heading}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-            </Table>
-          </div>
-          {/* <div className="flex-1">
-            <div className="text-lg font-semibold mb-6">Student`s Request</div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {[
-                    "Name of Book",
-                    "Book Borrowed",
-                    "Book Returned",
-                    "Completed",
-                  ].map((heading) => (
-                    <TableHead key={heading} className="uppercase text-center">
-                      {heading}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-            </Table>
-          </div> */}
-        </div>
       </div>
     </div>
   );

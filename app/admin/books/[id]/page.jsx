@@ -190,7 +190,6 @@ const Page = () => {
                               if (file && validateImageFile(file)) {
                                 onChange(file);
                               } else {
-                                // Reset the input if validation fails
                                 event.target.value = "";
                               }
                             }}
