@@ -89,6 +89,12 @@ const Graphs = () => {
     }
   };
 
+  function hasNonZeroValue(obj) {
+    return Object.entries(obj)
+      .filter(([key]) => !["_id", "__v", "monthYear"].includes(key)) // Exclude specific keys
+      .some(([_, value]) => value !== 0);
+  }
+
   useEffect(() => {
     fetchDataGraphs();
   }, []);
@@ -101,22 +107,29 @@ const Graphs = () => {
           <div className="text-center">
             <div className="font-semibold">{graphs.monthYear}</div>
           </div>
-          <div className="flex-1 pb-0">
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
-            >
-              <PieChart>
-                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-                <Pie
-                  data={transformDataForChart(graphs)}
-                  dataKey="counts"
-                  label
-                  nameKey="stats"
-                />
-              </PieChart>
-            </ChartContainer>
-          </div>
+          {hasNonZeroValue(graphs) ? (
+            <div className="flex-1 pb-0">
+              <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
+              >
+                <PieChart>
+                  <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                  <Pie
+                    data={transformDataForChart(graphs)}
+                    dataKey="counts"
+                    label
+                    nameKey="stats"
+                  />
+                </PieChart>
+              </ChartContainer>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-40">
+              <div className="text-gray-500 font-semibold">No Data</div>
+            </div>
+          )}
+
           <div className="flex-col gap-2 text-sm justify-center">
             <p className="text-gray-500 text-center">
               Monthly borrowing books data graph
