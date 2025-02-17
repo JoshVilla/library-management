@@ -14,6 +14,7 @@ export async function POST(req) {
       bookId,
       titleBook,
       authorBook,
+      bookCode,
     } = await req.json();
 
     const newBorrow = new BorrowBooks({
@@ -26,6 +27,7 @@ export async function POST(req) {
       bookId,
       titleBook,
       authorBook,
+      bookCode,
     });
 
     await newBorrow.save();

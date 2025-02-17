@@ -72,6 +72,7 @@ const Page = () => {
               "Author",
               "Category",
               "Book Code",
+              "Available",
               "Actions",
             ].map((heading) => (
               <TableHead key={heading} className="uppercase text-center">
@@ -105,6 +106,7 @@ const Page = () => {
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
               <TableCell className="text-center">{book.bookCode}</TableCell>
+              <TableCell className="text-center">{book.quantity}</TableCell>
               <TableCell className="flex justify-center gap-6 items-center">
                 <TooltipProvider>
                   <Tooltip>

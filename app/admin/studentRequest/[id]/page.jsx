@@ -2,6 +2,8 @@
 import {
   addNotification,
   getBorrowedBooks,
+  updateBook,
+  updateQuantity,
   updateRequestBook,
 } from "@/app/service/api";
 import Status from "@/components/status/status";
@@ -99,7 +101,10 @@ const Request = () => {
     try {
       const res = await updateRequestBook({ id: params.id, isApproved: value });
       if (res) {
-        fetchData();
+        if (value === STATUS.INPROGRESS) {
+          await updateQuantity({ bookCode: requestDetails.bookCode });
+        }
+        await fetchData();
         toast({
           title: res.message,
           className: "bg-black text-white",

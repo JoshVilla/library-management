@@ -1,17 +1,13 @@
 {
-  "/api/adminGraphs/getAdminGraphs/route": "app/api/adminGraphs/getAdminGraphs/route.js",
-  "/api/borrowBook/route": "app/api/borrowBook/route.js",
-  "/api/dashboard/route": "app/api/dashboard/route.js",
-  "/api/adminGraphs/route": "app/api/adminGraphs/route.js",
-  "/api/login/route": "app/api/login/route.js",
   "/api/announcement/route": "app/api/announcement/route.js",
+  "/api/login/route": "app/api/login/route.js",
   "/api/notification/route": "app/api/notification/route.js",
   "/api/book/route": "app/api/book/route.js",
   "/page": "app/page.js",
-  "/student/myRequest/page": "app/student/myRequest/page.js",
-  "/admin/page": "app/admin/page.js",
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js",
+  "/student/books/[id]/page": "app/student/books/[id]/page.js",
   "/admin/books/page": "app/admin/books/page.js",
-  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
-  "/student/page": "app/student/page.js",
-  "/student/books/page": "app/student/books/page.js"
+  "/admin/books/[id]/page": "app/admin/books/[id]/page.js",
+  "/student/books/page": "app/student/books/page.js",
+  "/student/page": "app/student/page.js"
 }

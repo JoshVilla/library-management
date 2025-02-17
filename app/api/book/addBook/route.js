@@ -25,6 +25,7 @@ export async function POST(req) {
       "bookCode",
       "category",
       "quantity",
+      "available",
     ];
     for (const field of requiredFields) {
       if (!bookData[field]) {

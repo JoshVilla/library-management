@@ -35,6 +35,10 @@ const booksSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    available: {
+      type: Number,
+      default: 1,
+    },
     quantity: {
       type: Number,
       default: 1,

@@ -115,6 +115,7 @@ const Page = () => {
               "Book Code",
               "Category",
               "Quantity",
+              "Available",
               "Action",
             ].map((heading) => (
               <TableHead key={heading} className="uppercase text-center">
@@ -148,6 +149,7 @@ const Page = () => {
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
               <TableCell className="text-center">{book.quantity}</TableCell>
+              <TableCell className="text-center">{book.available}</TableCell>
               <TableCell className="text-center flex items-center justify-center">
                 {loadingState.deleteLoading && book._id === bookId ? (
                   <Image

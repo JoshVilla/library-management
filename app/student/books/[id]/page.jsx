@@ -74,10 +74,11 @@ const Page = () => {
         studentName: `${state.firstname} ${state.middleinitial} ${state.lastname}`,
         titleBook: bookInfo.title,
         authorBook: bookInfo.author,
+        bookCode: bookInfo.bookCode,
       };
 
       const res = await requestBook(borrowParams);
-      console.log(res);
+
       if (res) {
         toast({
           title: res.message,

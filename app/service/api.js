@@ -101,3 +101,7 @@ export const updateMonthlyBorrowedBooksStats = async (params) => {
 export const getMonthlyBorrowedBooksStats = async (params) => {
   return await post("/api/adminGraphs/getAdminGraphs", params);
 };
+
+export const updateQuantity = async (params) => {
+  return await post("/api/book/reduceQuantityBook", params);
+};

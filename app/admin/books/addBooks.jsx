@@ -72,20 +72,21 @@ const AddBooksForm = ({ successfulAdd }) => {
 
   const handleAddBook = async (data) => {
     try {
-      if (data.picture && !validateImageFile(data.picture)) {
+      const params = { ...data, available: form.getValues("quantity") };
+      if (params.picture && !validateImageFile(params.picture)) {
         return;
       }
 
       setUploading(true);
       const formData = new FormData();
 
-      if (data.picture) {
-        formData.append("picture", data.picture);
+      if (params.picture) {
+        formData.append("picture", params.picture);
       }
 
-      Object.keys(data).forEach((key) => {
-        if (key !== "picture" && data[key]) {
-          formData.append(key, data[key]);
+      Object.keys(params).forEach((key) => {
+        if (key !== "picture" && params[key]) {
+          formData.append(key, params[key]);
         }
       });
 
@@ -113,7 +114,7 @@ const AddBooksForm = ({ successfulAdd }) => {
       setUploading(false);
     }
   };
-
+  console.log(form.getValues("quantity"));
   return (
     <div>
       <Dialog open={openDialog} onOpenChange={handleCloseDialog}>
