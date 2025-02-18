@@ -1,94 +1,38 @@
-import WeeklyBookStats from "@/app/models/booksStats";
-import BorrowBooks from "@/app/models/borrowBooks";
 import { connectToDatabase } from "@/lib/mongodb";
-import { MONTH, STATUS } from "@/utils/constant";
-import { getCurrentDayName } from "@/utils/helpers";
+import WeeklyBookStats from "@/app/models/booksStats";
 
 export async function POST(req) {
-  await connectToDatabase();
+  try {
+    await connectToDatabase();
 
-  const { month, bookId } = await req.json();
+    const { bookId, dateRange } = await req.json();
 
-  // Get current date and reset time to midnight for consistent comparison
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
+    // If no date range is provided, default to the past 7 days
+    let startDate = new Date();
+    if (dateRange) {
+      startDate = new Date(dateRange); // Use the provided dateRange if any
+    } else {
+      startDate.setDate(startDate.getDate() - 7); // Default to 7 days ago
+    }
 
-  // Set end of day (just before midnight)
-  const endOfDay = new Date(currentDate);
-  endOfDay.setHours(23, 59, 59, 999);
-
-  // Get yesterday's date
-  const oneDayAgo = new Date(currentDate);
-  oneDayAgo.setDate(currentDate.getDate() - 1);
-
-  // Get the day of the week (e.g., "Monday", "Tuesday")
-  const dayOfWeek = getCurrentDayName(oneDayAgo);
-
-  // Get the current year and day of the month
-  const year = currentDate.getFullYear();
-  const day = currentDate.getDate();
-
-  // Get BorrowBooks data for yesterday
-  const data = await BorrowBooks.find({
-    updatedAt: {
-      $gte: currentDate, // Start of yesterday
-      $lt: endOfDay, // End of yesterday
-    },
-  });
-
-  const countStatus = {
-    returned: 0,
-    notReturned: 0,
-    borrowing: 0,
-  };
-
-  // Process BorrowBooks data
-  data.forEach((item) => {
-    if (item.isApporoved === STATUS.RETURNED) countStatus.returned++;
-    else if (item.isApproved === STATUS.FAILED) countStatus.notReturned++;
-    else if (item.isApproved === STATUS.INPROGRESS) countStatus.borrowing++;
-  });
-
-  // Check if there's existing data for the current day, week, and year
-  const existingData = await WeeklyBookStats.findOne({
-    day,
-    week: dayOfWeek,
-    year,
-    bookId, // Ensure the correct bookId is matched
-  });
-
-  if (!existingData) {
-    // Create new data if no existing data
-    const newData = new WeeklyBookStats({
-      ...countStatus,
-      bookId, // Use the provided bookId
-      month: MONTH[currentDate.getMonth()],
-      week: dayOfWeek,
-      year,
-      day,
+    const endDate = new Date(); // Current date
+    console.log(startDate, endDate);
+    // Query to find the document based on bookId and the 7-day range
+    const res = await WeeklyBookStats.find({
+      bookId, // Matching the provided bookId
+      updatedAt: { $gte: startDate, $lte: endDate }, // Date range filter, less than or equal to current date
     });
 
-    // Save the new data to the database
-    await newData.save();
-  } else {
-    // Update the existing document if data exists
-    await WeeklyBookStats.findByIdAndUpdate(
-      existingData._id, // Update the document by its _id
-      { $set: countStatus },
-      { new: true }
-    );
-  }
+    // Return the result as a JSON response
+    return new Response(JSON.stringify(res), {
+      status: 200, // HTTP status code for success
+    });
+  } catch (error) {
+    console.log(error); // Log any errors
 
-  return new Response(
-    JSON.stringify({
-      ...countStatus,
-      month: MONTH[currentDate.getMonth()],
-      week: dayOfWeek,
-      year,
-      day,
-    }),
-    {
-      status: 200,
-    }
-  );
+    // Return an error response if something goes wrong
+    return new Response(JSON.stringify({ error: "An error occurred" }), {
+      status: 500, // HTTP status code for internal server error
+    });
+  }
 }

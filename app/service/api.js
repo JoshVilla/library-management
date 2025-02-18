@@ -106,6 +106,10 @@ export const updateQuantity = async (params) => {
   return await post("/api/book/reduceQuantityBook", params);
 };
 
+export const updateWeeklyBookStats = async (params) => {
+  return await post("/api/book/weeklyStats/updateWeeklyStats", params);
+};
+
 export const weeklyBookStats = async (params) => {
   return await post("/api/book/weeklyStats", params);
 };

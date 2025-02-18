@@ -1,5 +1,4 @@
 {
   "/api/book/route": "app/api/book/route.js",
-  "/api/book/weeklyStats/route": "app/api/book/weeklyStats/route.js",
   "/admin/books/[id]/page": "app/admin/books/[id]/page.js"
 }

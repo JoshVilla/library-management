@@ -1,25 +1,15 @@
-"use client";
-import { weeklyBookStats } from "@/app/service/api";
-import { useParams } from "next/navigation";
-import React, { useEffect } from "react";
+import { DatePickerWithRange } from "@/components/dateRangePicker/dateRangePicker";
+import React from "react";
 
 const Graph = () => {
-  const params = useParams();
-  const fetchData = async () => {
-    try {
-      const res = await weeklyBookStats({ bookId: params.id });
-      if (res) {
-        console.log(res);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, [params]);
-
-  return <div></div>;
+  return (
+    <div className="mt-10 p-6">
+      <div className="text-lg font-bold mb-6">Weekly Graph</div>
+      <div>
+        <DatePickerWithRange onDateChange={(date) => console.log(date)} />
+      </div>
+    </div>
+  );
 };
 
 export default Graph;

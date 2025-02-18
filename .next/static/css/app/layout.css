@@ -806,6 +806,9 @@ video {
 .mt-auto {
   margin-top: auto;
 }
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
 .block {
   display: block;
 }
@@ -1019,6 +1022,9 @@ video {
 }
 .w-\[1px\] {
   width: 1px;
+}
+.w-\[300px\] {
+  width: 300px;
 }
 .w-auto {
   width: auto;
