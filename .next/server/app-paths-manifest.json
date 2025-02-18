@@ -1,4 +1,10 @@
 {
+  "/api/book/weeklyStats/route": "app/api/book/weeklyStats/route.js",
+  "/api/book/weeklyStats/updateWeeklyStats/route": "app/api/book/weeklyStats/updateWeeklyStats/route.js",
   "/api/book/route": "app/api/book/route.js",
+  "/student/books/page": "app/student/books/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/student/books/[id]/page": "app/student/books/[id]/page.js",
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js",
   "/admin/books/[id]/page": "app/admin/books/[id]/page.js"
 }

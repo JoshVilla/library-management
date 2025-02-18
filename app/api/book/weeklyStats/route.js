@@ -5,34 +5,39 @@ export async function POST(req) {
   try {
     await connectToDatabase();
 
-    const { bookId, dateRange } = await req.json();
+    const { bookId, from, to } = await req.json();
 
-    // If no date range is provided, default to the past 7 days
-    let startDate = new Date();
-    if (dateRange) {
-      startDate = new Date(dateRange); // Use the provided dateRange if any
-    } else {
-      startDate.setDate(startDate.getDate() - 7); // Default to 7 days ago
+    if (!bookId) {
+      return new Response(JSON.stringify({ error: "bookId is required" }), {
+        status: 400,
+      });
     }
 
-    const endDate = new Date(); // Current date
-    console.log(startDate, endDate);
-    // Query to find the document based on bookId and the 7-day range
-    const res = await WeeklyBookStats.find({
-      bookId, // Matching the provided bookId
-      updatedAt: { $gte: startDate, $lte: endDate }, // Date range filter, less than or equal to current date
-    });
+    // Parse and validate date range
+    let startDate = from ? new Date(from) : new Date();
+    let endDate = to ? new Date(to) : new Date();
 
-    // Return the result as a JSON response
-    return new Response(JSON.stringify(res), {
-      status: 200, // HTTP status code for success
-    });
+    if (!from) {
+      startDate.setDate(endDate.getDate() - 7); // Default to last 7 days
+    }
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return new Response(JSON.stringify({ error: "Invalid date format" }), {
+        status: 400,
+      });
+    }
+
+    // MongoDB Query - Sorted from Oldest to Newest
+    const books = await WeeklyBookStats.find({
+      bookId,
+      updatedAt: { $gte: startDate.toISOString(), $lte: endDate.toISOString() },
+    }).sort({ updatedAt: 1 }); // Ascending order (old to new)
+
+    return new Response(JSON.stringify(books), { status: 200 });
   } catch (error) {
-    console.log(error); // Log any errors
-
-    // Return an error response if something goes wrong
-    return new Response(JSON.stringify({ error: "An error occurred" }), {
-      status: 500, // HTTP status code for internal server error
+    console.error("Error fetching book stats:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
     });
   }
 }

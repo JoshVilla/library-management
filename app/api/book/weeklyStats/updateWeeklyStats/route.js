@@ -41,10 +41,10 @@ export async function POST(req) {
     notReturned: 0,
     borrowing: 0,
   };
-
+  console.log(data);
   // Process BorrowBooks data
   data.forEach((item) => {
-    if (item.isApporoved === STATUS.RETURNED) countStatus.returned++;
+    if (item.isApproved === STATUS.RETURNED) countStatus.returned++;
     else if (item.isApproved === STATUS.FAILED) countStatus.notReturned++;
     else if (item.isApproved === STATUS.INPROGRESS) countStatus.borrowing++;
   });
