@@ -1,6 +1,6 @@
 "use client";
 
-import { getBooks, updateBook } from "@/app/service/api";
+import { getBooks, updateBook, updateWeeklyBookStats } from "@/app/service/api";
 import LoadingComp from "@/components/loading/loadingComp";
 import TitlePage from "@/components/titlePage/titlePage";
 import { Badge } from "@/components/ui/badge";
@@ -73,6 +73,7 @@ const Page = () => {
 
   const fetchBook = async () => {
     try {
+      await updateWeeklyBookStats({ bookId: params.id });
       const res = await getBooks({ id: params.id });
       if (res?.data?.length) {
         setBookData(res.data[0]);

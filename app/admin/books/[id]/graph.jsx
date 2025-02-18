@@ -3,12 +3,11 @@ import { DatePickerWithRange } from "@/components/dateRangePicker/dateRangePicke
 import { useParams } from "next/navigation";
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { TrendingUp } from "lucide-react";
+
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";

@@ -1,13 +1,9 @@
 {
-  "/api/book/weeklyStats/updateWeeklyStats/route": "app/api/book/weeklyStats/updateWeeklyStats/route.js",
-  "/api/book/route": "app/api/book/route.js",
-  "/api/book/weeklyStats/route": "app/api/book/weeklyStats/route.js",
-  "/api/borrowBook/route": "app/api/borrowBook/route.js",
-  "/api/borrowBook/updateStatus/route": "app/api/borrowBook/updateStatus/route.js",
-  "/api/notification/addNotification/route": "app/api/notification/addNotification/route.js",
-  "/api/book/reduceQuantityBook/route": "app/api/book/reduceQuantityBook/route.js",
+  "/api/adminGraphs/route": "app/api/adminGraphs/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
   "/admin/books/[id]/page": "app/admin/books/[id]/page.js",
-  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
   "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js",
-  "/admin/books/page": "app/admin/books/page.js"
+  "/admin/books/page": "app/admin/books/page.js",
+  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
+  "/admin/page": "app/admin/page.js"
 }
