@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { addDays, formatISO, differenceInCalendarDays, format } from "date-fns";
+import { addDays, format, differenceInCalendarDays } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -27,8 +27,8 @@ export function DatePickerWithRange({ className, onDateChange }) {
         setDate(range);
         if (onDateChange) {
           onDateChange({
-            from: formatISO(range.from), // Convert to ISO format
-            to: formatISO(range.to),
+            from: format(range.from, "yyyy-MM-dd"), // Format to YYYY-MM-DD
+            to: format(range.to, "yyyy-MM-dd"), // Format to YYYY-MM-DD
           });
         }
       } else {
@@ -37,7 +37,7 @@ export function DatePickerWithRange({ className, onDateChange }) {
     } else {
       setDate(range);
       if (onDateChange && range?.from) {
-        onDateChange({ from: formatISO(range.from), to: null }); // Single date selection
+        onDateChange({ from: format(range.from, "yyyy-MM-dd"), to: null }); // Single date selection
       }
     }
   };

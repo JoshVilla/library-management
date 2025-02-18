@@ -27,6 +27,11 @@ export async function POST(req) {
       });
     }
 
+    // Set time to the start of the day for startDate
+    startDate.setHours(0, 0, 0, 0);
+    // Set time to the end of the day for endDate
+    endDate.setHours(23, 59, 59, 999);
+
     // MongoDB Query - Sorted from Oldest to Newest
     const books = await WeeklyBookStats.find({
       bookId,
