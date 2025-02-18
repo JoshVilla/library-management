@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { getMonthlyBorrowedBooksStats } from "../service/api";
 import PieGraphSkeleton from "@/components/skeleton/pieGraphSkeleton";
+import { usePathname } from "next/navigation";
 
 const transformDataForChart = (data) => {
   return [
@@ -74,6 +75,7 @@ const chartConfig = {
 };
 
 const Graphs = () => {
+  const path = usePathname();
   const [graphs, setGraphs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const fetchDataGraphs = async () => {
@@ -97,7 +99,7 @@ const Graphs = () => {
 
   useEffect(() => {
     fetchDataGraphs();
-  }, []);
+  }, [path]);
   return (
     <div>
       {isLoading ? (

@@ -31,6 +31,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { bookCategories } from "@/utils/constant";
 import Captcha from "@/components/captcha/captcha";
+import Graph from "./graph";
 
 const Page = () => {
   const params = useParams();
@@ -135,7 +136,6 @@ const Page = () => {
     <div>
       <TitlePage title="Book Information" hasBack />
       <Separator className="my-6" />
-
       <div className="text-right mb-4">
         {isModify && (
           <Button variant="outline" onClick={() => setIsModify(false)}>
@@ -161,7 +161,6 @@ const Page = () => {
           setOpen={setOpenCaptcha}
         />
       </div>
-
       {isModify ? (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleModify)}>
@@ -412,6 +411,9 @@ const Page = () => {
           </div>
         </div>
       )}
+      <div>
+        <Graph />
+      </div>
     </div>
   );
 };

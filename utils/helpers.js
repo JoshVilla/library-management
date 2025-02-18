@@ -58,3 +58,16 @@ export const renderDate = (date = "") => {
 export const isExpired = (fromDate) => {
   return new Date(fromDate).getTime() < new Date().setHours(0, 0, 0, 0);
 };
+
+export function getCurrentDayName(date) {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return daysOfWeek[date.getDay()];
+}
