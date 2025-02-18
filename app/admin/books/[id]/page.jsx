@@ -236,22 +236,22 @@ const Page = () => {
                   <div>
                     <FormField
                       control={form.control}
-                      name="quantity"
+                      name="available"
                       render={({ field: { onChange, ...fieldProps } }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Quantity</FormLabel>
+                          <FormLabel>Available</FormLabel>
                           <FormControl>
                             <Input
                               className="w-40"
-                              placeholder="Input Quantity"
+                              placeholder="Input Available"
                               {...fieldProps}
                               value={
-                                fieldProps.value || infoState.quantity || ""
+                                fieldProps.value || infoState.available || ""
                               }
                               onChange={(event) => {
                                 setInfoState((prev) => ({
                                   ...prev,
-                                  quantity: event.target.value,
+                                  available: event.target.value,
                                 }));
                                 onChange(event.target.value);
                               }}
@@ -397,7 +397,7 @@ const Page = () => {
             <div>
               <div className="flex items-center justify-between">
                 <div className="text-4xl font-bold">{bookData.title}</div>
-                <div>Quantity: {bookData.quantity}</div>
+                <div>Available: {bookData.available}</div>
               </div>
               <Badge className="mt-4">{bookData.category}</Badge>
             </div>

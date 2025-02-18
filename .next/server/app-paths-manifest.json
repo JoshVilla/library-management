@@ -1,12 +1,18 @@
 {
   "/api/book/route": "app/api/book/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/notification/route": "app/api/notification/route.js",
-  "/api/announcement/route": "app/api/announcement/route.js",
+  "/api/book/editBook/route": "app/api/book/editBook/route.js",
   "/api/login/route": "app/api/login/route.js",
+  "/api/announcement/route": "app/api/announcement/route.js",
+  "/api/notification/route": "app/api/notification/route.js",
+  "/api/borrowBook/route": "app/api/borrowBook/route.js",
+  "/api/dashboard/route": "app/api/dashboard/route.js",
+  "/api/adminGraphs/getAdminGraphs/route": "app/api/adminGraphs/getAdminGraphs/route.js",
+  "/api/adminGraphs/route": "app/api/adminGraphs/route.js",
   "/page": "app/page.js",
-  "/student/books/[id]/page": "app/student/books/[id]/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/books/page": "app/admin/books/page.js",
+  "/admin/books/[id]/page": "app/admin/books/[id]/page.js",
+  "/student/books/page": "app/student/books/page.js",
   "/student/page": "app/student/page.js",
-  "/student/myRequest/page": "app/student/myRequest/page.js",
-  "/student/books/page": "app/student/books/page.js"
+  "/student/books/[id]/page": "app/student/books/[id]/page.js"
 }
