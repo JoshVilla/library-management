@@ -1,9 +1,7 @@
 "use client";
-
 import * as React from "react";
-import { addDays, format, differenceInCalendarDays } from "date-fns";
+import { addDays, format, differenceInCalendarDays, parse } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,22 +11,35 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePickerWithRange({ className, onDateChange }) {
-  const [date, setDate] = React.useState({
-    from: new Date(),
-    to: addDays(new Date(), 6), // Default to a 7-day range
+export function DatePickerWithRange({ className, onDateChange, initialValue }) {
+  const [date, setDate] = React.useState(() => {
+    if (initialValue?.from && initialValue?.to) {
+      return {
+        from:
+          typeof initialValue.from === "string"
+            ? parse(initialValue.from, "yyyy-MM-dd", new Date())
+            : initialValue.from,
+        to:
+          typeof initialValue.to === "string"
+            ? parse(initialValue.to, "yyyy-MM-dd", new Date())
+            : initialValue.to,
+      };
+    }
+    return {
+      from: new Date(),
+      to: addDays(new Date(), 6),
+    };
   });
 
   const handleSelect = (range) => {
     if (range?.from && range?.to) {
       const daysDifference = differenceInCalendarDays(range.to, range.from);
-
       if (daysDifference <= 7) {
         setDate(range);
         if (onDateChange) {
           onDateChange({
-            from: format(range.from, "yyyy-MM-dd"), // Format to YYYY-MM-DD
-            to: format(range.to, "yyyy-MM-dd"), // Format to YYYY-MM-DD
+            from: format(range.from, "yyyy-MM-dd"),
+            to: format(range.to, "yyyy-MM-dd"),
           });
         }
       } else {
@@ -37,7 +48,7 @@ export function DatePickerWithRange({ className, onDateChange }) {
     } else {
       setDate(range);
       if (onDateChange && range?.from) {
-        onDateChange({ from: format(range.from, "yyyy-MM-dd"), to: null }); // Single date selection
+        onDateChange({ from: format(range.from, "yyyy-MM-dd"), to: null });
       }
     }
   };

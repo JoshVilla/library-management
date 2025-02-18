@@ -19,7 +19,7 @@ export async function POST(req) {
 
   // Get yesterday's date
   const oneDayAgo = new Date(currentDate);
-  oneDayAgo.setDate(currentDate.getDate() - 1);
+  oneDayAgo.setDate(currentDate.getDate());
 
   // Get the day of the week (e.g., "Monday", "Tuesday")
   const dayOfWeek = getCurrentDayName(oneDayAgo);
@@ -30,6 +30,7 @@ export async function POST(req) {
 
   // Get BorrowBooks data for yesterday
   const data = await BorrowBooks.find({
+    bookId,
     updatedAt: {
       $gte: currentDate, // Start of yesterday
       $lt: endOfDay, // End of yesterday
@@ -41,7 +42,7 @@ export async function POST(req) {
     notReturned: 0,
     borrowing: 0,
   };
-  console.log(data);
+  console.log(data, "datadatadatadatadatadatadatadatadatadatadatadata");
   // Process BorrowBooks data
   data.forEach((item) => {
     if (item.isApproved === STATUS.RETURNED) countStatus.returned++;

@@ -61,6 +61,10 @@ const Graph = () => {
         <div className="flex gap-3 items-center">
           <DatePickerWithRange
             onDateChange={(date) => setDate({ to: date.to, from: date.from })}
+            initialValue={{
+              from: "2025-02-11",
+              to: "2025-02-18",
+            }}
           />
           <Button size="sm" onClick={fetchData}>
             Search
