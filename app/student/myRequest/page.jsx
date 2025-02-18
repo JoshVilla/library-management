@@ -161,7 +161,7 @@ const Page = () => {
                 "Status",
                 "Date to Borrow",
                 "Created At",
-                "Actions",
+                // "Actions",
               ].map((heading) => (
                 <TableHead key={heading} className="uppercase text-center">
                   {heading}
@@ -187,7 +187,7 @@ const Page = () => {
                 <TableCell className="text-center">
                   {renderDate(request.createdAt)}
                 </TableCell>
-                <TableCell className="flex justify-center gap-6 items-center">
+                {/* <TableCell className="flex justify-center gap-6 items-center">
                   {isExpired(request.fromDate) ||
                   request.isApproved === STATUS.APPROVED ||
                   request.isApproved === STATUS.CANCELLED ? null : (
@@ -253,7 +253,7 @@ const Page = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>

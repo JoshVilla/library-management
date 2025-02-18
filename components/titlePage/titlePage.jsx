@@ -2,10 +2,15 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const TitlePage = ({ title, hasBack = false }) => {
   const router = useRouter();
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
   return (
     <div>
       {hasBack ? (

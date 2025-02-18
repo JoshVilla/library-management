@@ -3,16 +3,9 @@ import Sidebar from "@/components/sidebar/sidebar";
 import React, { useEffect, useState } from "react";
 import { menuProps, sidebarTitle } from "./menuProps";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Bell,
-  BellDot,
-  DoorOpen,
-  Mail,
-  MailCheck,
-  MailOpen,
-} from "lucide-react";
+import { Bell, BellDot, DoorOpen, Mail, MailOpen } from "lucide-react";
 import { persistor } from "../redux/store";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { logoutUser } from "../redux/slices/studentInfoSlice";
 import {
   AlertDialog,
@@ -37,6 +30,7 @@ import { Separator } from "@/components/ui/separator";
 
 const Layout = ({ children }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const userInfo = useSelector((state) => state.user?.userInfo) || {};
   const dispatch = useDispatch();
   const [unreadCount, setUnreadCount] = useState(null); // Simulated unread count
@@ -50,14 +44,13 @@ const Layout = ({ children }) => {
     router.push("/");
   };
 
-  const arr = new Array(10).fill({
-    message: "hello",
-    createdAt: "Feb 12 2025",
-  });
-
   useEffect(() => {
     fetchNotification();
   }, []);
+
+  useEffect(() => {
+    console.log(pathname);
+  }, [pathname]);
 
   const fetchNotification = async () => {
     try {

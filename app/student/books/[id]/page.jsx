@@ -60,7 +60,6 @@ const Page = () => {
 
   useEffect(() => {
     fetchBook();
-    console.log(state);
   }, []);
 
   const onSubmit = async (data) => {
@@ -135,7 +134,7 @@ const Page = () => {
                   {bookInfo?.description}
                 </div>
                 <div className="text-sm">
-                  Item Available: {bookInfo?.quantity}
+                  Item Available: {bookInfo?.available}
                 </div>
               </div>
             </div>
@@ -256,8 +255,14 @@ const Page = () => {
                   </ul>
                 </div>
 
-                <Button type="submit" className="mt-4">
-                  {loadingState.borrowing
+                <Button
+                  type="submit"
+                  className="mt-4"
+                  disabled={!bookInfo.available}
+                >
+                  {!bookInfo.available
+                    ? "Item not available"
+                    : loadingState.borrowing
                     ? "Submitting Request..."
                     : "Submit Borrow Request"}
                 </Button>
