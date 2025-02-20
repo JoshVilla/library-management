@@ -106,7 +106,7 @@ const Page = () => {
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
               <TableCell className="text-center">{book.bookCode}</TableCell>
-              <TableCell className="text-center">{book.quantity}</TableCell>
+              <TableCell className="text-center">{book.available}</TableCell>
               <TableCell className="flex justify-center gap-6 items-center">
                 <TooltipProvider>
                   <Tooltip>
