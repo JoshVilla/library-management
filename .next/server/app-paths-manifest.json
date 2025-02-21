@@ -1,5 +1,7 @@
 {
-  "/api/notification/route": "app/api/notification/route.js",
-  "/api/changePassword/route": "app/api/changePassword/route.js",
-  "/student/profile/page": "app/student/profile/page.js"
+  "/admin/students/page": "app/admin/students/page.js",
+  "/admin/books/page": "app/admin/books/page.js",
+  "/admin/books/[id]/page": "app/admin/books/[id]/page.js",
+  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
+  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js"
 }
