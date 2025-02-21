@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/app/models/admin";
 import { Base64 } from "base64-string";
+import { hashPassword } from "@/utils/helpers";
 
 export async function POST(req) {
   try {
@@ -34,10 +35,12 @@ export async function POST(req) {
       );
     }
 
+    const hashedPassword = await hashPassword(password);
+
     // Update user password and mark as registered
     const updatedUser = await User.findOneAndUpdate(
       { usn }, // Filter condition
-      { $set: { password: base.encode(password), isRegistered: true } }, // Update object
+      { $set: { password: hashedPassword, isRegistered: true } }, // Update object
       { new: true } // Return the updated document
     );
 

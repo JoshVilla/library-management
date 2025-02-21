@@ -36,3 +36,5 @@ export const MONTH = [
   "November",
   "December",
 ];
+
+export const SALT_ROUNDS = 10;

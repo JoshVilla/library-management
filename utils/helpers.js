@@ -2,7 +2,8 @@
 import cloudinary from "@/lib/cloudinaryConfig";
 import { connectToDatabase } from "@/lib/mongodb";
 import { format } from "date-fns";
-
+import { SALT_ROUNDS } from "./constant";
+import bcrypt from "bcryptjs";
 export const getCloudinaryPublicId = (url) => {
   if (!url) return null;
 
@@ -71,3 +72,11 @@ export function getCurrentDayName(date) {
   ];
   return daysOfWeek[date.getDay()];
 }
+
+export const hashPassword = async (password) => {
+  return await bcrypt.hash(password, SALT_ROUNDS);
+};
+
+export const comparePassword = async (password, hashedPassword) => {
+  return await bcrypt.compare(password, hashedPassword);
+};

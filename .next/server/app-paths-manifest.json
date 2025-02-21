@@ -1,7 +1,6 @@
 {
-  "/admin/students/page": "app/admin/students/page.js",
-  "/admin/books/page": "app/admin/books/page.js",
-  "/admin/books/[id]/page": "app/admin/books/[id]/page.js",
-  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
-  "/admin/studentRequest/[id]/page": "app/admin/studentRequest/[id]/page.js"
+  "/api/login/route": "app/api/login/route.js",
+  "/register/page": "app/register/page.js",
+  "/page": "app/page.js",
+  "/student/page": "app/student/page.js"
 }

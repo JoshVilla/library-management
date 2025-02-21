@@ -33,11 +33,17 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await login(data);
-      if (res.user.length === 0) {
+      if (!res.isSuccess) {
+        toast({
+          title: "Login Failed",
+          description: res.message,
+          className: "bg-red-500 text-white",
+        });
+      } else if (res?.user.length === 0) {
         toast({
           title: "Login Failed",
           description: "Check your credentials and try again.",
-          className: "bg-black text-white",
+          className: "bg-red-500 text-white",
         });
       } else {
         router.push("/student/");
