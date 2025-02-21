@@ -1,6 +1,5 @@
 {
   "/api/notification/route": "app/api/notification/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/changePassword/route": "app/api/changePassword/route.js",
   "/student/profile/page": "app/student/profile/page.js"
 }

@@ -175,6 +175,11 @@ const Page = () => {
         });
         dispatch(setUserInfo(res.data));
         passworForm.reset();
+        setPasswordValue({
+          new: "",
+          current: "",
+          confirm: "",
+        });
       } else {
         toast({
           title: "Failed",
