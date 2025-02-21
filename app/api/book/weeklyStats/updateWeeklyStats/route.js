@@ -31,10 +31,10 @@ export async function POST(req) {
   // Get BorrowBooks data for yesterday
   const data = await BorrowBooks.find({
     bookId,
-    updatedAt: {
-      $gte: currentDate, // Start of yesterday
-      $lt: endOfDay, // End of yesterday
-    },
+    // updatedAt: {
+    //   $gte: currentDate, // Start of yesterday
+    //   $lt: endOfDay, // End of yesterday
+    // },
   });
 
   const countStatus = {
@@ -42,7 +42,7 @@ export async function POST(req) {
     notReturned: 0,
     borrowing: 0,
   };
-  console.log(data, "datadatadatadatadatadatadatadatadatadatadatadata");
+
   // Process BorrowBooks data
   data.forEach((item) => {
     if (item.isApproved === STATUS.RETURNED) countStatus.returned++;
