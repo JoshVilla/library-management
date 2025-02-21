@@ -1,7 +1,7 @@
 "use client";
 
 import TitlePage from "@/components/titlePage/titlePage";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Form,
@@ -16,10 +16,11 @@ import Image from "next/image";
 import { renderDate } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { editStudent } from "@/app/service/api";
+import { editStudent, changePassword } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { setUserInfo } from "@/app/redux/slices/studentInfoSlice";
 import { Eye, EyeOff } from "lucide-react";
+import PasswordIndicator from "@/components/passwordIndicator/page";
 
 const Page = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,10 @@ const Page = () => {
     newPassword: "",
     confirmNewPassword: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    edit: false,
+    changePassword: false,
+  });
 
   const [editMode, setEditMode] = useState({
     firstname: false,
@@ -45,6 +49,14 @@ const Page = () => {
     new: false,
     confirm: false,
   });
+
+  const [passwordValue, setPasswordValue] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
+
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
 
   const validateImageFile = (file) => {
     // Check if file exists
@@ -77,7 +89,7 @@ const Page = () => {
   const handleSave = async (data) => {
     try {
       const filteredData = getParams(data);
-      setIsLoading(true);
+      setIsLoading((prev) => ({ ...prev, edit: true }));
       if (filteredData.picture && !validateImageFile(filteredData.picture)) {
         return;
       }
@@ -130,7 +142,50 @@ const Page = () => {
         className: "bg-red-500 text-white",
       });
     } finally {
-      setIsLoading(false);
+      setIsLoading((prev) => ({ ...prev, edit: false }));
+    }
+  };
+
+  const isValidPassword = useCallback(() => {
+    const isValidFormatPassword = isPasswordValid;
+    const isNewAndConfirmPasswordMatch =
+      passwordValue.new === passwordValue.confirm;
+
+    return (
+      passwordValue.current &&
+      isValidFormatPassword &&
+      isNewAndConfirmPasswordMatch
+    );
+  }, [passwordValue]);
+
+  const handleChangePassword = async () => {
+    try {
+      setIsLoading((prev) => ({ ...prev, changePassword: true }));
+      const res = await changePassword({
+        id: state._id,
+        currentPassword: passwordValue.current,
+        newPassword: passwordValue.new,
+      });
+
+      if (res.status === 200) {
+        toast({
+          title: "Success",
+          description: res.message,
+          className: "bg-green-500 text-white",
+        });
+        dispatch(setUserInfo(res.data));
+        passworForm.reset();
+      } else {
+        toast({
+          title: "Failed",
+          description: res.message,
+          className: "bg-red-500 text-white",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading((prev) => ({ ...prev, changePassword: false }));
     }
   };
 
@@ -281,7 +336,10 @@ const Page = () => {
             <div className="text-lg font-semibold">Change Password</div>
             <Separator />
             <Form {...passworForm}>
-              <form action="">
+              <form
+                action=""
+                onSubmit={passworForm.handleSubmit(handleChangePassword)}
+              >
                 <FormField
                   control={passworForm.control}
                   name="currentPassword"
@@ -293,14 +351,26 @@ const Page = () => {
                           <Input
                             placeholder="Enter your current password"
                             type={showPassword.current ? "text" : "password"}
+                            value={value || passwordValue.current}
+                            onChange={(e) =>
+                              setPasswordValue((prev) => ({
+                                ...prev,
+                                current: e.target.value,
+                              }))
+                            }
                             {...fieldProps}
                           />
                           <button
                             type="button"
                             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black focus:outline-none"
-                            onClick={() => setShowPassword(!showPassword)}
+                            onClick={() =>
+                              setShowPassword((prev) => ({
+                                ...prev,
+                                current: !prev.current,
+                              }))
+                            }
                           >
-                            {showPassword ? (
+                            {showPassword.current ? (
                               <EyeOff size={20} />
                             ) : (
                               <Eye size={20} />
@@ -311,6 +381,103 @@ const Page = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={passworForm.control}
+                  name="newPassword"
+                  render={({ field: { onChange, value, ...fieldProps } }) => (
+                    <FormItem>
+                      <FormLabel>New Password</FormLabel>
+                      <FormControl>
+                        <div className="relative w-full max-w-md">
+                          <Input
+                            placeholder="Enter your new password"
+                            type={showPassword.new ? "text" : "password"}
+                            value={value || passwordValue.new}
+                            onChange={(e) =>
+                              setPasswordValue((prev) => ({
+                                ...prev,
+                                new: e.target.value,
+                              }))
+                            }
+                            {...fieldProps}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black focus:outline-none"
+                            onClick={() =>
+                              setShowPassword((prev) => ({
+                                ...prev,
+                                new: !prev.new,
+                              }))
+                            }
+                          >
+                            {showPassword.new ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <PasswordIndicator
+                  password={passwordValue.new}
+                  isValid={setIsPasswordValid}
+                />
+                <FormField
+                  control={passworForm.control}
+                  name="newPassword"
+                  render={({ field: { onChange, value, ...fieldProps } }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <div className="relative w-full max-w-md">
+                          <Input
+                            placeholder="Enter your confirm password"
+                            type={showPassword.confirm ? "text" : "password"}
+                            value={value || passwordValue.confirm}
+                            onChange={(e) =>
+                              setPasswordValue((prev) => ({
+                                ...prev,
+                                confirm: e.target.value,
+                              }))
+                            }
+                            {...fieldProps}
+                          />
+                          <button
+                            type="button"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-black focus:outline-none"
+                            onClick={() =>
+                              setShowPassword((prev) => ({
+                                ...prev,
+                                confirm: !prev.confirm,
+                              }))
+                            }
+                          >
+                            {showPassword.confirm ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
+                          </button>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="mt-10"
+                  type="submit"
+                  disabled={!isValidPassword()}
+                >
+                  {`${
+                    isLoading.changePassword
+                      ? "Changing Password"
+                      : "Change Password"
+                  }`}
+                </Button>
               </form>
             </Form>
           </div>

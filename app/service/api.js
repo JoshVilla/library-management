@@ -113,3 +113,7 @@ export const updateWeeklyBookStats = async (params) => {
 export const weeklyBookStats = async (params) => {
   return await post("/api/book/weeklyStats", params);
 };
+
+export const changePassword = async (params) => {
+  return await post("/api/changePassword", params);
+};

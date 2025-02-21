@@ -1,9 +1,6 @@
 {
-  "/api/book/weeklyStats/route": "app/api/book/weeklyStats/route.js",
-  "/api/book/route": "app/api/book/route.js",
-  "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/student/books/page": "app/student/books/page.js",
-  "/student/books/[id]/page": "app/student/books/[id]/page.js",
-  "/admin/books/[id]/page": "app/admin/books/[id]/page.js"
+  "/api/notification/route": "app/api/notification/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/changePassword/route": "app/api/changePassword/route.js",
+  "/student/profile/page": "app/student/profile/page.js"
 }
