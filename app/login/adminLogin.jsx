@@ -32,37 +32,6 @@ const AdminLogin = () => {
   const username = form.watch("username");
   const password = form.watch("password");
 
-  // const handleLogin = async (data) => {
-  //   try {
-  //     setLoading(true);
-  //     const res = await login(data);
-  //     if (res.user.length === 0) {
-  //       toast({
-  //         title: "Login Failed",
-  //         description: "Check your credentials and try again.",
-  //         className: "bg-black text-white",
-  //       });
-  //     } else {
-  //       router.push("/student/");
-  //       dispatch(setUserInfo(res.user[0]));
-  //       toast({
-  //         title: "Login Successful",
-  //         description: "Welcome back!",
-  //         className: "bg-black text-white",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast({
-  //       title: "Error",
-  //       description: "Something went wrong, please try again later.",
-  //       className: "bg-red text-white",
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const handleLogin = () => {
     if (username === "admin" && password === "admin123") {
       window.location.href = "/admin/";
