@@ -1,6 +1,7 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/app/models/admin";
 import { Base64 } from "base64-string";
+import { comparePassword, hashPassword } from "@/utils/helpers";
 
 export async function POST(req) {
   try {
@@ -11,24 +12,11 @@ export async function POST(req) {
     const getUserInfo = await User.findById(id);
     console.log(getUserInfo);
 
-    if (!getUserInfo) {
-      return new Response(JSON.stringify({ data: "User cannot found" }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
-    } else if (getUserInfo.password !== base.encode(currentPassword)) {
-      return new Response(
-        JSON.stringify({ message: "Password didnt match", data: {} }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    } else {
+    if (await comparePassword(currentPassword, getUserInfo.password)) {
       const updateData = await User.findByIdAndUpdate(
         id,
         {
-          password: base.encode(newPassword),
+          password: await hashPassword(newPassword),
         },
         { new: true, runValidators: true }
       );
@@ -37,7 +25,11 @@ export async function POST(req) {
           message: "Password updated",
           data: updateData,
           status: 200,
-        }),
+        })
+      );
+    } else {
+      return new Response(
+        JSON.stringify({ message: "Password didnt match", data: {} }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },

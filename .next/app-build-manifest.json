@@ -6,15 +6,25 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/register/page": [
+    "/student/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/register/page.js"
+      "static/chunks/app/student/layout.js"
     ],
-    "/api/register/route": [
+    "/student/profile/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/register/route.js"
+      "static/chunks/app/student/profile/page.js"
+    ],
+    "/api/notification/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notification/route.js"
+    ],
+    "/api/changePassword/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/changePassword/route.js"
     ],
     "/page": [
       "static/chunks/webpack.js",
@@ -26,11 +36,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/login/route.js"
     ],
-    "/student/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/student/layout.js"
-    ],
     "/student/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -40,11 +45,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/announcement/route.js"
-    ],
-    "/api/notification/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/notification/route.js"
     ]
   }
 }

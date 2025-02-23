@@ -10,7 +10,7 @@ export async function POST(req) {
     const { usn, password } = await req.json(); // Await req.json()
 
     const user = await User.find({ usn }); // Use findOne() with an object filter
-    console.log(user);
+
     if (!user) {
       return new Response(JSON.stringify({ error: "User not found" }), {
         status: 404,
