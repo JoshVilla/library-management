@@ -55,6 +55,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/book/route.js"
+    ],
+    "/student/books/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/student/books/[id]/page.js"
+    ],
+    "/api/requestBook/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/requestBook/route.js"
     ]
   }
 }

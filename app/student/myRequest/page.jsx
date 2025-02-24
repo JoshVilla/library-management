@@ -45,49 +45,12 @@ import { isExpired } from "@/utils/helpers";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import StatusBadge from "@/components/statusBadge/page";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
   const { toast } = useToast();
   const state = useSelector((state) => state.user.userInfo);
-  const [dataRequest, setDataRequest] = useState([]);
-  const [loadingState, setLoadingState] = useState({
-    init: true,
-    delete: false,
-  });
-  const [dataId, setDataId] = useState(""); // use for loading in deleting a data
-  const fetchData = async (params = {}) => {
-    try {
-      const res = await getBorrowedBooks({ studentId: state._id, ...params });
-      console.log(res.data);
-      if (res.data) {
-        setDataRequest(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingState((prev) => ({ ...prev, init: false }));
-    }
-  };
-
-  const renderStatus = (val) => {
-    let text = "";
-    let className = "";
-    if (val === STATUS.PENDING) {
-      text = "Pending";
-      className = "bg-white text-black";
-    }
-    if (val === STATUS.APPROVED) {
-      text = "Aprroved";
-      className = "bg-green-700 text-white";
-    }
-    if (val === STATUS.CANCELLED) {
-      (text = "Cancelled"), (className = "bg-black text-white");
-    }
-    if (val === STATUS.INPROGRESS) {
-      (text = "Borrowing in Progress"),
-        (className = "bg-yellow-500 text-white");
-    }
-    return <Badge className={className}>{text}</Badge>;
-  };
+  const { data, pageState, loading, setPageState, setData, fetchData } =
+    useFetchDataTable(getBorrowedBooks, { studentId: state._id });
 
   const renderDateRange = (from, to) => {
     const newFrom = new Date(from);
@@ -119,26 +82,6 @@ const Page = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      setDataId(id);
-      setLoadingState((prev) => ({ ...prev, delete: true }));
-      const res = await deleteRequest({ id });
-      if (res) {
-        fetchData();
-        toast({
-          title: res.message,
-          className: "bg-black text-white",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setDataId("");
-      setLoadingState((prev) => ({ ...prev, delete: true }));
-    }
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -147,11 +90,11 @@ const Page = () => {
     <div>
       <TitlePage title="My Request" />
       <div>
-        {/* <SearchForm
+        <SearchForm
           searchProps={searchProps}
           api={fetchData}
-          result={setDataRequest}
-        /> */}
+          result={setData}
+        />
         <Table className="mt-6">
           <TableHeader>
             <TableRow>
@@ -161,7 +104,7 @@ const Page = () => {
                 "Status",
                 "Date to Borrow",
                 "Created At",
-                // "Actions",
+                "Actions",
               ].map((heading) => (
                 <TableHead key={heading} className="uppercase text-center">
                   {heading}
@@ -170,7 +113,7 @@ const Page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dataRequest.map((request) => (
+            {data.map((request) => (
               <TableRow key={request._id}>
                 <TableCell className="text-center">
                   {request.titleBook}
@@ -187,7 +130,7 @@ const Page = () => {
                 <TableCell className="text-center">
                   {renderDate(request.createdAt)}
                 </TableCell>
-                {/* <TableCell className="flex justify-center gap-6 items-center">
+                <TableCell className="flex justify-center gap-6 items-center">
                   {isExpired(request.fromDate) ||
                   request.isApproved === STATUS.APPROVED ||
                   request.isApproved === STATUS.CANCELLED ? null : (
@@ -218,48 +161,13 @@ const Page = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   )}
-                  {dataId === request._id ? (
-                    <Image
-                      src={"/assets/Loading.gif"}
-                      width={10}
-                      height={10}
-                      alt="loading"
-                    />
-                  ) : (
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <Trash width={15} fill="true" />{" "}
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure want to delete your request?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your request from the database.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(request._id)}
-                          >
-                            Yes
-                          </AlertDialogAction>
-                          <AlertDialogCancel>
-                            No, I changed my mind
-                          </AlertDialogCancel>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
-                </TableCell> */}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        {dataRequest.length === 0 && !loadingState.init && <EmptyData />}
-        {loadingState.init && <LoadingComp />}
+        {data.length === 0 && !loading && <EmptyData />}
+        {loading && <LoadingComp />}
       </div>
     </div>
   );

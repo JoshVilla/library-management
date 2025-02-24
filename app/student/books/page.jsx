@@ -28,6 +28,7 @@ import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
+  const router = useRouter();
   const { pageState, loading, setPageState, setData, data, error, fetchData } =
     useFetchDataTable(getBooks);
 
@@ -78,7 +79,7 @@ const Page = () => {
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
               <TableCell className="text-center">{book.bookCode}</TableCell>
-              <TableCell className="text-center">{book.quantity}</TableCell>
+              <TableCell className="text-center">{book.available}</TableCell>
               <TableCell className="flex justify-center gap-6 items-center">
                 <TooltipProvider>
                   <Tooltip>

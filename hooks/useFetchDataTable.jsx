@@ -1,39 +1,32 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const useFetchDataTable = (api, initialParams = {}) => {
-  const [params, setParams] = useState(initialParams);
-  const [state, setState] = useState({
-    data: [],
-    loading: true,
-    error: null,
-    pageState: {
-      currentPage: 1,
-      totalPage: 0,
-    },
+  const [pageState, setPageState] = useState({
+    currentPage: 1,
+    totalPage: 0,
   });
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
   const fetchData = useCallback(
-    async (newParams = {}) => {
-      setState((prev) => ({ ...prev, loading: true, error: null }));
+    async (params = {}) => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await api({ ...params, ...newParams });
-        setState({
-          data: response?.data || [],
-          loading: false,
-          error: null,
-          pageState: {
-            currentPage: response?.pagination?.currentPage || 1,
-            totalPage: response?.pagination?.totalPage || 0,
-          },
-        });
-        setParams((prev) => ({ ...prev, ...newParams })); // Update params state
+        const response = await api({ ...initialParams, ...params });
+        if (response?.data) {
+          setData(response.data);
+          setPageState({
+            currentPage: response.pagination?.currentPage || 1,
+            totalPage: response.pagination?.totalPage || 0,
+          });
+        }
       } catch (err) {
         console.error("Fetch error:", err);
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: err.message || "An error occurred while fetching data.",
-        }));
+        setError(err.message || "An error occurred while fetching data.");
+      } finally {
+        setLoading(false);
       }
     },
     [api]
@@ -44,9 +37,13 @@ const useFetchDataTable = (api, initialParams = {}) => {
   }, [fetchData]);
 
   return {
-    ...state,
+    pageState,
+    setData,
+    setPageState,
+    loading,
+    data,
+    error,
     refetch: fetchData,
-    setParams,
     fetchData,
   };
 };
