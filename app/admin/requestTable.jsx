@@ -17,21 +17,20 @@ import {
 import { getBorrowedBooks } from "../service/api";
 import { format } from "date-fns";
 import { STATUS } from "@/utils/constant";
-import { Badge } from "@/components/ui/badge";
 import { Bolt, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import PaginationComponent from "@/components/pagination/Pagination";
+import StatusBadge from "@/components/statusBadge/page";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 
 const RequestTable = () => {
   const router = useRouter();
-  const [requestData, setRequestData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageState, setPageState] = useState({
-    currentPage: 1,
-    totalPage: 0,
-  });
+  const { data, setData, loading, pageState, setPageState } = useFetchDataTable(
+    getBorrowedBooks,
+    { isApproved: 2 }
+  );
   const tableHeaders = [
     "Name",
     "Usn",
@@ -40,39 +39,6 @@ const RequestTable = () => {
     "Status",
     "Actions",
   ];
-  const fetchData = async (params = {}) => {
-    try {
-      const res = await getBorrowedBooks({ isApproved: 2, ...params });
-      if (res.data) {
-        setRequestData(res.data);
-        setPageState({
-          currentPage: res.currentPage,
-          totalPage: res.totalPages,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const renderStatus = (val) => {
-    let text = "";
-    let className = "";
-    if (val === STATUS.PENDING) {
-      text = "Pending";
-      className = "bg-white text-black";
-    }
-    if (val === STATUS.APPROVED) {
-      text = "Aprroved";
-      className = "bg-green-700 text-white";
-    }
-    if (val === STATUS.CANCELLED) {
-      (text = "Cancelled"), (className = "bg-black text-white");
-    }
-    return <Badge className={className}>{text}</Badge>;
-  };
 
   const renderDate = (date) => {
     const newDate = new Date(date);
@@ -80,10 +46,6 @@ const RequestTable = () => {
 
     return <div>{formattedDate}</div>;
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div className="w-full mt-10">
@@ -98,7 +60,7 @@ const RequestTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {requestData.map((request) => (
+          {data.map((request) => (
             <TableRow key={request._id}>
               <TableCell className="text-center">
                 {request.studentName}
@@ -109,7 +71,7 @@ const RequestTable = () => {
                 {renderDate(request.createdAt)}
               </TableCell>
               <TableCell className="text-center">
-                {renderStatus(request.isApproved)}
+                <StatusBadge status={request.isApproved} />
               </TableCell>
               <TableCell className="flex justify-center items-center gap-4">
                 <TooltipProvider>
@@ -145,8 +107,8 @@ const RequestTable = () => {
           ))}
         </TableBody>
       </Table>
-      {isLoading && <LoadingComp />}
-      {requestData.length === 0 && !isLoading && <EmptyData />}
+      {loading && <LoadingComp />}
+      {data.length === 0 && !loading && <EmptyData />}
       {renderDate.length > 0 && (
         <PaginationComponent
           pageState={pageState}
