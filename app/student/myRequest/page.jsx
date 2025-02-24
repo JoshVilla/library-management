@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  deleteRequest,
-  getBorrowedBooks,
-  updateRequestBook,
-} from "@/app/service/api";
+import { getBorrowedBooks, updateRequestBook } from "@/app/service/api";
 import TitlePage from "@/components/titlePage/titlePage";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   Table,
@@ -27,17 +23,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
+
 import { STATUS } from "@/utils/constant";
 import { format } from "date-fns";
 import { Ban, Trash } from "lucide-react";
-import Image from "next/image";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import { useToast } from "@/hooks/use-toast";
