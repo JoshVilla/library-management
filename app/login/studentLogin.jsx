@@ -59,7 +59,7 @@ const Login = () => {
       toast({
         title: "Error",
         description: "Something went wrong, please try again later.",
-        className: "bg-red text-white",
+        className: "bg-red-500 text-white",
       });
     } finally {
       setLoading(false);

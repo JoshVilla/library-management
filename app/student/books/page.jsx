@@ -26,43 +26,15 @@ import Image from "next/image";
 import PaginationComponent from "@/components/pagination/Pagination";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
-  const [dataBooks, setDataBooks] = useState([]);
-  const [pageState, setPageState] = useState({
-    currentPage: 1,
-    totalPage: 0,
-  });
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const fetchData = async (params = {}) => {
-    try {
-      const res = await getBooks(params);
-      if (res) {
-        setDataBooks(res.data);
-        setPageState({
-          currentPage: res.pagination.currentPage,
-          totalPage: res.pagination.totalPages,
-        });
-      }
-    } catch (error) {
-      console.log(res);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { pageState, loading, setPageState, setData, data, error, fetchData } =
+    useFetchDataTable(getBooks);
 
   return (
     <div>
       <TitlePage title="List of Books" />
-      <SearchForm
-        api={fetchData}
-        result={setDataBooks}
-        searchProps={searchProps}
-      />
+      <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
       <Table className="mt-6">
         <TableHeader>
           <TableRow>
@@ -82,7 +54,7 @@ const Page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataBooks.map((book) => (
+          {data.map((book) => (
             <TableRow key={book._id}>
               <TableCell className="text-center">
                 <div className="flex justify-center">
@@ -125,9 +97,9 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
-      {!loading && dataBooks.length === 0 && <EmptyData />}
+      {!loading && data.length === 0 && <EmptyData />}
       {loading && <LoadingComp />}
-      {dataBooks.length > 0 && (
+      {data.length > 0 && (
         <div className="mt-10">
           <PaginationComponent
             pageState={pageState}
