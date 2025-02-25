@@ -236,7 +236,7 @@ const Page = () => {
                   <div className="text-sm break-words flex-1 max-w-[400px]">
                     {announce.announcement}
                   </div>
-                  <div className="text-xs text-gray-500 border">
+                  <div className="text-xs text-gray-500">
                     {renderDate(announce.createdAt)}
                   </div>
                 </div>
