@@ -1,9 +1,10 @@
 {
   "/api/admin/route": "app/api/admin/route.js",
-  "/api/admin/addAdmin/route": "app/api/admin/addAdmin/route.js",
-  "/api/admin/deleteStudent/route": "app/api/admin/deleteStudent/route.js",
+  "/api/book/route": "app/api/book/route.js",
   "/page": "app/page.js",
+  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
   "/admin/page": "app/admin/page.js",
   "/admin/announcements/page": "app/admin/announcements/page.js",
-  "/admin/students/page": "app/admin/students/page.js"
+  "/admin/students/page": "app/admin/students/page.js",
+  "/admin/books/page": "app/admin/books/page.js"
 }

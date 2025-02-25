@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -59,7 +59,6 @@ const Page = () => {
   const { data, setData, loading, pageState, setPageState, fetchData } =
     useFetchDataTable(getStudents);
   const { toast } = useToast();
-  const [students, setStudents] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [loadingState, setLoadingState] = useState({
     delete: false,
@@ -67,10 +66,6 @@ const Page = () => {
     init: false,
   });
   const [studentId, setStudentId] = useState(null);
-
-  // Fetch data based on page change
-
-  useEffect(() => {}, []);
 
   // Handle form submission
   const handleSubmit = async (data) => {
@@ -197,14 +192,7 @@ const Page = () => {
       <Table className="mt-10">
         <TableHeader>
           <TableRow>
-            {[
-              "Name",
-              "USN",
-              "No. of Books Borrowed",
-              "Total of Books Borrowed",
-              "Status",
-              "Actions",
-            ].map((heading) => (
+            {["Name", "USN", "Status", "Actions"].map((heading) => (
               <TableHead key={heading} className="uppercase text-center">
                 {heading}
               </TableHead>
@@ -216,12 +204,6 @@ const Page = () => {
             <TableRow key={student._id}>
               <TableCell className="text-center">{`${student.firstname} ${student.middleinitial} ${student.lastname}`}</TableCell>
               <TableCell className="text-center">{student.usn}</TableCell>
-              <TableCell className="text-center">
-                {student.numberOfBooksBorrowed}
-              </TableCell>
-              <TableCell className="text-center">
-                {student.totalOfBooksBorrowed}
-              </TableCell>
               <TableCell className="text-center">
                 <Badge
                   className={
@@ -280,7 +262,7 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
-      {students.length === 0 && loading && <EmptyData />}
+      {data.length === 0 && loading && <EmptyData />}
       {loading && <LoadingComp />}
       {/* Pagination */}
       <div className="mt-10">
