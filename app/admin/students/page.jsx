@@ -50,18 +50,17 @@ import EmptyData from "@/components/empty-data/emptyData";
 import Image from "next/image";
 import LoadingComp from "@/components/loading/loadingComp";
 import { Badge } from "@/components/ui/badge";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 
 const Page = () => {
   const form = useForm({
     defaultValues: { firstname: "", middleinitial: "", lastname: "", usn: "" },
   });
-  const searchForm = useForm({
-    defaultValues: { usn: "" },
-  });
+  const { data, setData, loading, pageState, setPageState, fetchData } =
+    useFetchDataTable(getStudents);
   const { toast } = useToast();
   const [students, setStudents] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [pageState, setPageState] = useState({ currentPage: 1, totalPage: 0 });
   const [loadingState, setLoadingState] = useState({
     delete: false,
     add: false,
@@ -70,25 +69,8 @@ const Page = () => {
   const [studentId, setStudentId] = useState(null);
 
   // Fetch data based on page change
-  const fetchData = async (params = {}) => {
-    try {
-      const response = await getStudents(params);
-      if (response.data) {
-        setStudents(response.data);
-        setPageState((prev) => ({
-          ...prev,
-          currentPage: response.pagination.currentPage,
-          totalPage: response.pagination.totalPages,
-        }));
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
 
-  useEffect(() => {
-    fetchData({ page: pageState.currentPage });
-  }, []);
+  useEffect(() => {}, []);
 
   // Handle form submission
   const handleSubmit = async (data) => {
@@ -154,7 +136,7 @@ const Page = () => {
         <SearchForm
           api={fetchData}
           searchProps={searchProps}
-          result={setStudents}
+          result={setData}
         />
       </div>
 
@@ -230,7 +212,7 @@ const Page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {students.map((student) => (
+          {data.map((student) => (
             <TableRow key={student._id}>
               <TableCell className="text-center">{`${student.firstname} ${student.middleinitial} ${student.lastname}`}</TableCell>
               <TableCell className="text-center">{student.usn}</TableCell>
@@ -298,8 +280,8 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
-      {students.length === 0 && loadingState.init && <EmptyData />}
-      {loadingState.init && <LoadingComp />}
+      {students.length === 0 && loading && <EmptyData />}
+      {loading && <LoadingComp />}
       {/* Pagination */}
       <div className="mt-10">
         <PaginationComponent
