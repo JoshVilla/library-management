@@ -19,7 +19,7 @@ const useFetchDataTable = (api, initialParams = {}) => {
           setData(response.data);
           setPageState({
             currentPage: response.pagination?.currentPage || 1,
-            totalPage: response.pagination?.totalPage || 0,
+            totalPage: response.pagination?.totalPages || 0,
           });
         }
       } catch (err) {

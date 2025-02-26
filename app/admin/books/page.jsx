@@ -34,39 +34,19 @@ import LoadingComp from "@/components/loading/loadingComp";
 import Link from "next/link";
 import { searchProps } from "./searchBookProps";
 import SearchForm from "@/components/searchForm/searchForm";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 
 const Page = () => {
   const { toast } = useToast();
-  const [books, setBooks] = useState([]);
+  const { data, setData, loading, pageState, setPageState, fetchData } =
+    useFetchDataTable(getBooks);
+  console.log(pageState, "pageState");
   const [loadingState, setLoadingState] = useState({
     initLoading: true,
     deleteLoading: false,
   });
-  const [pageState, setPageState] = useState({
-    currentPage: 1,
-    totalPage: 0,
-  });
+
   const [bookId, setBookId] = useState(null);
-
-  const fetchData = async (params = {}) => {
-    try {
-      const res = await getBooks(params);
-
-      if (res) {
-        setBooks(res.data);
-        setPageState({
-          currentPage: res.pagination.currentPage,
-          totalPage: res.pagination.totalPages,
-        });
-      }
-
-      return res;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoadingState((prev) => ({ ...prev, initLoading: false }));
-    }
-  };
 
   const handleDelete = async (records) => {
     try {
@@ -94,17 +74,13 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <div>
       <TitlePage title="List of Books" />
       <AddBooks
         successfulAdd={() => fetchData({ page: pageState.currentPage })}
       />
-      <SearchForm api={fetchData} result={setBooks} searchProps={searchProps} />
+      <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
       <Table className="mt-10">
         <TableHeader>
           <TableRow>
@@ -125,7 +101,7 @@ const Page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {books.map((book, idx) => (
+          {data.map((book, idx) => (
             <TableRow key={idx}>
               <TableCell className="text-center">
                 <div className="flex justify-center">
@@ -194,8 +170,8 @@ const Page = () => {
           ))}
         </TableBody>
       </Table>
-      {books.length === 0 && !loadingState.initLoading && <EmptyData />}
-      {loadingState.initLoading && <LoadingComp />}
+      {data.length === 0 && !loading && <EmptyData />}
+      {loading && <LoadingComp />}
       <div className="mt-10">
         <PaginationComponent
           pageState={pageState}
