@@ -65,6 +65,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/book/addBook/route.js"
+    ],
+    "/admin/books/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/books/[id]/page.js"
+    ],
+    "/api/book/weeklyStats/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/book/weeklyStats/route.js"
     ]
   }
 }

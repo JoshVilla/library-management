@@ -25,10 +25,9 @@ export async function POST(req) {
     if (titleBook) params.titleBook = titleBook;
     if (studentName) params.studentName = studentName;
     if (usn) params.usn = usn;
-    if (isApproved !== undefined) {
+    if (isApproved) {
       params.isApproved = isApproved;
     }
-    console.log(typeof isApproved === "string" ? +isApproved : isApproved);
     // Convert page and limit to integers
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
