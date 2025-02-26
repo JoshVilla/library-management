@@ -43,7 +43,12 @@ import PaginationComponent from "@/components/pagination/Pagination";
 import { Eye, Trash } from "lucide-react";
 import { formFields } from "./formFields";
 import Link from "next/link";
-import { addStudents, deleteStudent, getStudents } from "@/app/service/api";
+import {
+  addStudents,
+  deleteStudent,
+  getStudents,
+  importStudent,
+} from "@/app/service/api";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import EmptyData from "@/components/empty-data/emptyData";
@@ -51,13 +56,21 @@ import Image from "next/image";
 import LoadingComp from "@/components/loading/loadingComp";
 import { Badge } from "@/components/ui/badge";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
+import ImportButton from "@/components/import/importButton";
 
 const Page = () => {
   const form = useForm({
     defaultValues: { firstname: "", middleinitial: "", lastname: "", usn: "" },
   });
-  const { data, setData, loading, pageState, setPageState, fetchData } =
-    useFetchDataTable(getStudents);
+  const {
+    data,
+    setData,
+    loading,
+    pageState,
+    setPageState,
+    fetchData,
+    refetch,
+  } = useFetchDataTable(getStudents);
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [loadingState, setLoadingState] = useState({
@@ -127,12 +140,13 @@ const Page = () => {
     <div>
       <h1 className="text-2xl font-bold">List of Students</h1>
 
-      <div className="mt-6">
+      <div className="mt-6 flex items-center gap-4">
         <SearchForm
           api={fetchData}
           searchProps={searchProps}
           result={setData}
         />
+        <ImportButton api={importStudent} refresh={refetch} />
       </div>
 
       {/* Add Student Dialog */}

@@ -1,8 +1,1 @@
-{
-  "/api/borrowBook/route": "app/api/borrowBook/route.js",
-  "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/books/page": "app/admin/books/page.js",
-  "/admin/borrowedBooks/page": "app/admin/borrowedBooks/page.js",
-  "/admin/books/[id]/page": "app/admin/books/[id]/page.js"
-}
+{}

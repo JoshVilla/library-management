@@ -117,3 +117,7 @@ export const weeklyBookStats = async (params) => {
 export const changePassword = async (params) => {
   return await post("/api/changePassword", params);
 };
+
+export const importStudent = async (params, hasFormData) => {
+  return await post("/api/import/student", params, hasFormData);
+};
