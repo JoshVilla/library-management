@@ -1,1 +1,6 @@
-{}
+{
+  "/api/admin/deleteStudent/route": "app/api/admin/deleteStudent/route.js",
+  "/api/admin/route": "app/api/admin/route.js",
+  "/api/import/student/route": "app/api/import/student/route.js",
+  "/admin/students/page": "app/admin/students/page.js"
+}

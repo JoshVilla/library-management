@@ -44,7 +44,7 @@ const FileUploadModal = ({ api, refresh }) => {
       const response = await api(formData, true);
       if (response.isSuccess) {
         toast({
-          message: "Upload successful!",
+          title: "Upload successful!",
           className: "bg-black text-white",
         });
       }
