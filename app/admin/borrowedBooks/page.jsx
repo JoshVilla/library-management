@@ -11,12 +11,6 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { format } from "date-fns";
 import StatusBadge from "@/components/statusBadge/page";
 import EmptyData from "@/components/empty-data/emptyData";
@@ -26,13 +20,10 @@ import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import Link from "next/link";
 import PaginationComponent from "@/components/pagination/Pagination";
+import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [pageState, setPageState] = useState({
-    currentPage: 1,
-    totalPage: 0,
-  });
+  const { data, setData, loading, pageState, setPageState, fetchData } =
+    useFetchDataTable(getBorrowedBooks);
   const tableHeaders = [
     "Student",
     "USN",
@@ -41,22 +32,6 @@ const Page = () => {
     "Requested Last",
     "Actions",
   ];
-  const fetchData = async (params = {}) => {
-    try {
-      const res = await getBorrowedBooks(params);
-      if (res) {
-        setData(res.data);
-        setPageState({
-          currentPage: res.currentPage,
-          totalPage: res.totalPages,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const renderDateRange = (from, to) => {
     const newFrom = new Date(from);
@@ -66,10 +41,6 @@ const Page = () => {
 
     return <div>{`${formattedFromDate} - ${formattedToDate}`}</div>;
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div>
@@ -109,8 +80,8 @@ const Page = () => {
             ))}
           </TableBody>
         </Table>
-        {isLoading && <LoadingComp />}
-        {data.length === 0 && !isLoading && <EmptyData />}
+        {loading && <LoadingComp />}
+        {data.length === 0 && !loading && <EmptyData />}
 
         <div className="mt-10">
           <PaginationComponent
