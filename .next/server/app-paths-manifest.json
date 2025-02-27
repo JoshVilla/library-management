@@ -1,4 +1,7 @@
 {
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/announcement/route": "app/api/announcement/route.js",
+  "/api/notification/route": "app/api/notification/route.js",
   "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/student/page": "app/student/page.js"
 }

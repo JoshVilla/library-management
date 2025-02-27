@@ -3,9 +3,10 @@ import TitlePage from "@/components/titlePage/titlePage";
 import React, { useEffect, useState } from "react";
 import { getAnnouncement } from "../service/api";
 import { format } from "date-fns";
+import { IAnnouncement } from "../service/types";
 
 const Page = () => {
-  const [announcement, setAnnouncement] = useState(null);
+  const [announcement, setAnnouncement] = useState<IAnnouncement | null>(null);
   const fetchAnnouncement = async () => {
     try {
       const response = await getAnnouncement({ isPinned: true });
@@ -17,7 +18,7 @@ const Page = () => {
     }
   };
 
-  const renderDate = (date) => {
+  const renderDate = (date: string) => {
     return date ? format(new Date(date), "MMM dd, yyyy") : "";
   };
 
