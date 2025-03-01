@@ -1,12 +1,11 @@
 "use client";
 import Sidebar from "@/components/sidebar/sidebar";
-import React, { useEffect, useState } from "react";
-import { menuProps, sidebarTitle } from "./menuProps";
+import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Bell, BellDot, DoorOpen, Mail, MailOpen } from "lucide-react";
-import { persistor } from "../redux/store";
+import { persistor, RootState } from "../redux/store";
 import { usePathname, useRouter } from "next/navigation";
-import { logoutUser } from "../redux/slices/studentInfoSlice";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,13 +26,22 @@ import Image from "next/image";
 import { getNotification, readNotification } from "../service/api";
 import { renderDate } from "@/utils/helpers";
 import { Separator } from "@/components/ui/separator";
+import { INotification, IStudent } from "../service/types";
+import { logoutUser } from "../redux/slices/studentInfoSlice";
+import { menuProps, sidebarTitle } from "./menuProps";
 
-const Layout = ({ children }) => {
+type Props = {
+  children: ReactElement;
+};
+
+const Layout = ({ children }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const userInfo = useSelector((state) => state.user?.userInfo) || {};
+  const userInfo = useSelector(
+    (state: RootState) => state.user.userInfo
+  ) as IStudent;
   const dispatch = useDispatch();
-  const [unreadCount, setUnreadCount] = useState(null); // Simulated unread count
+  const [unreadCount, setUnreadCount] = useState(0); // Simulated unread count
   const [notifData, setNotifData] = useState([]);
   const [openNotif, setOpenNotif] = useState(false);
   const logout = () => {
@@ -57,10 +65,10 @@ const Layout = ({ children }) => {
       const res = await getNotification({ studentId: userInfo._id });
       if (res) {
         const unReadNotif = res.notifications.filter(
-          (el) => el.isRead === false
+          (el: INotification) => el.isRead === false
         );
         const sortNotifs = res.notifications.sort(
-          (a, b) => a.isRead - b.isRead
+          (a: any, b: any) => a.isRead - b.isRead
         );
         setNotifData(sortNotifs);
         setUnreadCount(unReadNotif.length);
@@ -70,7 +78,7 @@ const Layout = ({ children }) => {
     }
   };
 
-  const handleReadNotification = async (id) => {
+  const handleReadNotification = async (id: string) => {
     try {
       await readNotification({ id });
       await fetchNotification();
@@ -119,6 +127,7 @@ const Layout = ({ children }) => {
                   </span>
                 )}
               </PopoverTrigger>
+              {/*@ts-ignore */}
               <PopoverContent className="w-72 max-h-80 overflow-scroll">
                 <div className="">
                   <p className="font-semibold">Notifications</p>
@@ -129,7 +138,7 @@ const Layout = ({ children }) => {
                   )}
                   <Separator />
                   <ul className="mt-2 space-y-4">
-                    {notifData.map((notif, idx) => (
+                    {notifData.map((notif: INotification, idx) => (
                       <li
                         onClick={() => {
                           router.push(`/student/notification/${notif._id}`);
@@ -160,19 +169,26 @@ const Layout = ({ children }) => {
               <DoorOpen />
               <AlertDialog>
                 <AlertDialogTrigger>Logout</AlertDialogTrigger>
+                {/*@ts-ignore */}
                 <AlertDialogContent>
+                  {/*@ts-ignore */}
                   <AlertDialogHeader>
+                    {/*@ts-ignore */}
                     <AlertDialogTitle>
                       Are you sure you want to log out?
                     </AlertDialogTitle>
+                    {/*@ts-ignore */}
                     <AlertDialogDescription>
                       You will be signed out of your account. Any unsaved
                       changes will be lost. Do you want to proceed with logging
                       out?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
+                  {/*@ts-ignore */}
                   <AlertDialogFooter>
+                    {/*@ts-ignore */}
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    {/*@ts-ignore */}
                     <AlertDialogAction onClick={logout}>
                       Log out
                     </AlertDialogAction>

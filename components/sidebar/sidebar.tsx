@@ -1,7 +1,16 @@
 import Link from "next/link";
 import React from "react";
 
-const Sidebar = ({ menuProp = [], title }) => {
+export interface IMenuSideBar {
+  path: string;
+  label: string;
+}
+interface Props {
+  menuProp: IMenuSideBar[];
+  title: string;
+}
+
+const Sidebar = ({ menuProp, title }: Props) => {
   return (
     <div className="hidden md:block md:w-1/6 h-screen border text-black p-2">
       <div className="text-lg">{title}</div>

@@ -2,9 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
     "moduleResolution": "node",
     "allowJs": true,
@@ -20,21 +18,19 @@
     ],
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": false,
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "src"
+    "src",
+    "app",
+    "app/redux/slices",
+    "app/types/**/*.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

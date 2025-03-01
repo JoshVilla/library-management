@@ -19,18 +19,28 @@ import { Button } from "@/components/ui/button";
 import { editStudent, changePassword } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { setUserInfo } from "@/app/redux/slices/studentInfoSlice";
-import { Eye, EyeOff } from "lucide-react";
+import { CloudCog, Eye, EyeOff } from "lucide-react";
 import PasswordIndicator from "@/components/passwordIndicator/page";
+import { RootState } from "@/app/redux/store";
+import { IStudent } from "@/app/service/types";
 
 const Page = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const state = useSelector((state) => state.user.userInfo);
-  const form = useForm({ defaultValues: state });
-  const passworForm = useForm({
-    currentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
+  const state = useSelector(
+    (state: RootState) => state.user.userInfo
+  ) as IStudent;
+  const form = useForm<IStudent>({ defaultValues: state });
+  const passworForm = useForm<{
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  }>({
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
+    }
   });
   const [isLoading, setIsLoading] = useState({
     edit: false,
@@ -86,7 +96,7 @@ const Page = () => {
     return true;
   };
 
-  const handleSave = async (data) => {
+  const handleSave = async (data: IStudent) => {
     try {
       const filteredData = getParams(data);
       setIsLoading((prev) => ({ ...prev, edit: true }));
@@ -134,7 +144,7 @@ const Page = () => {
           className: "bg-green-500 text-white",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast({
         title: "Error",
@@ -209,7 +219,7 @@ const Page = () => {
     { name: "lastname", label: "Lastname" },
   ];
 
-  const getParams = (data) => {
+  const getParams = (data: IStudent) => {
     const allowedFields = profileFields.map((field) => field.name);
     const filteredProfile = Object.fromEntries(
       Object.entries(data).filter(([key]) =>
@@ -219,6 +229,8 @@ const Page = () => {
 
     return filteredProfile;
   };
+
+  console.log(isLoading, "isLoading");
 
   return (
     <div>
@@ -248,16 +260,16 @@ const Page = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>
-                            <div className="space-y-2">
+                            <div className="space-y-2 mt-4">
                               <Input
                                 type="file"
                                 accept=".jpg,.jpeg,.png"
                                 onChange={(event) => {
                                   const file = event.target.files?.[0];
                                   if (file && validateImageFile(file)) {
-                                    form.setValue("picture", file); // Explicitly set file in form
+                                    field.onChange(file);
                                   } else {
-                                    event.target.value = ""; // Reset input if validation fails
+                                    event.target.value = "";
                                   }
                                 }}
                               />
@@ -288,7 +300,7 @@ const Page = () => {
                       {editMode[name] ? (
                         <FormField
                           control={form.control}
-                          name={name}
+                          name={name as keyof IStudent}
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>{label}</FormLabel>
@@ -314,7 +326,7 @@ const Page = () => {
                   ))}
                   <div className="mt-10">
                     {Object.values(editMode).includes(true) && (
-                      <Button>{isLoading ? "Saving..." : "Save"}</Button>
+                      <Button>{isLoading.edit ? "Saving..." : "Save"}</Button>
                     )}
                   </div>
                 </div>
@@ -357,12 +369,13 @@ const Page = () => {
                             placeholder="Enter your current password"
                             type={showPassword.current ? "text" : "password"}
                             value={value || passwordValue.current}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              onChange(e);
                               setPasswordValue((prev) => ({
                                 ...prev,
                                 current: e.target.value,
-                              }))
-                            }
+                              }));
+                            }}
                             {...fieldProps}
                           />
                           <button
@@ -375,11 +388,7 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.current ? (
-                              <EyeOff size={20} />
-                            ) : (
-                              <Eye size={20} />
-                            )}
+                            {showPassword.current ? <EyeOff size={20} /> : <Eye size={20} />}
                           </button>
                         </div>
                       </FormControl>
@@ -398,12 +407,13 @@ const Page = () => {
                             placeholder="Enter your new password"
                             type={showPassword.new ? "text" : "password"}
                             value={value || passwordValue.new}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              onChange(e);
                               setPasswordValue((prev) => ({
                                 ...prev,
                                 new: e.target.value,
-                              }))
-                            }
+                              }));
+                            }}
                             {...fieldProps}
                           />
                           <button
@@ -416,11 +426,7 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.new ? (
-                              <EyeOff size={20} />
-                            ) : (
-                              <Eye size={20} />
-                            )}
+                            {showPassword.new ? <EyeOff size={20} /> : <Eye size={20} />}
                           </button>
                         </div>
                       </FormControl>
@@ -433,7 +439,7 @@ const Page = () => {
                 />
                 <FormField
                   control={passworForm.control}
-                  name="newPassword"
+                  name="confirmNewPassword"
                   render={({ field: { onChange, value, ...fieldProps } }) => (
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
@@ -443,12 +449,13 @@ const Page = () => {
                             placeholder="Enter your confirm password"
                             type={showPassword.confirm ? "text" : "password"}
                             value={value || passwordValue.confirm}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              onChange(e);
                               setPasswordValue((prev) => ({
                                 ...prev,
                                 confirm: e.target.value,
-                              }))
-                            }
+                              }));
+                            }}
                             {...fieldProps}
                           />
                           <button
@@ -461,11 +468,7 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.confirm ? (
-                              <EyeOff size={20} />
-                            ) : (
-                              <Eye size={20} />
-                            )}
+                            {showPassword.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
                           </button>
                         </div>
                       </FormControl>

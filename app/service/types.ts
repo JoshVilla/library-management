@@ -27,3 +27,31 @@ export interface IAnnouncement {
   updatedAt: string; // ISO date string
   __v: number;
 }
+
+export interface IStudent {
+  _id: string;
+  firstname: string;
+  middleinitial: string;
+  lastname: string;
+  numberOfBooksBorrowed: number;
+  totalOfBooksBorrowed: number;
+  usn: string;
+  isRegistered: boolean;
+  pictureUrl: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface INotification {
+  _id: string;
+  message: string;
+  isRead: boolean;
+  reason: string;
+  titleBook: string;
+  borrowDuration: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
