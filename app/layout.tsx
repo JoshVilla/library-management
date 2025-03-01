@@ -1,19 +1,20 @@
-"use client";
-
-import { Toaster } from "../components/ui/toaster";
+import * as React from "react";
 import "./globals.css";
-import Providers from "./providers";
-import Head from "next/head";
+import { Inter } from "next/font/google";
+import ClientLayout from "./client-layout";
 
-export default function RootLayout({ children }) {
+const inter = Inter({ subsets: ["latin"] });
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <Head>
-        <link rel="icon" type="image/png" href="/icons/books.png" />
-      </Head>
-      <body>
-        <Providers>{children}</Providers>
-        <Toaster />
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={inter.className}>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
