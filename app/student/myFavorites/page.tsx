@@ -37,7 +37,7 @@ const MyFavorites = () => {
       <div className="flex flex-wrap items-center gap-4 px-4">
         {favorites.map((favorite) => (
           <div className=" w-1/6" key={favorite.pictureUrl}>
-        <Image src={favorite.pictureUrl} alt="book" width={150} height={150} />
+        <Image src={favorite.pictureUrl ? favorite.pictureUrl : "/assets/book-placeholder.png"} alt="book" width={150} height={150} />
         <div className="flex flex-col mt-4 gap-2">
           <div className="hover:underline cursor-pointer" onClick={() => router.push(`/student/books/${favorite.bookId}`)}>{favorite.title}</div>
           <div  className="text-sm text-[#636361] dark:text-[#adadad] ">Author: {favorite.author}</div>
