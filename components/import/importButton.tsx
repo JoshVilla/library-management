@@ -65,7 +65,7 @@ const FileUploadModal = ({ api, refresh }) => {
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button>Upload Excel File</Button>
+        <Button size="sm">Upload Excel File</Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
