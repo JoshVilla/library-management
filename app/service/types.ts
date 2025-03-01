@@ -55,3 +55,77 @@ export interface INotification {
   updatedAt: string;
   __v: number;
 }
+
+export interface IBook {
+  _id: string;
+  title: string;
+  author: string;
+  description: string;
+  quantity: number;
+  bookCode: number;
+  pictureUrl: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface ILoginParams {
+  usn: string;
+  password: string;
+}
+
+export interface IRegisterParams {
+  firstname: string;
+  middleinitial: string;
+  lastname: string;
+  usn: string;
+  password: string;
+  picture?: File;
+}
+
+export interface IRequestBookParams {
+  studentId: string;
+  usn: string;
+  studentName: string;
+  fromDate: string;
+  toDate: string;
+  bookId: string;
+  titleBook: string;
+  authorBook: string;
+  bookCode: number;
+}
+
+export interface IUpdateRequestParams {
+  id: string;
+  isApproved: number;
+  reasonToChangeStatus?: string;
+}
+
+export interface IAnnouncementParams {
+  announcement: string;
+  isPinned: boolean;
+}
+
+export interface INotificationParams {
+  message: string;
+  reason: string;
+  titleBook: string;
+  borrowDuration: string;
+}
+
+export interface IChangePasswordParams {
+  id: string;
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface IApiResponse<T = any> {
+  status: number;
+  message?: string;
+  data?: T;
+  error?: string;
+}
+
+export interface IServiceParams {
+  [key: string]: any;
+}
