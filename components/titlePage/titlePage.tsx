@@ -12,7 +12,7 @@ const TitlePage = ({ title, hasBack = false }) => {
   }, [title]);
 
   return (
-    <div>
+    <div className="mt-4">
       {hasBack ? (
         <div className="flex gap-10 items-center">
           <ArrowLeft
