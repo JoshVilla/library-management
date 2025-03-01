@@ -82,7 +82,7 @@ const Graphs = () => {
     try {
       const res = await getMonthlyBorrowedBooksStats();
       if (res) {
-        setGraphs(res.data[0]);
+        setGraphs(res.data[res.data.length - 1]);
       }
     } catch (error) {
       console.log(error);

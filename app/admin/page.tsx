@@ -49,7 +49,10 @@ export default function Home() {
 
   const updateMonthlyBorrowedBooks = async () => {
     try {
-      await updateMonthlyBorrowedBooksStats();
+      const res = await updateMonthlyBorrowedBooksStats({});
+      if (res) {
+        console.log(res);
+      }
     } catch (error) {
       console.log(error);
     }
