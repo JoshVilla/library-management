@@ -1,21 +1,23 @@
 "use client";
-import { getBooks, requestBook } from "@/app/service/api";
+import { addFavorites, getBooks, myFavorites, removeFavorites, requestBook } from "@/app/service/api";
+import { IBook as IBaseBook, IRequestBookParams, IApiResponse, IStudent, IMyFavoritesParams } from "@/app/service/types";
 import TitlePage from "@/components/titlePage/titlePage";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, HeartIcon } from "lucide-react";
 
 import {
   Form,
@@ -28,19 +30,34 @@ import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
+import { RootState } from "@/app/redux/store";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+
+// Extend IBook to include additional fields needed for the page
+interface IBook extends IBaseBook {
+  category?: string;
+  available: number;
+}
+
+interface FormValues {
+  reason: string;
+  fromDate: Date;
+  toDate: Date;
+}
 
 const Page = () => {
   const { toast } = useToast();
   const params = useParams();
-  const state = useSelector((state) => state.user.userInfo);
-  const form = useForm({
+  const state = useSelector((state: RootState) => state.user.userInfo) as IStudent;
+  const [isFavorite, setIsFavorite] = useState(false);
+  const form = useForm<FormValues>({
     defaultValues: {
       reason: "",
       fromDate: new Date(),
       toDate: new Date(),
     },
   });
-  const [bookInfo, setBookInfo] = useState({});
+  const [bookInfo, setBookInfo] = useState<IBook | null>(null);
   const [loadingState, setLoadingState] = useState({
     init: true,
     borrowing: false,
@@ -48,32 +65,91 @@ const Page = () => {
 
   const fetchBook = async () => {
     try {
-      setLoadingState({ init: true });
-      const res = await getBooks({ id: params.id });
-      setBookInfo(res.data[0]);
+      setLoadingState({ init: true, borrowing: false });
+      const res = await getBooks({ id: params.id }) as IApiResponse<IBook[]>;
+      if (res.data?.[0]) {
+        setBookInfo(res.data[0]);
+      }
     } catch (error) {
       console.log(error);
     } finally {
-      setLoadingState({ init: false });
+      setLoadingState({ init: false, borrowing: false });
     }
   };
 
+  const checkFavorite = async () => {
+    try {
+      const res = await myFavorites({ bookId: params.id as string, userId: state._id }) as IApiResponse<IMyFavoritesParams[]>;
+      if (res.data?.[0]) {
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleAddFavorite = async () => {
+    try {
+      if (!bookInfo) return;
+      const res = await addFavorites({ 
+        userId: state._id, 
+        bookId: params.id as string, 
+        title: bookInfo.title, 
+        author: bookInfo.author, 
+        pictureUrl: bookInfo.pictureUrl 
+      });
+      if (res) {
+        setIsFavorite(true);
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        title: error.message,
+        className: "bg-black text-white",
+      });
+    }
+  }
+
+  const handleRemoveFavorite = async () => {
+    try {
+      const res = await removeFavorites({
+        userId: state._id, bookId: params.id as string,
+      });
+      if (res) {
+        setIsFavorite(false);
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     fetchBook();
+    checkFavorite();
   }, []);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: FormValues) => {
+    if (!bookInfo) return;
+    
     try {
       setLoadingState((prev) => ({ ...prev, borrowing: true }));
-      const borrowParams = {
-        ...data,
-        bookId: params.id,
+      const borrowParams: IRequestBookParams = {
+        bookId: params.id as string,
         usn: state.usn,
         studentId: state._id,
         studentName: `${state.firstname} ${state.middleinitial} ${state.lastname}`,
         titleBook: bookInfo.title,
         authorBook: bookInfo.author,
         bookCode: bookInfo.bookCode,
+        fromDate: data.fromDate.toISOString(),
+        toDate: data.toDate.toISOString()
       };
 
       const res = await requestBook(borrowParams);
@@ -115,7 +191,7 @@ const Page = () => {
               <Image
                 src={
                   bookInfo?.pictureUrl
-                    ? bookInfo?.pictureUrl
+                    ? bookInfo.pictureUrl
                     : "/assets/book-placeholder.png"
                 }
                 width={200}
@@ -124,7 +200,9 @@ const Page = () => {
               />
               <div className="flex flex-col gap-4 p-2 ml-10">
                 <div>
-                  <Badge>{bookInfo?.category}</Badge>
+                  <Badge variant="secondary" className="bg-gray-200 dark:bg-gray-900">
+                    {bookInfo?.category}
+                  </Badge>
                 </div>
                 <div className="text-2xl font-bold">{bookInfo?.title}</div>
                 <div className="text-lg font-semibold">
@@ -135,6 +213,18 @@ const Page = () => {
                 </div>
                 <div className="text-sm">
                   Item Available: {bookInfo?.available}
+                </div>
+                <div className="flex items-center gap-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <HeartIcon className="w-4 h-4" color={isFavorite ? "red" : "gray"} onClick={isFavorite ? handleRemoveFavorite : handleAddFavorite}/>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 </div>
               </div>
             </div>
@@ -159,25 +249,32 @@ const Page = () => {
                       <FormLabel>From Date</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value
-                              ? format(field.value, "PPP")
-                              : "Select date"}
-                          </Button>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? format(field.value, "PPP") : "Select date"}
+                            </Button>
+                          </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
+                        {/*@ts-ignore */}
+                        <PopoverContent align="start" className="w-auto p-0 bg-white">
                           <Calendar
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
+                            className="rounded-md border"
+                            classNames={{
+                              day_selected: "bg-black text-white hover:bg-gray-900",
+                              day_today: "bg-gray-100 text-gray-900",
+                            }}
+                            showOutsideDays={false}
                           />
                         </PopoverContent>
                       </Popover>
@@ -206,12 +303,19 @@ const Page = () => {
                               : "Select date"}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
+                         {/*@ts-ignore */}
+                        <PopoverContent className="w-auto p-0 bg-white z-50">
                           <Calendar
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
                             initialFocus
+                            className="rounded-md border"
+                            classNames={{
+                              day_selected: "bg-black text-white hover:bg-gray-900",
+                              day_today: "bg-gray-100 text-gray-900",
+                            }}
+                            showOutsideDays={false}
                           />
                         </PopoverContent>
                       </Popover>
@@ -230,7 +334,8 @@ const Page = () => {
                         <Textarea
                           placeholder="Input your reason"
                           value={value || ""}
-                          onChange={(e) => onChange(e.target.value)}
+                          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
+                          className="resize-none"
                         />
                       </FormControl>
                       {form.formState.errors.reason && (
@@ -258,9 +363,9 @@ const Page = () => {
                 <Button
                   type="submit"
                   className="mt-4"
-                  disabled={!bookInfo.available}
+                  disabled={!bookInfo?.available}
                 >
-                  {!bookInfo.available
+                  {!bookInfo?.available
                     ? "Item not available"
                     : loadingState.borrowing
                     ? "Submitting Request..."

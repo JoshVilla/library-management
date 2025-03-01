@@ -91,7 +91,7 @@ const Layout = ({ children }: Props) => {
     <div className="flex w-full">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="w-full">
-        <div className="p-4 bg-[#f9f9f9] flex justify-between items-center">
+        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]  flex justify-between items-center">
           <div className="flex items-center gap-2">
             <span className="text-lg font-semibold">Hello! </span>
             <Image

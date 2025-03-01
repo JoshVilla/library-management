@@ -1,6 +1,6 @@
 import { IMenuSideBar } from "@/components/sidebar/sidebar";
 
-export const sidebarTitle = "Student Portal";
+export const sidebarTitle: string = "Student Portal";
 
 export const menuProps:IMenuSideBar[] = [
   {
@@ -15,4 +15,8 @@ export const menuProps:IMenuSideBar[] = [
     label: "Books",
     path: "/student/books",
   },
+  {
+    label: "My Favorites",
+    path: "/student/myFavorites",
+  }
 ];

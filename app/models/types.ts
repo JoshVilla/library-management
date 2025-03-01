@@ -29,5 +29,16 @@ export interface IBookDocument extends Document {
   updatedAt: Date;
 }
 
+export interface IFavoriteDocument extends Document {
+  userId: string;
+  bookId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  pictureUrl: string | null;
+  title: string;
+  author: string;
+}
+
 export type UserModel = Model<IUserDocument>;
 export type BookModel = Model<IBookDocument>; 
+export type FavoriteModel = Model<IFavoriteDocument>;

@@ -13,6 +13,8 @@ import {
   INotificationParams,
   IChangePasswordParams,
   IServiceParams,
+  IMyFavoritesParams,
+  IRemoveFavoritesParams,
 } from "./types";
 
 export const getStudents = async (params: IServiceParams = {}): Promise<IApiResponse<IStudent[]>> => {
@@ -133,4 +135,16 @@ export const changePassword = async (params: IChangePasswordParams): Promise<IAp
 
 export const importStudent = async (params: FormData, hasFormData: boolean = true): Promise<IApiResponse<void>> => {
   return await post<void>("/api/import/student", params, hasFormData);
+}; 
+
+export const myFavorites = async (params: IServiceParams = {}): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/myFavorites", params);
+}; 
+
+export const addFavorites = async (params: IMyFavoritesParams): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/myFavorites/addFavorites", params);
+}; 
+
+export const removeFavorites = async (params: IRemoveFavoritesParams): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/myFavorites/removeFavorites", params);
 }; 

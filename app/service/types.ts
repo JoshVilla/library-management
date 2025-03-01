@@ -129,3 +129,18 @@ export interface IApiResponse<T = any> {
 export interface IServiceParams {
   [key: string]: any;
 }
+
+export interface IMyFavoritesParams {
+  userId: string;
+  bookId: string;
+  title: string;
+  author: string;
+  pictureUrl: string;
+}
+
+export interface IRemoveFavoritesParams {
+  userId?: string;
+  bookId?: string;
+}
+
+
