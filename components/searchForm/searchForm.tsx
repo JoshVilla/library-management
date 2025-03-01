@@ -1,3 +1,6 @@
+"use client";
+
+import * as React from "react";
 import {
   Form,
   FormField,
@@ -16,28 +19,69 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const SearchForm = ({ api, result, searchProps }) => {
-  const form = useForm();
+interface SearchOption {
+  value: string | number | boolean;
+  label: string;
+}
+
+interface SearchProp {
+  type: "input" | "select";
+  name: string;
+  placeholder?: string;
+  options?: SearchOption[];
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => string | number | boolean;
+}
+
+interface SearchFormProps {
+  api: (params?: any) => Promise<{ data: any[] }>;
+  result: (data: any[]) => void;
+  searchProps: SearchProp[];
+}
+
+// Create a dynamic schema based on searchProps
+const createFormSchema = (searchProps: SearchProp[]) => {
+  const schemaObj: Record<string, z.ZodType<any>> = {};
+  searchProps.forEach((prop) => {
+    if (prop.type === "input") {
+      schemaObj[prop.name] = z.string().optional();
+    } else {
+      schemaObj[prop.name] = z.union([z.string(), z.number(), z.boolean()]).optional();
+    }
+  });
+  return z.object(schemaObj);
+};
+
+const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => {
+  const formSchema = createFormSchema(searchProps);
+  type FormValues = z.infer<typeof formSchema>;
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {},
+  });
+
   const [loadingSearch, setLoadingSearch] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState<string | number | boolean>("");
+
   // Reset the form inputs
   const handleReset = () => {
-    form.reset(); // Reset form fields
-    // If you want to explicitly reset the select field to empty or default
+    form.reset();
     searchProps.forEach((prop) => {
       if (prop.type === "select") {
-        form.setValue(prop.name, ""); // Reset the select field to an empty value or set to a default value
+        form.setValue(prop.name, "");
       }
     });
-    api(); // Optional: If you want to call the API on reset
+    api();
   };
 
   // Handle the search functionality
-  const handleSearch = async (params) => {
+  const handleSearch = async (params: FormValues) => {
     try {
       setLoadingSearch(true);
       const res = await api(params);
@@ -56,7 +100,7 @@ const SearchForm = ({ api, result, searchProps }) => {
       <Form {...form}>
         <form
           className="flex items-center gap-5 flex-wrap"
-          onSubmit={form.handleSubmit(handleSearch)} // Only handle submit on form submit
+          onSubmit={form.handleSubmit(handleSearch)}
         >
           {searchProps.map((prop, idx) =>
             prop.type === "input" ? (
@@ -64,26 +108,24 @@ const SearchForm = ({ api, result, searchProps }) => {
                 key={idx}
                 control={form.control}
                 name={prop.name}
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          placeholder={prop.placeholder}
-                          {...field}
-                          value={field.value || ""}
-                          className="w-60"
-                          onChange={(e) => {
-                            field.onChange(
-                              prop.onChange ? prop.onChange(e) : e.target.value
-                            );
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder={prop.placeholder}
+                        {...field}
+                        value={field.value || ""}
+                        className="w-60"
+                        onChange={(e) => {
+                          field.onChange(
+                            prop.onChange ? prop.onChange(e) : e.target.value
+                          );
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             ) : (
               <FormField
@@ -106,20 +148,16 @@ const SearchForm = ({ api, result, searchProps }) => {
                           field.onChange(parsedValue);
                           setSelected(parsedValue);
                         }}
-                        value={field.value}
+                        value={field.value?.toString() || ""}
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a value">
-                            {prop.options.find((o) => o.value === selected)
-                              ?.label || "Select a value"}
-                          </SelectValue>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select a value" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent position="popper">
                           <SelectGroup>
-                            <SelectLabel>Categories</SelectLabel>
-                            {prop.options.map((category) => (
+                            {prop.options?.map((category) => (
                               <SelectItem
-                                key={category.value}
+                                key={category.value.toString()}
                                 value={category.value.toString()}
                               >
                                 {category.label}
@@ -137,7 +175,7 @@ const SearchForm = ({ api, result, searchProps }) => {
           )}
           {/* Reset button: Will trigger the handleReset method */}
           <Button
-            type="button" // Make sure it's type="button" to avoid form submission
+            type="button"
             size="sm"
             variant="outline"
             onClick={handleReset}
@@ -148,7 +186,7 @@ const SearchForm = ({ api, result, searchProps }) => {
           <Button type="submit" size="sm">
             {loadingSearch && (
               <Image
-                src={"/assets/Loading.gif"}
+                src="/assets/Loading.gif"
                 alt="loading"
                 width={10}
                 height={10}

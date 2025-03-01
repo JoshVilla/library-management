@@ -3,6 +3,7 @@
 import * as React from "react";
 import { addDays, format, differenceInCalendarDays } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { type DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,21 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePickerWithRange({ className, onDateChange }) {
-  const [date, setDate] = React.useState({
+interface DatePickerWithRangeProps {
+  className?: string;
+  onDateChange?: (dates: { from: string; to: string | null }) => void;
+}
+
+export function DatePickerWithRange({ 
+  className,
+  onDateChange 
+}: DatePickerWithRangeProps) {
+  const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 6), // Default to a 7-day range
   });
 
-  const handleSelect = (range) => {
+  const handleSelect = (range: DateRange | undefined) => {
     if (range?.from && range?.to) {
       const daysDifference = differenceInCalendarDays(range.to, range.from);
 
@@ -37,7 +46,10 @@ export function DatePickerWithRange({ className, onDateChange }) {
     } else {
       setDate(range);
       if (onDateChange && range?.from) {
-        onDateChange({ from: format(range.from, "yyyy-MM-dd"), to: null }); // Single date selection
+        onDateChange({ 
+          from: format(range.from, "yyyy-MM-dd"),
+          to: null 
+        }); // Single date selection
       }
     }
   };
