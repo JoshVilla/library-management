@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -37,94 +37,91 @@ import { useToast } from "@/hooks/use-toast";
 import { isExpired } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
 import { STATUS } from "@/utils/constant";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define types
+interface RequestDetails {
+  id?: string;
+  titleBook?: string;
+  authorBook?: string;
+  studentName?: string;
+  usn?: string;
+  reason?: string;
+  fromDate?: string;
+  toDate?: string;
+  createdAt?: string;
+  isApproved?: number;
+  bookId?: string;
+  bookCode?: string;
+  studentId?: string;
+}
+
+// Form schema
+const formSchema = z.object({
+  isApproved: z.number(),
+  reasonToChangeStatus: z.string(),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const Request = () => {
   const { toast } = useToast();
   const params = useParams();
-  const [requestDetails, setRequestDetails] = useState({});
+  const [requestDetails, setRequestDetails] = useState<RequestDetails>({});
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const form = useForm({
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      isApproved: requestDetails.isApproved,
+      isApproved: requestDetails.isApproved || 0,
       reasonToChangeStatus: "",
     },
   });
-  const fetchData = async () => {
+
+  const fetchData = useCallback(async () => {
     try {
       const res = await getBorrowedBooks({ id: params.id });
       if (res.data) {
         setRequestDetails(res.data[0]);
       }
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Error fetching request details",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+      console.error("Error fetching request details:", error);
     }
-  };
+  }, [params.id, toast]);
 
-  const renderDate = (date = "") => {
+  const renderDate = useCallback((date = "") => {
     if (!date) return "";
     const newDate = new Date(date);
     return format(newDate, "MMM dd, yyyy");
-  };
+  }, []);
 
-  const renderDateRange = (from = "", to = "") => {
+  const renderDateRange = useCallback((from = "", to = "") => {
     if (!from && !to) return "";
     const newFrom = new Date(from);
     const newTo = new Date(to);
-    const formattedFromDate = format(newFrom, "MMM dd, yyyy");
-    const formattedToDate = format(newTo, "MMM dd, yyyy");
+    return `${format(newFrom, "MMM dd, yyyy")} - ${format(newTo, "MMM dd, yyyy")}`;
+  }, []);
 
-    return `${formattedFromDate} - ${formattedToDate}`;
-  };
+  const messageOfUpdatingStatus = useCallback((status: number) => {
+    const messages = {
+      [STATUS.APPROVED]: "The Librarian approved your request.",
+      [STATUS.CANCELLED]: "The Librarian cancelled your request.",
+      [STATUS.RETURNED]: "You have successfully returned the book!",
+      [STATUS.FAILED]: "You have failed to return the book on time.",
+    };
+    return messages[status] || "";
+  }, []);
 
-  const handleUpdate = async (data) => {
+  const handleAddNotification = useCallback(async (data: FormValues) => {
     try {
-      setLoading(true);
-      const res = await updateRequestBook({ id: params.id, ...data });
-      await handleAddNotification(data);
-      if (res) {
-        fetchData();
-        setOpenModal(false);
-        toast({
-          title: res.message,
-          className: "bg-black text-white",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdateStatus = async (value) => {
-    try {
-      const res = await updateRequestBook({ id: params.id, isApproved: value });
-      if (res) {
-        if (value === STATUS.INPROGRESS) {
-          await updateQuantity({ bookCode: requestDetails.bookCode });
-        }
-        await fetchData();
-        toast({
-          title: res.message,
-          className: "bg-black text-white",
-        });
-        if (value === 0 || value === -1 || value === 4) {
-          await handleAddNotification({
-            isApproved: value,
-            reasonToChangeStatus: messageOfUpdatingStatus(value),
-          });
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleAddNotification = async (data) => {
-    try {
-      const { titleBook, authorBook, studentId, toDate, fromDate } =
-        requestDetails;
+      const { titleBook, authorBook, studentId, toDate, fromDate } = requestDetails;
       await addNotification({
         message: messageOfUpdatingStatus(data.isApproved),
         studentId,
@@ -134,44 +131,140 @@ const Request = () => {
         reason: data.reasonToChangeStatus,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Error adding notification:", error);
+      throw error;
+    }
+  }, [requestDetails, messageOfUpdatingStatus, renderDate]);
+
+  const handleUpdate = async (data: FormValues) => {
+    try {
+      setLoading(true);
+      const res = await updateRequestBook({ id: params.id, ...data });
+      await handleAddNotification(data);
+      
+      if (res) {
+        await fetchData();
+        setOpenModal(false);
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error updating request",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+      console.error("Error updating request:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  const messageOfUpdatingStatus = (status) => {
-    let message;
 
-    if (status === STATUS.APPROVED) {
-      message = "The Librarian approved your request.";
-    } else if (status === STATUS.CANCELLED) {
-      message = "The Librarian cancelled your request.";
-    } else if (status === STATUS.RETURNED) {
-      message = "You have successfully returned the book!";
-    } else if (status === STATUS.FAILED) {
-      message = "You have failed to return the book on time.";
+  const handleUpdateStatus = async (value: number) => {
+    try {
+      setLoading(true);
+      const res = await updateRequestBook({ id: params.id, isApproved: value });
+      
+      if (res) {
+        if (value === STATUS.INPROGRESS) {
+          await updateQuantity({ bookCode: requestDetails.bookCode });
+        }
+        
+        await fetchData();
+        toast({
+          title: res.message,
+          className: "bg-black text-white",
+        });
+        
+        if ([STATUS.CANCELLED, STATUS.FAILED, STATUS.RETURNED].includes(value)) {
+          await handleAddNotification({
+            isApproved: value,
+            reasonToChangeStatus: messageOfUpdatingStatus(value),
+          });
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Error updating status",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
     }
-
-    return message;
   };
 
   useEffect(() => {
     fetchData();
-  }, [params.id]);
+  }, [fetchData]);
+
+  const statusActions = useMemo(() => ({
+    [STATUS.APPROVED]: (
+      <div className="space-y-1 mt-2">
+        <div className="text-xs text-gray-500">
+          Once the student gets the book, change the status to Borrowing in Progress
+        </div>
+        <div className="space-x-6">
+          <Button
+            variant="link"
+            className="text-xs text-blue-500 p-0 h-auto"
+            onClick={() => handleUpdateStatus(STATUS.INPROGRESS)}
+            disabled={loading}
+          >
+            Change Status
+          </Button>
+          <Button
+            variant="link"
+            className="text-xs text-blue-500 p-0 h-auto"
+            onClick={() => handleUpdateStatus(STATUS.CANCELLED)}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    ),
+    [STATUS.INPROGRESS]: (
+      <div className="space-y-1 mt-2">
+        <div className="text-xs text-gray-500">
+          Update the status depending on whether the student successfully returned the book.
+        </div>
+        <div className="space-x-6">
+          <Button
+            variant="link"
+            className="text-xs text-blue-500 p-0 h-auto"
+            onClick={() => handleUpdateStatus(STATUS.RETURNED)}
+            disabled={loading}
+          >
+            Successfully returned the book
+          </Button>
+          <Button
+            variant="link"
+            className="text-xs text-blue-500 p-0 h-auto"
+            onClick={() => handleUpdateStatus(STATUS.FAILED)}
+            disabled={loading}
+          >
+            Failed to return the book
+          </Button>
+        </div>
+      </div>
+    ),
+  }), [handleUpdateStatus, loading]);
 
   return (
     <div>
-      <TitlePage title="Student`s Request Details" hasBack />
+      <TitlePage title="Student's Request Details" hasBack />
       <div className="mt-10 flex flex-col gap-4 w-full">
         <div className="w-full">
-          <div className=" mb-4 flex items-center w-full justify-between">
+          <div className="mb-4 flex items-center w-full justify-between">
             <div className="text-2xl font-semibold">Requested Book</div>
-            {/* {isExpired(requestDetails.fromDate) ? (
-              <Badge variant="destructive">Expired</Badge>
-            ) : ( */}
-
             <div>
               <div className="flex items-center gap-2">
                 <Status status={requestDetails.isApproved} />
-                {requestDetails.isApproved === 2 && (
+                {requestDetails.isApproved === STATUS.PENDING && (
                   <Dialog open={openModal} onOpenChange={setOpenModal}>
                     <DialogTrigger className="text-xs text-blue-500 hover:underline">
                       Change Status
@@ -216,24 +309,20 @@ const Request = () => {
                               )}
                             />
                             <FormField
-                              key="reasonToChangeStatus"
                               control={form.control}
                               name="reasonToChangeStatus"
-                              render={({
-                                field: { onChange, value, ...fieldProps },
-                              }) => (
+                              render={({ field }) => (
                                 <FormItem className="mt-6">
                                   <FormLabel>Reason</FormLabel>
                                   <FormControl>
-                                    <Textarea
-                                      onChange={(e) => onChange(e.target.value)}
-                                    />
+                                    <Textarea {...field} />
                                   </FormControl>
+                                  <FormMessage />
                                 </FormItem>
                               )}
                             />
                             <DialogFooter>
-                              <Button type="submit" className="mt-4">
+                              <Button type="submit" disabled={loading} className="mt-4">
                                 {loading ? "Saving..." : "Save changes"}
                               </Button>
                             </DialogFooter>
@@ -244,52 +333,8 @@ const Request = () => {
                   </Dialog>
                 )}
               </div>
-              {requestDetails.isApproved === 1 && (
-                <div className="space-y-1 mt-2">
-                  <div className="text-xs text-gray-500">
-                    Once the student get the book, change the status to
-                    Borrworing in Progress
-                  </div>
-                  <div className="space-x-6">
-                    <span
-                      onClick={() => handleUpdateStatus(3)}
-                      className="text-xs text-blue-500 hover:underline cursor-pointer"
-                    >
-                      Change Status
-                    </span>
-                    <span
-                      onClick={() => handleUpdateStatus(0)}
-                      className="text-xs text-blue-500 hover:underline cursor-pointer"
-                    >
-                      Cancel
-                    </span>
-                  </div>
-                </div>
-              )}
-              {requestDetails.isApproved === 3 && (
-                <div className="space-y-1 mt-2">
-                  <div className="text-xs text-gray-500">
-                    Update the status depending on whether the student
-                    successfully returned the book.
-                  </div>
-                  <div className="space-x-6">
-                    <span
-                      onClick={() => handleUpdateStatus(4)}
-                      className="text-xs text-blue-500 hover:underline cursor-pointer"
-                    >
-                      Successfully returned the book
-                    </span>
-                    <span
-                      onClick={() => handleUpdateStatus(-1)}
-                      className="text-xs text-blue-500 hover:underline cursor-pointer"
-                    >
-                      Failed to returned the book
-                    </span>
-                  </div>
-                </div>
-              )}
+              {statusActions[requestDetails.isApproved]}
             </div>
-            {/* // )} */}
             <div className="text-gray-500 text-sm">
               Requested last: {renderDate(requestDetails.createdAt)}
             </div>

@@ -24,10 +24,11 @@ import LoadingComp from "@/components/loading/loadingComp";
 import PaginationComponent from "@/components/pagination/Pagination";
 import StatusBadge from "@/components/statusBadge/page";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
+import { BorrowedBook, IBookRequest } from "../service/types";
 
 const RequestTable = () => {
   const router = useRouter();
-  const { data, setData, loading, pageState, setPageState } = useFetchDataTable(
+  const { data, setData, loading, pageState, setPageState, fetchData } = useFetchDataTable(
     getBorrowedBooks,
     { isApproved: 2 }
   );
@@ -49,30 +50,41 @@ const RequestTable = () => {
 
   return (
     <div className="w-full mt-10">
+      {/*@ts-ignore */}
       <Table>
+         {/*@ts-ignore */}
         <TableHeader>
+          {/*@ts-ignore */}
           <TableRow>
             {tableHeaders.map((heading) => (
-              <TableHead key={heading} className="uppercase text-center">
+                <TableHead key={heading} className="uppercase text-center">
                 {heading}
               </TableHead>
             ))}
           </TableRow>
         </TableHeader>
+        {/*@ts-ignore */}
         <TableBody>
-          {data.map((request) => (
-            <TableRow key={request._id}>
+          {data.map((request: BorrowedBook) => (
+
+             <TableRow key={request._id}>
+              {/*@ts-ignore */}
               <TableCell className="text-center">
                 {request.studentName}
               </TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center">{request.usn}</TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center">{request.titleBook}</TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center">
                 {renderDate(request.createdAt)}
               </TableCell>
-              <TableCell className="text-center">
+              {/*@ts-ignore */}
+                  <TableCell className="text-center">
                 <StatusBadge status={request.isApproved} />
               </TableCell>
+              {/*@ts-ignore */}
               <TableCell className="flex justify-center items-center gap-4">
                 <TooltipProvider>
                   <Tooltip>
@@ -84,6 +96,7 @@ const RequestTable = () => {
                         }
                       />
                     </TooltipTrigger>
+                    {/*@ts-ignore */}
                     <TooltipContent>
                       <p>View Details</p>
                     </TooltipContent>
@@ -96,6 +109,7 @@ const RequestTable = () => {
                       <TooltipTrigger>
                         <Bolt size={15} />
                       </TooltipTrigger>
+                      {/*@ts-ignore */}
                       <TooltipContent>
                         <p>Update Status</p>
                       </TooltipContent>

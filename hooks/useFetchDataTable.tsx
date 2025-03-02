@@ -22,7 +22,7 @@ const useFetchDataTable = (api, initialParams = {}) => {
             totalPage: response.pagination?.totalPages || 0,
           });
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error("Fetch error:", err);
         setError(err.message || "An error occurred while fetching data.");
       } finally {

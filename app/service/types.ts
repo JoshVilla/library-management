@@ -106,6 +106,8 @@ export interface IAnnouncementParams {
 }
 
 export interface INotificationParams {
+  studentId: string;
+  authorBook: string;
   message: string;
   reason: string;
   titleBook: string;
