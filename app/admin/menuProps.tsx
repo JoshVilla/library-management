@@ -1,6 +1,6 @@
 import { IMenuSideBar } from "@/components/sidebar/sidebar";
 import { HomeIcon, BookOpenIcon, MessageSquare, User } from "lucide-react";
-export const sidebarTitle: string = "Inventory System";
+export const sidebarTitle: string = "Library Management System";
 
 
 export const menuProps: IMenuSideBar[] = [

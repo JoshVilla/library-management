@@ -15,7 +15,13 @@ import {
   IServiceParams,
   IMyFavoritesParams,
   IRemoveFavoritesParams,
+  IBookRequest,
 } from "./types";
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "/api",
+});
 
 export const getStudents = async (params: IServiceParams = {}): Promise<IApiResponse<IStudent[]>> => {
   return await post<IStudent[]>("/api/admin", params);
@@ -65,12 +71,24 @@ export const requestBook = async (params: IRequestBookParams): Promise<IApiRespo
   return await post<void>("/api/requestBook", params);
 };
 
-export const getBorrowedBooks = async (params: IServiceParams = {}): Promise<IApiResponse<any>> => {
-  return await post("/api/borrowBook", params);
+export const getBorrowedBooks = async (params?: IServiceParams): Promise<{ data: IBookRequest[] }> => {
+  try {
+    const response = await api.get<IApiResponse<IBookRequest[]>>("/borrowedBooks", { params });
+    return { data: response.data.data || [] };
+  } catch (error) {
+    console.error("Error fetching borrowed books:", error);
+    return { data: [] };
+  }
 };
 
-export const updateRequestBook = async (params: IUpdateRequestParams): Promise<IApiResponse<void>> => {
-  return await post<void>("/api/borrowBook/updateStatus", params);
+export const updateRequestBook = async (params: IUpdateRequestParams): Promise<{ success: boolean }> => {
+  try {
+    const response = await api.put<IApiResponse<void>>(`/borrowedBooks/${params.id}`, params);
+    return { success: response.data.success };
+  } catch (error) {
+    console.error("Error updating request:", error);
+    return { success: false };
+  }
 };
 
 export const deleteRequest = async (params: { id: string }): Promise<IApiResponse<void>> => {

@@ -98,7 +98,6 @@ export interface IRequestBookParams {
 export interface IUpdateRequestParams {
   id: string;
   isApproved: number;
-  reasonToChangeStatus?: string;
 }
 
 export interface IAnnouncementParams {
@@ -119,11 +118,10 @@ export interface IChangePasswordParams {
   newPassword: string;
 }
 
-export interface IApiResponse<T = any> {
-  status: number;
-  message?: string;
+export interface IApiResponse<T> {
+  success: boolean;
   data?: T;
-  error?: string;
+  message?: string;
 }
 
 export interface IServiceParams {
@@ -141,6 +139,16 @@ export interface IMyFavoritesParams {
 export interface IRemoveFavoritesParams {
   userId?: string;
   bookId?: string;
+}
+
+export interface IBookRequest {
+  _id: string;
+  titleBook: string;
+  authorBook: string;
+  isApproved: number;
+  fromDate: string;
+  toDate: string;
+  createdAt: string;
 }
 
 

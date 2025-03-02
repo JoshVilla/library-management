@@ -133,7 +133,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Link href="/register" className="hover:underline">
+              <Link href="/register" className="hover:underline text-sm">
                 Don't have an account? Register
               </Link>
               <Button type="submit">

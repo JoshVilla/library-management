@@ -103,7 +103,7 @@ const Layout = ({ children }: Props) => {
             />
             <span
               className="cursor-pointer hover:underline"
-              onClick={() => router.push("student/profile")}
+              onClick={() => router.push("/student/profile")}
             >
               {userInfo.firstname ? userInfo.firstname : "Guest"}
             </span>

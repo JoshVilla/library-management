@@ -6,146 +6,115 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage, // ✅ Added FormMessage
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useDispatch } from "react-redux";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
-});
-
-type FormValues = z.infer<typeof formSchema>;
 
 const AdminLogin = () => {
-  const router = useRouter();
+  const form = useForm();
+
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const username = form.watch("username");
+  const password = form.watch("password");
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
-  });
-
-  const handleLogin = async (values: FormValues) => {
-    try {
-      setLoading(true);
-      // Simulate network delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      if (values.username === "admin" && values.password === "admin123") {
-        toast({
-          title: "Success",
-          description: "Welcome back, Admin!",
-        });
-        router.push("/admin");
-      } else {
-        toast({
-          title: "Login Failed",
-          description: "Invalid username or password",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+  const handleLogin = () => {
+    if (username === "admin" && password === "admin123") {
+      window.location.href = "/admin/";
+    } else {
       toast({
-        title: "Error",
-        description: "An unexpected error occurred",
+        title: "Login Failed",
+        description: "Check again your credentials",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
-            Admin Login
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Please sign in to access the admin dashboard
-          </p>
-        </div>
-
-        <div className="mt-8 bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+    <div>
+      <div className="w-full flex items-center justify-center">
+        <div className="w-96">
           <Form {...form}>
             <form
-              className="space-y-6"
+              className="flex justify-center flex-col gap-4"
               onSubmit={form.handleSubmit(handleLogin)}
             >
+              {/* ✅ Updated FormField for Username */}
               <FormField
                 control={form.control}
                 name="username"
-                render={({ field }) => (
+                rules={{ required: "Username is required" }}
+                render={({ field }: any) => (
+                  // @ts-ignore
                   <FormItem>
-                    <FormLabel className="dark:text-white">Username</FormLabel>
+                    {/*@ts-ignore*/}
+                    <FormLabel>Username</FormLabel>
+                    {/*@ts-ignore*/}
                     <FormControl>
-                      <Input 
-                        placeholder="Input Username" 
-                        {...field}
-                        disabled={loading}
-                        className="dark:bg-gray-700 dark:text-white dark:border-gray-600"
-                      />
+                      <Input placeholder="Input Username" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage /> {/* ✅ Automatically displays errors */}
                   </FormItem>
                 )}
               />
 
+              {/* ✅ Updated FormField for Password */}
               <FormField
                 control={form.control}
                 name="password"
-                render={({ field }) => (
+                rules={{ required: "Password is required" }}
+                render={({ field }: any) => (
+                  //@ts-ignore
                   <FormItem>
-                    <FormLabel className="dark:text-white">Password</FormLabel>
+                    {/*@ts-ignore*/}
+                    <FormLabel>Password</FormLabel>
+                    {/*@ts-ignore*/}
                     <FormControl>
                       <div className="relative">
                         <Input
                           type={showPassword ? "text" : "password"}
                           placeholder="Input Password"
                           {...field}
-                          disabled={loading}
-                          className="pr-10 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                          className="pr-10"
                         />
                         <button
                           type="button"
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                           onClick={() => setShowPassword(!showPassword)}
-                          disabled={loading}
                         >
                           {showPassword ? (
-                            <EyeOff className="w-5 h-5" />
+                            <EyeOff size={20} />
                           ) : (
-                            <Eye className="w-5 h-5" />
+                            <Eye size={20} />
                           )}
                         </button>
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage /> {/* ✅ Automatically displays errors */}
                   </FormItem>
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-              >
-                {loading ? "Signing in..." : "Sign in"}
+              <Button type="submit">
+                {loading ? (
+                  <Image
+                    src="/assets/Loading.gif"
+                    width={10}
+                    height={10}
+                    alt="loading"
+                  />
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
           </Form>

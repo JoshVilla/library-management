@@ -6,13 +6,17 @@ import { Users, BookOpen } from "lucide-react"; // Import relevant icons
 import { useEffect, useState } from "react";
 import { dashboard, updateMonthlyBorrowedBooksStats } from "@/app/service/api";
 import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
-import Captcha from "@/components/captcha/captcha";
 import RequestTable from "./requestTable";
 import Graphs from "./graphs";
-import PieGraphSkeleton from "@/components/skeleton/pieGraphSkeleton";
+
+interface DashboardData { 
+  name: string;
+  value: number;
+  icon: React.ReactNode;
+}
 
 export default function Home() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<DashboardData[]>([]);
   const skeleteonArr = new Array(4).fill("skel");
 
   const fetchData = async () => {
@@ -40,6 +44,7 @@ export default function Home() {
           value,
           icon: getIcon(key),
         }));
+        console.log(result, "result");
         setData(result);
       }
     } catch (error) {

@@ -5,7 +5,6 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { menuProps, sidebarTitle } from "./menuProps";
 
 
@@ -15,7 +14,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="flex-1 p-4">
         <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-end items-center gap-4 mb-4">
-          <ThemeToggle />
           <AlertDialogPrimitive.Root>
             <AlertDialogPrimitive.Trigger asChild>
               <Button variant="ghost" className="flex gap-2">

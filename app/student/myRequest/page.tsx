@@ -23,10 +23,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
+import { RootState } from "@/app/redux/store";
 import { STATUS } from "@/utils/constant";
 import { format } from "date-fns";
-import { Ban, Trash } from "lucide-react";
+import { Ban } from "lucide-react";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import { useToast } from "@/hooks/use-toast";
@@ -35,13 +35,18 @@ import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import StatusBadge from "@/components/statusBadge/page";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
-const Page = () => {
-  const { toast } = useToast();
-  const state = useSelector((state) => state.user.userInfo);
-  const { data, pageState, loading, setPageState, setData, fetchData } =
-    useFetchDataTable(getBorrowedBooks, { studentId: state._id });
+import { IStudent, IBookRequest, IUpdateRequestParams } from "@/app/service/types";
 
-  const renderDateRange = (from, to) => {
+const Page: React.FC = () => {
+  const { toast } = useToast();
+  const state = useSelector((state: RootState) => state.user.userInfo) as IStudent;
+  
+  const { data, loading, fetchData, setData } = useFetchDataTable<IBookRequest>({
+    apiFunction: getBorrowedBooks,
+    params: { studentId: state._id }
+  });
+
+  const renderDateRange = (from: string, to: string): JSX.Element => {
     const newFrom = new Date(from);
     const newTo = new Date(to);
     const formattedFromDate = format(newFrom, "MMM dd, yyyy");
@@ -50,24 +55,32 @@ const Page = () => {
     return <div>{`${formattedFromDate} - ${formattedToDate}`}</div>;
   };
 
-  const renderDate = (date) => {
+  const renderDate = (date: string): JSX.Element => {
     const newDate = new Date(date);
     const formattedDate = format(newDate, "MMM dd, yyyy");
 
     return <div>{formattedDate}</div>;
   };
 
-  const handleCancelRequest = async (id) => {
+  const handleCancelRequest = async (id: string): Promise<void> => {
     try {
-      const res = await updateRequestBook({ id, isApproved: 0 });
-      if (res) {
-        fetchData();
+      const params: IUpdateRequestParams = { id, isApproved: 0 };
+      const res = await updateRequestBook(params);
+      if (res.success) {
+        await fetchData();
         toast({
           title: "Request Cancelled Successfully",
         });
+      } else {
+        throw new Error("Failed to cancel request");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error cancelling request:", error);
+      toast({
+        title: "Error",
+        description: "Failed to cancel request",
+        variant: "destructive",
+      });
     }
   };
 
@@ -76,7 +89,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div>
+    <div className="space-y-6">
       <TitlePage title="My Request" />
       <div>
         <SearchForm
@@ -84,79 +97,106 @@ const Page = () => {
           api={fetchData}
           result={setData}
         />
-        <Table className="mt-6">
-          <TableHeader>
-            <TableRow>
-              {[
-                "Title",
-                "Author",
-                "Status",
-                "Date to Borrow",
-                "Created At",
-                "Actions",
-              ].map((heading) => (
-                <TableHead key={heading} className="uppercase text-center">
-                  {heading}
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((request) => (
-              <TableRow key={request._id}>
-                <TableCell className="text-center">
-                  {request.titleBook}
-                </TableCell>
-                <TableCell className="text-center">
-                  {request.authorBook}
-                </TableCell>
-                <TableCell className="text-center">
-                  <StatusBadge status={request.isApproved} />
-                </TableCell>
-                <TableCell className="text-center">
-                  {renderDateRange(request.fromDate, request.toDate)}
-                </TableCell>
-                <TableCell className="text-center">
-                  {renderDate(request.createdAt)}
-                </TableCell>
-                <TableCell className="flex justify-center gap-6 items-center">
-                  {isExpired(request.fromDate) ||
-                  request.isApproved === STATUS.APPROVED ||
-                  request.isApproved === STATUS.CANCELLED ? null : (
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <Ban width={15} />
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure want to cancel your request?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            cancelled your request.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogAction
-                            onClick={() => handleCancelRequest(request._id)}
-                          >
-                            Yes
-                          </AlertDialogAction>
-                          <AlertDialogCancel>
-                            No, I changed my mind
-                          </AlertDialogCancel>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  )}
-                </TableCell>
+        <div className="mt-6 rounded-md border">
+            {/* @ts-ignore */}
+          <Table>
+            {/* @ts-ignore */}
+            <TableHeader>
+              {/* @ts-ignore */}
+              <TableRow>
+                {[
+                  "Title",
+                  "Author",
+                  "Status",
+                  "Date to Borrow",
+                  "Created At",
+                  "Actions",
+                ].map((heading:string) => (
+                 <div>
+                  {/* @ts-ignore */}
+                   <TableHead key={heading} className="uppercase text-center">
+                    {heading}
+                  </TableHead>
+                 </div>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {data.length === 0 && !loading && <EmptyData />}
-        {loading && <LoadingComp />}
+            </TableHeader>
+            {/* @ts-ignore */}
+            <TableBody>
+              {data.map((request: IBookRequest) => (
+                <div key={request._id}>
+                  {/* @ts-ignore */}
+                  <TableRow>
+                  {/* @ts-ignore */}
+                  <TableCell className="text-center">
+                    {request.titleBook}
+                  </TableCell>
+                  {/* @ts-ignore */}
+                  <TableCell className="text-center">
+                    {request.authorBook}
+                  </TableCell>
+                  {/* @ts-ignore */}
+                  <TableCell className="text-center">
+                    <StatusBadge status={request.isApproved} />
+                  </TableCell>
+                  {/* @ts-ignore */}
+                  <TableCell className="text-center">
+                    {renderDateRange(request.fromDate, request.toDate)}
+                  </TableCell>
+                  {/* @ts-ignore */}
+                  <TableCell className="text-center">
+                    {renderDate(request.createdAt)}
+                  </TableCell>
+                  {/* @ts-ignore */}
+                  <TableCell className="flex justify-center gap-6 items-center">
+                    {isExpired(request.fromDate) ||
+                    request.isApproved === STATUS.APPROVED ||
+                    request.isApproved === STATUS.CANCELLED ? null : (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button type="button" className="hover:opacity-70 transition-opacity">
+                            <Ban width={15} />
+                          </button>
+                        </AlertDialogTrigger>
+                        {/* @ts-ignore */}
+                        <AlertDialogContent>
+                          {/* @ts-ignore */}
+                          <AlertDialogHeader>
+                            {/* @ts-ignore */}
+                            <AlertDialogTitle>
+                              Are you absolutely sure you want to cancel your request?
+                            </AlertDialogTitle>
+                            {/* @ts-ignore */}
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently
+                              cancel your request.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          {/* @ts-ignore */}
+                          <AlertDialogFooter>
+                            {/* @ts-ignore */}
+                            <AlertDialogAction
+                              onClick={() => handleCancelRequest(request._id)}
+                            >
+                              Yes
+                            </AlertDialogAction>
+                            {/* @ts-ignore */}
+                            <AlertDialogCancel>
+                              No, I changed my mind
+                            </AlertDialogCancel>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </TableCell>
+                </TableRow>
+                </div>
+              ))}
+            </TableBody>
+          </Table>
+          {data.length === 0 && !loading && <EmptyData />}
+          {loading && <LoadingComp />}
+        </div>
       </div>
     </div>
   );

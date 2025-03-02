@@ -5,7 +5,7 @@ export const sidebarTitle: string = "Student Portal";
 export const menuProps: IMenuSideBar[] = [
   {
     label: "Dashboard",
-    path: "/student/",
+    path: "/student",
     icon: <HomeIcon className="w-5 h-5" />
   },
   {

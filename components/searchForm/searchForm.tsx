@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import {
   Form,
   FormField,
@@ -24,13 +24,14 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Search } from "lucide-react";
 
-interface SearchOption {
+export interface SearchOption {
   value: string | number | boolean;
   label: string;
 }
 
-interface SearchProp {
+export interface SearchProp {
   type: "input" | "select";
   name: string;
   placeholder?: string;
@@ -38,10 +39,15 @@ interface SearchProp {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => string | number | boolean;
 }
 
-interface SearchFormProps {
-  api: (params?: any) => Promise<{ data: any[] }>;
-  result: (data: any[]) => void;
-  searchProps: SearchProp[];
+interface SearchProps {
+  label: string;
+  value: string;
+}
+
+interface SearchFormProps<T> {
+  searchProps: SearchProps[];
+  api: (params?: any) => Promise<{ data: T[] }>;
+  result: (data: T[]) => void;
 }
 
 // Create a dynamic schema based on searchProps
@@ -150,18 +156,23 @@ const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => 
                         }}
                         value={field.value?.toString() || ""}
                       >
+                        {/* @ts-ignore */}
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Select a value" />
                         </SelectTrigger>
+                         {/* @ts-ignore */}
                         <SelectContent position="popper">
                           <SelectGroup>
                             {prop.options?.map((category) => (
+                            <div   key={category.value.toString()}>
+                                {/* @ts-ignore */}
                               <SelectItem
-                                key={category.value.toString()}
+                              
                                 value={category.value.toString()}
                               >
                                 {category.label}
                               </SelectItem>
+                            </div>
                             ))}
                           </SelectGroup>
                         </SelectContent>
