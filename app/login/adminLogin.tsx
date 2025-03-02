@@ -6,20 +6,34 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage, // ✅ Added FormMessage
+  FormMessage,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define the form schema
+const formSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 const AdminLogin = () => {
-  const form = useForm();
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
 
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -48,36 +62,26 @@ const AdminLogin = () => {
               className="flex justify-center flex-col gap-4"
               onSubmit={form.handleSubmit(handleLogin)}
             >
-              {/* ✅ Updated FormField for Username */}
               <FormField
                 control={form.control}
                 name="username"
-                rules={{ required: "Username is required" }}
-                render={({ field }: any) => (
-                  // @ts-ignore
+                render={({ field }) => (
                   <FormItem>
-                    {/*@ts-ignore*/}
                     <FormLabel>Username</FormLabel>
-                    {/*@ts-ignore*/}
                     <FormControl>
                       <Input placeholder="Input Username" {...field} />
                     </FormControl>
-                    <FormMessage /> {/* ✅ Automatically displays errors */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* ✅ Updated FormField for Password */}
               <FormField
                 control={form.control}
                 name="password"
-                rules={{ required: "Password is required" }}
-                render={({ field }: any) => (
-                  //@ts-ignore
+                render={({ field }) => (
                   <FormItem>
-                    {/*@ts-ignore*/}
                     <FormLabel>Password</FormLabel>
-                    {/*@ts-ignore*/}
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -99,7 +103,7 @@ const AdminLogin = () => {
                         </button>
                       </div>
                     </FormControl>
-                    <FormMessage /> {/* ✅ Automatically displays errors */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
