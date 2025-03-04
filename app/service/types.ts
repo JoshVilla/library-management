@@ -101,8 +101,8 @@ export interface IUpdateRequestParams {
 }
 
 export interface IAnnouncementParams {
-  announcement: string;
-  isPinned: boolean;
+  announcement?: string;
+  isPinned?: boolean;
 }
 
 export interface INotificationParams {
