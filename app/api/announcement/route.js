@@ -28,7 +28,7 @@ export async function POST(req) {
         page: pageNumber,
         limit: limitNumber,
         totalPages: Math.ceil(total / limitNumber),
-        announcements,
+        data: announcements,
       }),
       {
         status: 200,

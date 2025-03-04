@@ -31,11 +31,17 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import PaginationComponent from "@/components/pagination/Pagination";
 import LoadingComp from "@/components/loading/loadingComp";
+import { IAnnouncement } from "@/app/service/types";
+
+type PageState = {
+  currentPage: number;
+  totalPage: number;
+};
 
 const Page = () => {
   const { toast } = useToast();
-  const [announcements, setAnnouncements] = useState([]);
-  const [pageState, setPageState] = useState({
+  const [announcements, setAnnouncements] = useState<IAnnouncement[]>([]);
+  const [pageState, setPageState] = useState<PageState>({
     currentPage: 1,
     totalPage: 0,
   });
@@ -45,23 +51,23 @@ const Page = () => {
     pin: false,
   });
 
-  const unPinnedAnnouncement = useMemo(() => {
-    return announcements.filter((o) => !o.isPinned);
+  const unPinnedAnnouncement: IAnnouncement[] = useMemo(() => {
+    return announcements.filter((o:IAnnouncement) => !o.isPinned);
   }, [announcements]);
 
-  const pinnedAnnouncement = useMemo(() => {
-    return announcements.find((o) => o.isPinned) || null;
+  const pinnedAnnouncement: IAnnouncement | null = useMemo(() => {
+    return announcements.find((o:IAnnouncement) => o.isPinned) || null;
   }, [announcements]);
 
   const fetchData = async (params = {}) => {
     setLoadingState((prev) => ({ ...prev, init: true }));
     try {
       const res = await getAnnouncement(params);
-      if (res.announcements) {
-        setAnnouncements(res.announcements);
+      if (res.data) {
+        setAnnouncements(res.data);
         setPageState({
-          currentPage: res.page,
-          totalPage: res.totalPages,
+          currentPage: res.page ?? 1,
+          totalPage: res.totalPages ?? 0,
         });
       } else {
         toast({
@@ -112,7 +118,7 @@ const Page = () => {
     }
   };
 
-  const handleUnpin = async (id) => {
+  const handleUnpin = async (id: string) => {
     setLoadingState((prev) => ({ ...prev, pin: true }));
     try {
       const res = await updateAnnouncement({ id, isPinned: false });
@@ -227,7 +233,7 @@ const Page = () => {
             {unPinnedAnnouncement.length === 0 && (
               <div className="text-sm text-gray-500">No Announcements</div>
             )}
-            {unPinnedAnnouncement.map((announce) => (
+            {unPinnedAnnouncement.map((announce: IAnnouncement) => (
               <div
                 key={announce._id}
                 className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm"

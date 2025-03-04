@@ -124,6 +124,10 @@ export interface IApiResponse<T> {
   success: boolean;
   data?: T;
   message?: string;
+  page?: number;
+  totalPages?: number;
+  total?: number;
+  limit?: number;
 }
 
 export interface IServiceParams {
