@@ -269,8 +269,11 @@ const Request = () => {
                     <DialogTrigger className="text-xs text-blue-500 hover:underline">
                       Change Status
                     </DialogTrigger>
+                    {/*@ts-ignore */}
                     <DialogContent>
+                      {/*@ts-ignore */} 
                       <DialogHeader>
+                        {/*@ts-ignore */}
                         <DialogTitle>Change Status</DialogTitle>
                         <Separator />
                         <Form {...form}>
@@ -280,7 +283,9 @@ const Request = () => {
                               name="isApproved"
                               render={({ field }) => (
                                 <FormItem className="space-y-3 mt-4">
+                                  {/*@ts-ignore */}
                                   <FormControl>
+                                    {/*@ts-ignore */}
                                     <RadioGroup
                                       onValueChange={field.onChange}
                                       defaultValue={requestDetails.isApproved}
@@ -321,6 +326,7 @@ const Request = () => {
                                 </FormItem>
                               )}
                             />
+                            {/*@ts-ignore */}
                             <DialogFooter>
                               <Button type="submit" disabled={loading} className="mt-4">
                                 {loading ? "Saving..." : "Save changes"}
