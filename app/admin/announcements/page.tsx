@@ -70,7 +70,7 @@ const Page = () => {
           className: "bg-red-500 text-white",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Fetch error:", error);
       toast({
         title: "Error fetching announcements",
@@ -100,7 +100,7 @@ const Page = () => {
           className: "bg-red-500 text-white",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Delete error:", error);
       toast({
         title: "Error deleting announcement",
@@ -123,7 +123,7 @@ const Page = () => {
           className: "bg-black text-white",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Unpin error:", error);
       toast({
         title: "Error unpinning announcement",
@@ -146,7 +146,7 @@ const Page = () => {
           className: "bg-black text-white",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Pin error:", error);
       toast({
         title: "Error pinning announcement",
@@ -190,7 +190,7 @@ const Page = () => {
               <span>Pinned Announcement</span>
             </div>
             {pinnedAnnouncement ? (
-              <div className="p-4 bg-gray-100 rounded-lg mt-3">
+              <div className="p-4 dark:bg-gray-800 bg-gray-100 rounded-lg mt-3">
                 <div className="flex items-center justify-between">
                   <div className="text-xs text-gray-500">
                     Posted: {renderDate(pinnedAnnouncement.createdAt)}
@@ -230,7 +230,7 @@ const Page = () => {
             {unPinnedAnnouncement.map((announce) => (
               <div
                 key={announce._id}
-                className="bg-gray-100 p-4 rounded-lg shadow-sm"
+                className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm"
               >
                 <div className="flex justify-between items-center">
                   <div className="text-sm break-words flex-1 max-w-[400px]">
