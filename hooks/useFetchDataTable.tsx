@@ -16,9 +16,9 @@ type UseFetchDataTableProps = {
 
   const fetchData = useCallback(
     async (additionalParams = {}) => {
-      setLoading(true);
-      setError(null);
       try {
+        setLoading(true);
+        setError(null);
         const response = await apiFunction({ ...params, ...additionalParams });
         if (response?.data) {
           setData(response.data);

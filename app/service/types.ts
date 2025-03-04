@@ -67,6 +67,11 @@ export interface IBook {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  available: number;
+  category: string;
+  totalOfBooksBorrowed: number;
+  numberOfBooksBorrowed: number;
+
 }
 
 export interface ILoginParams {

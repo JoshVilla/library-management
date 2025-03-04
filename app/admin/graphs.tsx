@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Pie, PieChart } from "recharts";
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -13,6 +12,17 @@ import { getMonthlyBorrowedBooksStats } from "../service/api";
 import PieGraphSkeleton from "@/components/skeleton/pieGraphSkeleton";
 import { usePathname } from "next/navigation";
 
+type Report = {
+  __v: number;
+  _id: string;
+  monthYear: string;
+  totalApproved: number;
+  totalBorrowingInProgress: number;
+  totalCancelled: number;
+  totalNotReturned: number;
+  totalPending: number;
+  totalReturned: number;
+}
 const transformDataForChart = (data) => {
   return [
     {
@@ -76,7 +86,7 @@ const chartConfig = {
 
 const Graphs = () => {
   const path = usePathname();
-  const [graphs, setGraphs] = useState([]);
+  const [graphs, setGraphs] = useState<Report>();
   const [isLoading, setIsLoading] = useState(true);
   const fetchDataGraphs = async () => {
     try {
@@ -107,15 +117,17 @@ const Graphs = () => {
       ) : (
         <div className="flex flex-col">
           <div className="text-center">
-            <div className="font-semibold">{graphs.monthYear}</div>
+            <div className="font-semibold">{graphs?.monthYear}</div>
           </div>
           {hasNonZeroValue(graphs) ? (
             <div className="flex-1 pb-0">
+              {/*@ts-ignore */}
               <ChartContainer
                 config={chartConfig}
                 className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
               >
                 <PieChart>
+                  {/*@ts-ignore */}
                   <ChartTooltip content={<ChartTooltipContent hideLabel />} />
                   <Pie
                     data={transformDataForChart(graphs)}

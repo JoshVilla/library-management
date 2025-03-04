@@ -57,7 +57,7 @@ import LoadingComp from "@/components/loading/loadingComp";
 import { Badge } from "@/components/ui/badge";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 import ImportButton from "@/components/import/importButton";
-
+import { IStudent } from "@/app/service/types";
 const Page = () => {
   const form = useForm({
     defaultValues: { firstname: "", middleinitial: "", lastname: "", usn: "" },
@@ -70,7 +70,7 @@ const Page = () => {
     setPageState,
     fetchData,
     refetch,
-  } = useFetchDataTable(getStudents);
+  } = useFetchDataTable({ apiFunction: getStudents });
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState(false);
   const [loadingState, setLoadingState] = useState({
@@ -81,7 +81,7 @@ const Page = () => {
   const [studentId, setStudentId] = useState(null);
 
   // Handle form submission
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: IStudent) => {
     try {
       setLoadingState((prev) => ({ ...prev, add: true }));
       const response = await addStudents(data);
@@ -97,7 +97,7 @@ const Page = () => {
         title: "Added Successfully",
         className: "bg-black text-white",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add student:", error);
       toast({
         title: "Failed to add student",
@@ -112,7 +112,7 @@ const Page = () => {
   const handleDelete = async (id) => {
     try {
       setStudentId(id);
-      setLoadingState({ delete: true });
+      setLoadingState((prev) => ({ ...prev, delete: true }));
       const response = await deleteStudent({ id });
       if (response.error) {
         throw new Error(response.error); // Handle API error messages
@@ -124,14 +124,14 @@ const Page = () => {
         title: "Deleted Successfully",
         className: "bg-black text-white",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Failed to delete student",
         description: error.message || "Something went wrong.",
         className: "bg-red-500 text-white",
       });
     } finally {
-      setLoadingState({ delete: false });
+      setLoadingState((prev) => ({ ...prev, delete: false }));
       setStudentId(null);
     }
   };
@@ -151,15 +151,20 @@ const Page = () => {
 
       {/* Add Student Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogTrigger className="bg-black text-white text-sm px-4 py-2 rounded-lg mt-6">
-          Add Student
+        <DialogTrigger asChild>
+          <Button variant="outline"  className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg mt-6">
+            Add Student
+          </Button>
         </DialogTrigger>
+        {/*@ts-ignore */}
         <DialogContent>
+          {/*@ts-ignore */}
           <DialogHeader>
+            {/*@ts-ignore */}
             <DialogTitle>Add Student</DialogTitle>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(handleSubmit)}
+                onSubmit={form.handleSubmit((data) => handleSubmit(data as IStudent))}
                 className="space-y-4"
               >
                 {formFields.map((fieldName) => (
@@ -203,8 +208,11 @@ const Page = () => {
       </Dialog>
 
       {/* Table Display */}
+      {/*@ts-ignore */}
       <Table className="mt-10">
+        {/*@ts-ignore */}
         <TableHeader>
+          {/*@ts-ignore */}
           <TableRow>
             {["Name", "USN", "Status", "Actions"].map((heading) => (
               <TableHead key={heading} className="uppercase text-center">
@@ -213,12 +221,17 @@ const Page = () => {
             ))}
           </TableRow>
         </TableHeader>
+        {/*@ts-ignore */}
         <TableBody>
-          {data.map((student) => (
+          {data.map((student: IStudent) => (
             <TableRow key={student._id}>
+              {/*@ts-ignore */}
               <TableCell className="text-center">{`${student.firstname} ${student.middleinitial} ${student.lastname}`}</TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center">{student.usn}</TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center">
+                {/*@ts-ignore */}
                 <Badge
                   className={
                     student.isRegistered
@@ -229,6 +242,7 @@ const Page = () => {
                   {student.isRegistered ? "Registered" : "Not Registered"}
                 </Badge>
               </TableCell>
+              {/*@ts-ignore */}
               <TableCell className="text-center flex items-center justify-center">
                 {loadingState.delete && student._id === studentId ? (
                   <Image
@@ -242,23 +256,30 @@ const Page = () => {
                     <AlertDialogTrigger>
                       <Trash width={15} fill="currentColor" />
                     </AlertDialogTrigger>
+                    {/*@ts-ignore */}
                     <AlertDialogContent>
+                      {/*@ts-ignore */}
                       <AlertDialogHeader>
+                        {/*@ts-ignore */}
                         <AlertDialogTitle>
                           Are you absolutely sure?
                         </AlertDialogTitle>
+                        {/*@ts-ignore */}
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
                           delete the student's account and remove it from the
                           database.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
+                      {/*@ts-ignore */}
                       <AlertDialogFooter>
+                        {/*@ts-ignore */}
                         <AlertDialogAction
                           onClick={() => handleDelete(student._id)}
                         >
                           Yes
                         </AlertDialogAction>
+                        {/*@ts-ignore */}
                         <AlertDialogCancel>
                           No, I changed my mind
                         </AlertDialogCancel>
@@ -266,8 +287,11 @@ const Page = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 )}
+                {/*@ts-ignore */}
                 <Button variant="icon">
+                  {/*@ts-ignore */}
                   <Link href={`/admin//students/${student._id}`}>
+                    {/*@ts-ignore */}
                     <Eye />
                   </Link>
                 </Button>
@@ -284,7 +308,7 @@ const Page = () => {
           pageState={pageState}
           onChangePage={(page) => {
             fetchData({ page });
-            setPageState((prev) => ({ currentPage: page, ...prev }));
+            setPageState((prev) => ({ ...prev, currentPage: page }));
           }}
         />
       </div>

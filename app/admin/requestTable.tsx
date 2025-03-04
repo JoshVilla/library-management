@@ -14,7 +14,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { getBorrowedBooks } from "../service/api";
 import { format } from "date-fns";
 import { STATUS } from "@/utils/constant";
 import { Bolt, View } from "lucide-react";
@@ -25,13 +24,13 @@ import PaginationComponent from "@/components/pagination/Pagination";
 import StatusBadge from "@/components/statusBadge/page";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 import { BorrowedBook, IBookRequest } from "../service/types";
-
+import { getBorrowedBooks } from "../service/api";
 const RequestTable = () => {
   const router = useRouter();
-  const { data, setData, loading, pageState, setPageState, fetchData } = useFetchDataTable(
-    getBorrowedBooks,
-    { isApproved: 2 }
-  );
+  const { data, setData, loading, pageState, setPageState, fetchData } = useFetchDataTable({
+    apiFunction: getBorrowedBooks,
+    params: { isApproved: 2 }
+  });
   const tableHeaders = [
     "Name",
     "Usn",

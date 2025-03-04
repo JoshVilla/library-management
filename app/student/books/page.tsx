@@ -30,7 +30,7 @@ import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
   const router = useRouter();
   const { pageState, loading, setPageState, setData, data, error, fetchData } =
-    useFetchDataTable(getBooks);
+    useFetchDataTable({ apiFunction: getBooks });
 
   return (
     <div>

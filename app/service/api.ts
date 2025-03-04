@@ -61,8 +61,20 @@ export const dashboard = async (): Promise<IApiResponse<any>> => {
   return await post("/api/dashboard");
 };
 
-export const login = async (params: ILoginParams): Promise<IApiResponse<IStudent>> => {
-  return await post<IStudent>("/api/login", params);
+export const login = async (params: ILoginParams): Promise<IApiResponse<IStudent & { token: string }>> => {
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params),
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const register = async (params: IRegisterParams): Promise<IApiResponse<IStudent>> => {
@@ -73,19 +85,9 @@ export const requestBook = async (params: IRequestBookParams): Promise<IApiRespo
   return await post<void>("/api/requestBook", params);
 };
 
-export const getBorrowedBooks = async (params: BorrowedBook): Promise<IApiResponse<void>> => {
-  return await post<void>("/api/borrowBook", params);
+export const getBorrowedBooks = async (params: IServiceParams): Promise<IApiResponse<IBookRequest[]>> => {
+  return await post<IBookRequest[]>("/api/borrowBook", params);
 };
-
-// export const getBorrowedBooks = async (params?: IServiceParams): Promise<{ data: IBookRequest[] }> => {
-//   try {
-//     const response = await api.get<IApiResponse<IBookRequest[]>>("/borrowedBooks", { params });
-//     return { data: response.data.data || [] };
-//   } catch (error) {
-//     console.error("Error fetching borrowed books:", error);
-//     return { data: [] };
-//   }
-// };
 
 export const updateRequestBook = async (params: BorrowedBook): Promise<IApiResponse<void>> => {
   return await post<void>("/api/borrowBook/updateStatus", params);

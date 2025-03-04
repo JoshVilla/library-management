@@ -53,7 +53,7 @@ const Page = () => {
       <TitlePage title="Dashboard" />
       {/* Annoucement */}
       {announcement && (
-        <div className=" dark:bg-green-600 bg-green-100 p-4 my-4">
+        <div className=" dark:bg-green-600 bg-green-100 p-4 my-4 rounded-lg">
           <div className="flex justify-between">
             <div className="text-lg font-semibold">Announcement!!</div>
             <div className="text-sm text-gray-500 dark:text-white">

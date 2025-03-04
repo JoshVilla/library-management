@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { editStudent, changePassword } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
 import { setUserInfo } from "@/app/redux/slices/studentInfoSlice";
-import { CloudCog, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import PasswordIndicator from "@/components/passwordIndicator/page";
 import { RootState } from "@/app/redux/store";
 import { IStudent } from "@/app/service/types";

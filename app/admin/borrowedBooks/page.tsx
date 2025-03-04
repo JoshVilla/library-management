@@ -23,7 +23,7 @@ import PaginationComponent from "@/components/pagination/Pagination";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 const Page = () => {
   const { data, setData, loading, pageState, setPageState, fetchData } =
-    useFetchDataTable(getBorrowedBooks);
+    useFetchDataTable({ apiFunction: getBorrowedBooks });
   const tableHeaders = [
     "Student",
     "USN",

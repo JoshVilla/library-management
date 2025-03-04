@@ -35,11 +35,11 @@ import Link from "next/link";
 import { searchProps } from "./searchBookProps";
 import SearchForm from "@/components/searchForm/searchForm";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
-
+import { IBook } from "@/app/service/types";
 const Page = () => {
   const { toast } = useToast();
   const { data, setData, loading, pageState, setPageState, fetchData } =
-    useFetchDataTable(getBooks);
+    useFetchDataTable({ apiFunction: getBooks });
   console.log(pageState, "pageState");
   const [loadingState, setLoadingState] = useState({
     initLoading: true,
@@ -62,7 +62,7 @@ const Page = () => {
         title: "Deleted Successfully",
         className: "bg-black text-white",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Failed to delete student",
         description: error.message || "Something went wrong.",
@@ -101,7 +101,7 @@ const Page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((book, idx) => (
+          {data.map((book: IBook, idx) => (
             <TableRow key={idx}>
               <TableCell className="text-center">
                 <div className="flex justify-center">
