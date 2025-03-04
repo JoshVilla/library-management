@@ -1,25 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-const useFetchDataTable = (api, initialParams = {}) => {
+type UseFetchDataTableProps = {
+  apiFunction: any;
+  params?: Record<string, any>;
+};
+
+  function useFetchDataTable({ apiFunction, params = {} }: UseFetchDataTableProps) {
   const [pageState, setPageState] = useState({
     currentPage: 1,
     totalPage: 0,
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(
-    async (params = {}) => {
+    async (additionalParams = {}) => {
       setLoading(true);
       setError(null);
       try {
-        const response = await api({ ...initialParams, ...params });
+        const response = await apiFunction({ ...params, ...additionalParams });
         if (response?.data) {
           setData(response.data);
           setPageState({
-            currentPage: response.pagination?.currentPage || 1,
-            totalPage: response.pagination?.totalPages || 0,
+            currentPage: response.page || 1,
+            totalPage: response.totalPages || 0,
           });
         }
       } catch (err: any) {
@@ -29,7 +34,7 @@ const useFetchDataTable = (api, initialParams = {}) => {
         setLoading(false);
       }
     },
-    [api]
+    []
   );
 
   useEffect(() => {
@@ -46,6 +51,6 @@ const useFetchDataTable = (api, initialParams = {}) => {
     refetch: fetchData,
     fetchData,
   };
-};
+}
 
 export default useFetchDataTable;

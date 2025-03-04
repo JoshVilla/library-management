@@ -1,15 +1,15 @@
 "use client";
 import { getStudents } from "@/app/service/api";
+import { IStudent } from "@/app/service/types";
 import TitlePage from "@/components/titlePage/titlePage";
 import { AvatarFallback, Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Table, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   const params = useParams();
-  const router = useRouter();
-  const [studentInfo, setStudentInfo] = useState(null);
+
+  const [studentInfo, setStudentInfo] = useState<IStudent | null>(null);
 
   const fetchData = async () => {
     try {
@@ -49,11 +49,11 @@ const page = () => {
             </Avatar>
             <div>
               Name:{" "}
-              <span className="text-gray-700 font-semibold">{`${studentInfo?.firstname} ${studentInfo?.middleinitial} ${studentInfo?.lastname}`}</span>
+              <span className="text-gray-700 dark:text-gray-400 font-semibold">{`${studentInfo?.firstname} ${studentInfo?.middleinitial} ${studentInfo?.lastname}`}</span>
             </div>
             <div>
               USN:{" "}
-              <span className="text-gray-700 font-semibold">
+              <span className="text-gray-700 dark:text-gray-400 font-semibold">
                 {studentInfo?.usn}
               </span>
             </div>

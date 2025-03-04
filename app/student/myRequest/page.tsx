@@ -41,7 +41,7 @@ const Page: React.FC = () => {
   const { toast } = useToast();
   const state = useSelector((state: RootState) => state.user.userInfo) as IStudent;
   
-  const { data, loading, fetchData, setData } = useFetchDataTable<IBookRequest>({
+  const { data, loading, fetchData, setData } = useFetchDataTable({
     apiFunction: getBorrowedBooks,
     params: { studentId: state._id }
   });
@@ -112,21 +112,16 @@ const Page: React.FC = () => {
                   "Created At",
                   "Actions",
                 ].map((heading:string) => (
-                 <div>
-                  {/* @ts-ignore */}
                    <TableHead key={heading} className="uppercase text-center">
                     {heading}
                   </TableHead>
-                 </div>
                 ))}
               </TableRow>
             </TableHeader>
             {/* @ts-ignore */}
             <TableBody>
               {data.map((request: IBookRequest) => (
-                <div key={request._id}>
-                  {/* @ts-ignore */}
-                  <TableRow>
+                  <TableRow key={request._id}>
                   {/* @ts-ignore */}
                   <TableCell className="text-center">
                     {request.titleBook}
@@ -190,7 +185,6 @@ const Page: React.FC = () => {
                     )}
                   </TableCell>
                 </TableRow>
-                </div>
               ))}
             </TableBody>
           </Table>
