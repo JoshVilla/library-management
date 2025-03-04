@@ -156,5 +156,13 @@ export interface IBookRequest {
   toDate: string;
   createdAt: string;
 }
-
-
+ export interface StudentDashboard {
+  countStatus: {
+  pending: number;
+  returned: number;
+  canceled: number;
+  approved: number;
+  borrowing: number;
+  failed: number;
+  };
+ }

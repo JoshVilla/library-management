@@ -17,6 +17,7 @@ import {
   IRemoveFavoritesParams,
   IBookRequest,
   BorrowedBook,
+  StudentDashboard,
 } from "./types";
 import axios from "axios";
 
@@ -165,3 +166,8 @@ export const addFavorites = async (params: IMyFavoritesParams): Promise<IApiResp
 export const removeFavorites = async (params: IRemoveFavoritesParams): Promise<IApiResponse<void>> => {
   return await post<void>("/api/myFavorites/removeFavorites", params);
 }; 
+
+export const studentDashboard = async (params: IServiceParams = {}): Promise<IApiResponse<StudentDashboard>> => {
+  return await post<StudentDashboard>("/api/dashboard/studentDashboard", params);
+}; 
+
