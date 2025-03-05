@@ -60,10 +60,10 @@ const Page = () => {
         studentDashboard({ studentId: state._id }),
         getBooks({ featured: true }),
       ]);
-      if (res) {
+      if (res?.data) {
         setStudentDashboardState(res.data);
       }
-      if (res2) {
+      if (res2?.data) {
         setFeaturedBooks(res2.data);
       }
     } catch (error) {

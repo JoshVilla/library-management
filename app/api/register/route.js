@@ -25,6 +25,13 @@ export async function POST(req) {
       );
     }
 
+    if (user.status !== "active") {
+      return new Response(JSON.stringify({ error: "Usn is not active" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     if (user.isRegistered) {
       return new Response(
         JSON.stringify({ message: "USN already registered", isSuccess: false }),

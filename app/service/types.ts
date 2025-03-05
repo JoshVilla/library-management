@@ -30,6 +30,7 @@ export interface IAnnouncement {
 
 export interface IStudent {
   _id: string;
+  status: string;
   firstname: string;
   middleinitial: string;
   lastname: string;
@@ -134,6 +135,8 @@ export interface IApiResponse<T> {
   total?: number;
   limit?: number;
   error?: string;
+  isSuccess?: boolean;
+  user?: IStudent[] | any;
 }
 
 export interface IServiceParams {

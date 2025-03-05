@@ -29,6 +29,12 @@ export async function POST(req) {
       );
     }
 
+    if (user[0].status !== "active") {
+      return new Response(JSON.stringify({ error: "Student is not active" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
     return new Response(
       JSON.stringify({ user, message: "Login Successfull", isSuccess: true }),
       {

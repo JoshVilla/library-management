@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     usn: { type: String, required: true },
     isRegistered: { type: Boolean, default: false },
     pictureUrl: { type: String, default: null },
+    status: { type: String, default: "active" },
     password: {
       type: String,
       default: "",
@@ -21,6 +22,8 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Explicitly set the collection name to "students" for the lms_db database
-const User: UserModel = mongoose.models.User || mongoose.model<IUserDocument>("User", UserSchema, "students");
+const User: UserModel =
+  mongoose.models.User ||
+  mongoose.model<IUserDocument>("User", UserSchema, "students");
 
-export default User; 
+export default User;

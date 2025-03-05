@@ -48,6 +48,7 @@ import {
   deleteStudent,
   getStudents,
   importStudent,
+  editStudent,
 } from "@/app/service/api";
 import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
@@ -58,6 +59,8 @@ import { Badge } from "@/components/ui/badge";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 import ImportButton from "@/components/import/importButton";
 import { IStudent } from "@/app/service/types";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 const Page = () => {
   const form = useForm({
     defaultValues: { firstname: "", middleinitial: "", lastname: "", usn: "" },
@@ -79,6 +82,9 @@ const Page = () => {
     init: false,
   });
   const [studentId, setStudentId] = useState(null);
+
+  const capitalizeFirstLetter = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
 
   // Handle form submission
   const handleSubmit = async (data: IStudent) => {
@@ -109,6 +115,26 @@ const Page = () => {
     }
   };
 
+  const handleStatusChange = async (usn: string, status: string) => {
+    try {
+      const formData = new FormData();
+      formData.append("usn", usn);
+      formData.append("status", status !== "active" ? "active" : "inactive");
+      const response = await editStudent(formData, true);
+      if (response.error) {
+        throw new Error(response.error); // Handle API error messages
+      }
+      fetchData();
+    } catch (error: any) {
+      console.error("Failed to change status:", error);
+      toast({
+        title: "Failed to change status",
+        description: error.message || "Something went wrong.",
+        className: "bg-red-500 text-white",
+      });
+    }
+  };
+
   const handleDelete = async (id) => {
     try {
       setStudentId(id);
@@ -135,7 +161,6 @@ const Page = () => {
       setStudentId(null);
     }
   };
-
   return (
     <div>
       <h1 className="text-2xl font-bold">List of Students</h1>
@@ -152,19 +177,22 @@ const Page = () => {
       {/* Add Student Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
-          <Button variant="outline"  className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg mt-6">
-          <Plus /> Add Student
+          <Button
+            variant="outline"
+            className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg mt-6"
+          >
+            <Plus /> Add Student
           </Button>
         </DialogTrigger>
-        {/*@ts-ignore */}
+
         <DialogContent>
-          {/*@ts-ignore */}
           <DialogHeader>
-            {/*@ts-ignore */}
             <DialogTitle>Add Student</DialogTitle>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit((data) => handleSubmit(data as IStudent))}
+                onSubmit={form.handleSubmit((data) =>
+                  handleSubmit(data as IStudent)
+                )}
                 className="space-y-4"
               >
                 {formFields.map((fieldName) => (
@@ -208,30 +236,27 @@ const Page = () => {
       </Dialog>
 
       {/* Table Display */}
-      {/*@ts-ignore */}
       <Table className="mt-10">
-        {/*@ts-ignore */}
         <TableHeader>
-          {/*@ts-ignore */}
           <TableRow>
-            {["Name", "USN", "Status", "Actions"].map((heading) => (
-              <TableHead key={heading} className="uppercase text-center">
-                {heading}
-              </TableHead>
-            ))}
+            {["Name", "USN", "Status", "Account Status", "Actions"].map(
+              (heading) => (
+                <TableHead key={heading} className="uppercase text-center">
+                  {heading}
+                </TableHead>
+              )
+            )}
           </TableRow>
         </TableHeader>
-        {/*@ts-ignore */}
+
         <TableBody>
           {data.map((student: IStudent) => (
             <TableRow key={student._id}>
-              {/*@ts-ignore */}
               <TableCell className="text-center">{`${student.firstname} ${student.middleinitial} ${student.lastname}`}</TableCell>
-              {/*@ts-ignore */}
+
               <TableCell className="text-center">{student.usn}</TableCell>
-              {/*@ts-ignore */}
+
               <TableCell className="text-center">
-                {/*@ts-ignore */}
                 <Badge
                   className={
                     student.isRegistered
@@ -242,7 +267,19 @@ const Page = () => {
                   {student.isRegistered ? "Registered" : "Not Registered"}
                 </Badge>
               </TableCell>
-              {/*@ts-ignore */}
+              <TableCell className="text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <Label>
+                    {student.status === "active" ? "Active" : "Inactive"}
+                  </Label>
+                  <Switch
+                    checked={student.status === "active"}
+                    onCheckedChange={() => {
+                      handleStatusChange(student.usn, student.status);
+                    }}
+                  />
+                </div>
+              </TableCell>
               <TableCell className="text-center flex items-center justify-center">
                 {loadingState.delete && student._id === studentId ? (
                   <Image
@@ -256,30 +293,27 @@ const Page = () => {
                     <AlertDialogTrigger>
                       <Trash width={15} fill="currentColor" />
                     </AlertDialogTrigger>
-                    {/*@ts-ignore */}
+
                     <AlertDialogContent>
-                      {/*@ts-ignore */}
                       <AlertDialogHeader>
-                        {/*@ts-ignore */}
                         <AlertDialogTitle>
                           Are you absolutely sure?
                         </AlertDialogTitle>
-                        {/*@ts-ignore */}
+
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently
                           delete the student's account and remove it from the
                           database.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      {/*@ts-ignore */}
+
                       <AlertDialogFooter>
-                        {/*@ts-ignore */}
                         <AlertDialogAction
                           onClick={() => handleDelete(student._id)}
                         >
                           Yes
                         </AlertDialogAction>
-                        {/*@ts-ignore */}
+
                         <AlertDialogCancel>
                           No, I changed my mind
                         </AlertDialogCancel>
@@ -287,11 +321,9 @@ const Page = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 )}
-                {/*@ts-ignore */}
-                <Button variant="icon">
-                  {/*@ts-ignore */}
-                  <Link href={`/admin//students/${student._id}`}>
-                    {/*@ts-ignore */}
+
+                <Button variant="ghost">
+                  <Link href={`/admin/students/${student._id}`}>
                     <Eye />
                   </Link>
                 </Button>

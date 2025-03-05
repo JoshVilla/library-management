@@ -33,16 +33,16 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await login(data);
-      if (!res.isSuccess) {
+      if (res.error) {
+        toast({
+          title: "Login Failed",
+          description: res.error,
+          className: "bg-red-500 text-white",
+        });
+      } else if (!res.isSuccess) {
         toast({
           title: "Login Failed",
           description: res.message,
-          className: "bg-red-500 text-white",
-        });
-      } else if (res?.user.length === 0) {
-        toast({
-          title: "Login Failed",
-          description: "Check your credentials and try again.",
           className: "bg-red-500 text-white",
         });
       } else {
