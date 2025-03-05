@@ -21,8 +21,11 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
-
+import { useRouter } from "next/navigation";
+import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
+import CarouselSkeleton from "@/components/skeleton/carousel";
 const Page = () => {
+  const router = useRouter();
   const state = useSelector(
     (state: RootState) => state.user.userInfo
   ) as IStudent;
@@ -31,6 +34,9 @@ const Page = () => {
     useState<StudentDashboard | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [featuredBooks, setFeaturedBooks] = useState<IBook[]>([]);
+  const [arrSkeleton, setArrSkeleton] = useState<string[]>(
+    new Array(6).fill("card")
+  );
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const fetchAnnouncement = async () => {
     try {
@@ -56,7 +62,6 @@ const Page = () => {
       ]);
       if (res) {
         setStudentDashboardState(res.data);
-        console.log(res.data.countStatus);
       }
       if (res2) {
         setFeaturedBooks(res2.data);
@@ -82,24 +87,32 @@ const Page = () => {
           <div className="flex justify-between">
             <div className="text-lg font-semibold">Announcement!!</div>
             <div className="text-sm text-gray-500 dark:text-white">
-              Posted last:{renderDate(announcement.createdAt)}
+              Posted last: {renderDate(announcement.createdAt)}
             </div>
           </div>
           <div className="mt-2">{announcement.announcement}</div>
         </div>
       )}
       <div className="flex gap-4">
-        <div className="flex-1">
-          {studentDashboardState?.countStatus && (
+        <div className="w-full">
+          {studentDashboardState?.countStatus && !isLoading ? (
             <StatusCount
               count={studentDashboardState?.countStatus}
               isLoading={isLoading}
             />
+          ) : (
+            <div className="flex gap-4">
+              {arrSkeleton.map((item, key: number) => (
+                <DashCardSkeleton key={`${item}-${key}`} />
+              ))}
+            </div>
           )}
         </div>
         <div className="md:w-1/4 p-4">
           <div className="text-xl font-semibold">Featured Books</div>
-          {featuredBooks.length === 0 ? (
+          {isLoading ? (
+            <CarouselSkeleton />
+          ) : featuredBooks.length === 0 ? (
             <div className=" text-sm text-gray-500 mt-10">
               No featured books found
             </div>
@@ -113,7 +126,10 @@ const Page = () => {
               <CarouselContent className="flex items-center">
                 {featuredBooks.map((book) => (
                   <CarouselItem key={book._id}>
-                    <div className="p-1 flex flex-col items-center justify-center h-full">
+                    <div
+                      className="p-1 flex flex-col items-center justify-center h-full cursor-pointer"
+                      onClick={() => router.push(`/student/books/${book._id}`)}
+                    >
                       <div className="relative">
                         <Image
                           src={

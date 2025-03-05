@@ -6,6 +6,7 @@ import { Users, BookOpen } from "lucide-react"; // Import relevant icons
 import { useEffect, useRef, useState } from "react";
 import { dashboard, updateMonthlyBorrowedBooksStats } from "@/app/service/api";
 import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
+import CarouselSkeleton from "@/components/skeleton/carousel";
 import RequestTable from "./requestTable";
 import Graphs from "./graphs";
 import { getBooks } from "@/app/service/api";
@@ -28,10 +29,12 @@ interface DashboardData {
 export default function Home() {
   const [data, setData] = useState<DashboardData[]>([]);
   const [featuredBooks, setFeaturedBooks] = useState<IBook[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const skeletonArr = new Array(4).fill("skel");
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const [res, res2] = await Promise.all([
         dashboard(),
         getBooks({ featured: true }),
@@ -66,6 +69,8 @@ export default function Home() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,14 +116,16 @@ export default function Home() {
           <Graphs />
           <div>
             <div className="text-xl font-semibold my-10">Featured Books</div>
-            {featuredBooks.length === 0 ? (
+            {isLoading ? (
+              <CarouselSkeleton />
+            ) : featuredBooks.length === 0 ? (
               <div className="text-center text-sm text-gray-500">
                 No featured books found
               </div>
             ) : (
               <Carousel
                 plugins={[plugin.current]}
-                className="w-[270px] flex justify-center items-center "
+                className="w-[270px] flex justify-center items-center"
                 onMouseEnter={plugin.current.stop}
                 onMouseLeave={plugin.current.reset}
               >

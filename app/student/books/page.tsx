@@ -27,6 +27,7 @@ import PaginationComponent from "@/components/pagination/Pagination";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
+import { IBook } from "@/app/service/types";
 const Page = () => {
   const router = useRouter();
   const { pageState, loading, setPageState, setData, data, error, fetchData } =
@@ -55,7 +56,7 @@ const Page = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((book) => (
+          {data.map((book: IBook) => (
             <TableRow key={book._id}>
               <TableCell className="text-center">
                 <div className="flex justify-center">
