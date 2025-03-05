@@ -42,15 +42,15 @@ export async function POST(req) {
       try {
         const bytes = await picture.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        
+
         // Convert buffer to base64
-        const base64Image = buffer.toString('base64');
+        const base64Image = buffer.toString("base64");
         const uploadStr = `data:${picture.type};base64,${base64Image}`;
-        
+
         // Upload to Cloudinary
         const uploadResponse = await cloudinary.v2.uploader.upload(uploadStr, {
           folder: "book_covers",
-          resource_type: "auto"
+          resource_type: "auto",
         });
 
         console.log("Cloudinary upload successful:", uploadResponse.secure_url);

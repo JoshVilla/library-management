@@ -7,7 +7,16 @@ export async function POST(req) {
 
     const body = await req.json();
 
-    const { page = 1, limit = 5, title, bookCode, category, id, author } = body;
+    const {
+      page = 1,
+      limit = 5,
+      title,
+      bookCode,
+      category,
+      id,
+      author,
+      featured,
+    } = body;
     const pageNumber = Number(page) || 1;
     const limitNumber = Number(limit) || 5;
     const skip = (pageNumber - 1) * limitNumber;
@@ -18,6 +27,7 @@ export async function POST(req) {
     if (category) query.category = category;
     if (author) query.author = author;
     if (title) query.title = title;
+    if (featured) query.featured = featured;
 
     const [books, totalBooks] = await Promise.all([
       Books.find(query).skip(skip).limit(limitNumber),

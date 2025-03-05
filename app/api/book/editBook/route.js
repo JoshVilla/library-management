@@ -18,6 +18,7 @@ export async function POST(req) {
     if (formData.get("category")) params.category = formData.get("category");
     if (formData.get("quantity")) params.quantity = formData.get("quantity");
     if (formData.get("available")) params.available = formData.get("available");
+    if (formData.get("featured")) params.featured = formData.get("featured");
     // Handle image upload if present
     const picture = formData.get("picture");
     if (picture) {

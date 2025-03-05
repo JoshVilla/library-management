@@ -44,6 +44,10 @@ const booksSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

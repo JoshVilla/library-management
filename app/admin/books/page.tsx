@@ -23,10 +23,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-import { deleteBook, getBooks } from "@/app/service/api";
+import { deleteBook, getBooks, updateBook } from "@/app/service/api";
 import { Badge } from "@/components/ui/badge";
 import PaginationComponent from "@/components/pagination/Pagination";
-import { Eye, Trash } from "lucide-react";
+import { Eye, Settings, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import EmptyData from "@/components/empty-data/emptyData";
@@ -36,16 +36,38 @@ import { searchProps } from "./searchBookProps";
 import SearchForm from "@/components/searchForm/searchForm";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
 import { IBook } from "@/app/service/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormLabel,
+  FormControl,
+  FormField,
+  FormDescription,
+} from "@/components/ui/form";
+import { FormItem } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 const Page = () => {
+  const form = useForm();
   const { toast } = useToast();
   const { data, setData, loading, pageState, setPageState, fetchData } =
     useFetchDataTable({ apiFunction: getBooks });
   const [loadingState, setLoadingState] = useState({
     initLoading: true,
     deleteLoading: false,
+    updateLoading: false,
   });
 
   const [bookId, setBookId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleDelete = async (records) => {
     try {
@@ -73,6 +95,32 @@ const Page = () => {
     }
   };
 
+  const handleSave = async (data: any, id: string) => {
+    try {
+      setLoadingState((prev) => ({ ...prev, updateLoading: true }));
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("featured", data.featured);
+      const response = await updateBook(formData, true);
+      if (response.error) {
+        throw new Error(response.error); // Handle API error messages
+      }
+      fetchData({ page: 1 });
+      setOpenDialog(false);
+      toast({
+        title: "Updated Successfully",
+        className: "bg-black text-white",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Failed to update book",
+        description: error.message || "Something went wrong.",
+      });
+    } finally {
+      setLoadingState((prev) => ({ ...prev, updateLoading: false }));
+    }
+  };
+
   return (
     <div>
       <TitlePage title="List of Books" />
@@ -80,8 +128,11 @@ const Page = () => {
       <AddBooks
         successfulAdd={() => fetchData({ page: pageState.currentPage })}
       />
+      {/* @ts-ignore */}
       <Table className="mt-10">
+        {/* @ts-ignore */}
         <TableHeader>
+          {/* @ts-ignore */}
           <TableRow>
             {[
               "Cover",
@@ -99,9 +150,11 @@ const Page = () => {
             ))}
           </TableRow>
         </TableHeader>
+        {/* @ts-ignore */}
         <TableBody>
           {data.map((book: IBook, idx) => (
             <TableRow key={idx}>
+              {/* @ts-ignore */}
               <TableCell className="text-center">
                 <div className="flex justify-center">
                   <Image
@@ -117,14 +170,22 @@ const Page = () => {
                   />
                 </div>
               </TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">{book.title}</TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">{book.author}</TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">{book.bookCode}</TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">
+                {/* @ts-ignore */}
                 <Badge variant="outline">{book.category}</Badge>
               </TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">{book.quantity}</TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center">{book.available}</TableCell>
+              {/* @ts-ignore */}
               <TableCell className="text-center flex items-center justify-center">
                 {loadingState.deleteLoading && book._id === bookId ? (
                   <Image
@@ -135,8 +196,10 @@ const Page = () => {
                   />
                 ) : (
                   <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Trash width={15} fill="currentColor" />
+                    <AlertDialogTrigger asChild>
+                      <Button variant="icon">
+                        <Trash width={15} fill="currentColor" />
+                      </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
@@ -164,6 +227,69 @@ const Page = () => {
                     <Eye />
                   </Link>
                 </Button>
+                <Dialog
+                  onOpenChange={(open) => {
+                    if (open) {
+                      form.setValue("featured", book.featured);
+                    }
+                  }}
+                >
+                  <DialogTrigger asChild>
+                    <Button variant="icon">
+                      <Settings />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Settings</DialogTitle>
+                      <DialogDescription asChild>
+                        <Form {...form}>
+                          <form
+                            onSubmit={form.handleSubmit((data) =>
+                              handleSave(data, book._id)
+                            )}
+                          >
+                            <FormField
+                              control={form.control}
+                              name="featured"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-4">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value}
+                                      onCheckedChange={field.onChange}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel>
+                                      Add to featured books?
+                                    </FormLabel>
+                                    <FormDescription>
+                                      Featured books will be displayed on the
+                                      home page of the student`s portal.
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                            <Button type="submit" size="sm">
+                              {loadingState.updateLoading ? (
+                                <Image
+                                  src="/assets/Loading.gif"
+                                  width={15}
+                                  height={15}
+                                  alt="loading"
+                                />
+                              ) : (
+                                "Save"
+                              )}
+                            </Button>
+                          </form>
+                        </Form>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}
@@ -176,7 +302,7 @@ const Page = () => {
           pageState={pageState}
           onChangePage={(page) => {
             fetchData({ page });
-            setPageState((prev) => ({  ...prev, currentPage: page }));
+            setPageState((prev) => ({ ...prev, currentPage: page }));
           }}
         />
       </div>

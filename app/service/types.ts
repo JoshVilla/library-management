@@ -71,7 +71,7 @@ export interface IBook {
   category: string;
   totalOfBooksBorrowed: number;
   numberOfBooksBorrowed: number;
-
+  featured?: boolean;
 }
 
 export interface ILoginParams {
@@ -162,13 +162,13 @@ export interface IBookRequest {
   toDate: string;
   createdAt: string;
 }
- export interface StudentDashboard {
+export interface StudentDashboard {
   countStatus: {
-  pending: number;
-  returned: number;
-  canceled: number;
-  approved: number;
-  borrowing: number;
-  failed: number;
+    pending: number;
+    returned: number;
+    canceled: number;
+    approved: number;
+    borrowing: number;
+    failed: number;
   };
- }
+}
