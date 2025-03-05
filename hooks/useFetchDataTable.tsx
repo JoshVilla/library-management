@@ -21,10 +21,11 @@ type UseFetchDataTableProps = {
         setError(null);
         const response = await apiFunction({ ...params, ...additionalParams });
         if (response?.data) {
+
           setData(response.data);
           setPageState({
-            currentPage: response.page || 1,
-            totalPage: response.totalPages || 0,
+            currentPage: response.pagination.currentPage || 1,
+            totalPage: response.pagination.totalPages || 0,
           });
         }
       } catch (err: any) {

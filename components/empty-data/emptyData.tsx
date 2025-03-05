@@ -9,7 +9,7 @@ const EmptyData = () => {
     <div className="w-full flex justify-center py-10">
       <div className="text-center">
         <Image
-          src={themeMode === "dark" ? "/assets/empty-folder-dark.png" : "/assets/empty-folder-light.png"}
+          src={themeMode === "dark" || themeMode === "system" ? "/assets/empty-folder-dark.png" : "/assets/empty-folder-light.png"}
           width={100}
           height={100}
           alt="empty"

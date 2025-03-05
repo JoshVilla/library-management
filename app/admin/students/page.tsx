@@ -40,7 +40,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import PaginationComponent from "@/components/pagination/Pagination";
-import { Eye, Trash } from "lucide-react";
+import { Eye, Plus, Trash } from "lucide-react";
 import { formFields } from "./formFields";
 import Link from "next/link";
 import {
@@ -153,7 +153,7 @@ const Page = () => {
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogTrigger asChild>
           <Button variant="outline"  className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg mt-6">
-            Add Student
+          <Plus /> Add Student
           </Button>
         </DialogTrigger>
         {/*@ts-ignore */}

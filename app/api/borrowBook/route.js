@@ -40,9 +40,11 @@ export async function POST(req) {
     return new Response(
       JSON.stringify({
         data: books,
-        totalRecords,
-        totalPages: Math.ceil(totalRecords / limitNumber),
-        currentPage: pageNumber,
+        pagination: {
+          currentPage: pageNumber,
+          totalPages: Math.ceil(totalRecords / limitNumber),
+          totalRecords,
+        },
       }),
       {
         status: 200,

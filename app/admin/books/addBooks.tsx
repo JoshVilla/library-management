@@ -30,7 +30,7 @@ import { formFields } from "./addBooksProps";
 import { useForm } from "react-hook-form";
 import { addBook } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
-
+import { Plus } from "lucide-react";
 const AddBooksForm = ({ successfulAdd }) => {
   const form = useForm();
   const { toast } = useToast();
@@ -114,12 +114,13 @@ const AddBooksForm = ({ successfulAdd }) => {
       setUploading(false);
     }
   };
-  console.log(form.getValues("quantity"));
   return (
     <div>
       <Dialog open={openDialog} onOpenChange={handleCloseDialog}>
-        <DialogTrigger className="bg-black text-white text-sm px-4 py-2 rounded-lg mt-6">
-          Add Books
+        <DialogTrigger asChild>
+          <Button variant="outline" className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg">
+          <Plus /> Add Books
+          </Button>
         </DialogTrigger>
         <DialogContent className={"overflow-y-scroll max-h-[80%]"}>
           <DialogHeader>

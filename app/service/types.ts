@@ -133,6 +133,7 @@ export interface IApiResponse<T> {
   totalPages?: number;
   total?: number;
   limit?: number;
+  error?: string;
 }
 
 export interface IServiceParams {

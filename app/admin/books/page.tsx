@@ -40,7 +40,6 @@ const Page = () => {
   const { toast } = useToast();
   const { data, setData, loading, pageState, setPageState, fetchData } =
     useFetchDataTable({ apiFunction: getBooks });
-  console.log(pageState, "pageState");
   const [loadingState, setLoadingState] = useState({
     initLoading: true,
     deleteLoading: false,
@@ -77,10 +76,10 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="List of Books" />
+      <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
       <AddBooks
         successfulAdd={() => fetchData({ page: pageState.currentPage })}
       />
-      <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
       <Table className="mt-10">
         <TableHeader>
           <TableRow>
@@ -177,7 +176,7 @@ const Page = () => {
           pageState={pageState}
           onChangePage={(page) => {
             fetchData({ page });
-            setPageState((prev) => ({ currentPage: page, ...prev }));
+            setPageState((prev) => ({  ...prev, currentPage: page }));
           }}
         />
       </div>

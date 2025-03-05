@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="flex-1 p-4">
-        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-end items-center gap-4 mb-4">
+        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-end items-center gap-4 mb-4 rounded-lg">
           <AlertDialogPrimitive.Root>
             <AlertDialogPrimitive.Trigger asChild>
               <Button variant="ghost" className="flex gap-2">

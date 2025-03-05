@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Search } from "lucide-react";
+import { Search, SearchIcon } from "lucide-react";
 
 export interface SearchOption {
   value: string | number | boolean;
@@ -203,7 +203,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => 
                 height={10}
               />
             )}
-            Search
+            <SearchIcon /> Search
           </Button>
         </form>
       </Form>
