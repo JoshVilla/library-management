@@ -40,22 +40,21 @@ export async function POST(req) {
     const picture = formData.get("picture");
     if (picture) {
       try {
-        const buffer = Buffer.from(await picture.arrayBuffer()); // Ensure correct buffer conversion
-        const imageUrl = await new Promise((resolve, reject) => {
-          cloudinary.v2.uploader
-            .upload_stream({ folder: "book_covers" }, (error, result) => {
-              if (error) {
-                console.error("Cloudinary upload failed:", error);
-                reject(new Error("Failed to upload image"));
-              } else {
-                console.log("Cloudinary upload successful:", result.secure_url);
-                resolve(result.secure_url);
-              }
-            })
-            .end(buffer);
+        const bytes = await picture.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        
+        // Convert buffer to base64
+        const base64Image = buffer.toString('base64');
+        const uploadStr = `data:${picture.type};base64,${base64Image}`;
+        
+        // Upload to Cloudinary
+        const uploadResponse = await cloudinary.v2.uploader.upload(uploadStr, {
+          folder: "book_covers",
+          resource_type: "auto"
         });
 
-        bookData.pictureUrl = imageUrl;
+        console.log("Cloudinary upload successful:", uploadResponse.secure_url);
+        bookData.pictureUrl = uploadResponse.secure_url;
       } catch (uploadError) {
         console.error("Error uploading to Cloudinary:", uploadError);
         return new Response(

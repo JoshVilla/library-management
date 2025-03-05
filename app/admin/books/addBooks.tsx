@@ -103,7 +103,7 @@ const AddBooksForm = ({ successfulAdd }) => {
         title: "Book Added Successfully",
         className: "bg-black text-white",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add book:", error);
       toast({
         title: "Failed to add book",
@@ -122,8 +122,11 @@ const AddBooksForm = ({ successfulAdd }) => {
           <Plus /> Add Books
           </Button>
         </DialogTrigger>
+        {/*ts-ignore */}
         <DialogContent className={"overflow-y-scroll max-h-[80%]"}>
+          {/*ts-ignore */}
           <DialogHeader>
+            {/*ts-ignore */}
             <DialogTitle>Add Book</DialogTitle>
             <Form {...form}>
               <form
@@ -202,11 +205,14 @@ const AddBooksForm = ({ successfulAdd }) => {
                               onValueChange={field.onChange}
                               value={field.value}
                             >
+                              {/*ts-ignore */}
                               <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a category" />
                               </SelectTrigger>
+                              {/*ts-ignore */}
                               <SelectContent>
                                 <SelectGroup>
+                                  {/*ts-ignore */}
                                   <SelectLabel>Categories</SelectLabel>
                                   {fieldName.categories.map((category) => (
                                     <SelectItem key={category} value={category}>
