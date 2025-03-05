@@ -111,46 +111,52 @@ export default function Home() {
           <Graphs />
           <div>
             <div className="text-xl font-semibold my-10">Featured Books</div>
-            <Carousel
-              plugins={[plugin.current]}
-              className="w-[270px] flex justify-center items-center "
-              onMouseEnter={plugin.current.stop}
-              onMouseLeave={plugin.current.reset}
-            >
-              <CarouselContent className="flex items-center">
-                {featuredBooks.map((book) => (
-                  <CarouselItem key={book._id}>
-                    <div className="p-1 flex flex-col items-center justify-center h-full">
-                      <div className="relative">
-                        <Image
-                          src={
-                            book.pictureUrl ?? "/assets/book-placeholder.png"
-                          }
-                          alt={book.title}
-                          className="object-cover rounded-lg"
-                          width={96}
-                          height={96}
-                        />
-                      </div>
-                      <div className="mt-4 text-center">
-                        <div className="text-xs font-semibold ">
-                          {book.title}
+            {featuredBooks.length === 0 ? (
+              <div className="text-center text-sm text-gray-500">
+                No featured books found
+              </div>
+            ) : (
+              <Carousel
+                plugins={[plugin.current]}
+                className="w-[270px] flex justify-center items-center "
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+              >
+                <CarouselContent className="flex items-center">
+                  {featuredBooks.map((book) => (
+                    <CarouselItem key={book._id}>
+                      <div className="p-1 flex flex-col items-center justify-center h-full">
+                        <div className="relative">
+                          <Image
+                            src={
+                              book.pictureUrl ?? "/assets/book-placeholder.png"
+                            }
+                            alt={book.title}
+                            className="object-cover rounded-lg"
+                            width={96}
+                            height={96}
+                          />
                         </div>
-                        <div className="text-xs text-gray-500 ">
-                          {book.author}
+                        <div className="mt-4 text-center">
+                          <div className="text-xs font-semibold ">
+                            {book.title}
+                          </div>
+                          <div className="text-xs text-gray-500 ">
+                            {book.author}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {featuredBooks.length > 1 && (
-                <>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </>
-              )}
-            </Carousel>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {featuredBooks.length > 1 && (
+                  <>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </>
+                )}
+              </Carousel>
+            )}
           </div>
         </div>
       </div>
