@@ -36,7 +36,9 @@ export interface SearchProp {
   name: string;
   placeholder?: string;
   options?: SearchOption[];
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => string | number | boolean;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => string | number | boolean;
 }
 
 interface SearchProps {
@@ -57,13 +59,19 @@ const createFormSchema = (searchProps: SearchProp[]) => {
     if (prop.type === "input") {
       schemaObj[prop.name] = z.string().optional();
     } else {
-      schemaObj[prop.name] = z.union([z.string(), z.number(), z.boolean()]).optional();
+      schemaObj[prop.name] = z
+        .union([z.string(), z.number(), z.boolean()])
+        .optional();
     }
   });
   return z.object(schemaObj);
 };
 
-const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => {
+const SearchForm: React.FC<SearchFormProps> = ({
+  api,
+  result,
+  searchProps,
+}) => {
   const formSchema = createFormSchema(searchProps);
   type FormValues = z.infer<typeof formSchema>;
 
@@ -160,19 +168,16 @@ const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => 
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Select a value" />
                         </SelectTrigger>
-                         {/* @ts-ignore */}
+                        {/* @ts-ignore */}
                         <SelectContent position="popper">
                           <SelectGroup>
                             {prop.options?.map((category) => (
-                            <div   key={category.value.toString()}>
+                              <div key={category.value.toString()}>
                                 {/* @ts-ignore */}
-                              <SelectItem
-                              
-                                value={category.value.toString()}
-                              >
-                                {category.label}
-                              </SelectItem>
-                            </div>
+                                <SelectItem value={category.value.toString()}>
+                                  {category.label}
+                                </SelectItem>
+                              </div>
                             ))}
                           </SelectGroup>
                         </SelectContent>
@@ -195,15 +200,17 @@ const SearchForm: React.FC<SearchFormProps> = ({ api, result, searchProps }) => 
           </Button>
           {/* Search button: Will trigger form submission */}
           <Button type="submit" size="sm">
-            {loadingSearch && (
+            {loadingSearch ? (
               <Image
                 src="/assets/Loading.gif"
                 alt="loading"
                 width={10}
                 height={10}
               />
+            ) : (
+              <SearchIcon />
             )}
-            <SearchIcon /> Search
+            Search
           </Button>
         </form>
       </Form>

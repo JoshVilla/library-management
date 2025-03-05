@@ -83,9 +83,6 @@ const Page = () => {
   });
   const [studentId, setStudentId] = useState(null);
 
-  const capitalizeFirstLetter = (str: string) =>
-    str.charAt(0).toUpperCase() + str.slice(1);
-
   // Handle form submission
   const handleSubmit = async (data: IStudent) => {
     try {
