@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import User from "@/app/models/admin";
+import Student from "@/app/models/student";
 import { Base64 } from "base64-string";
 import { comparePassword, hashPassword } from "@/utils/helpers";
 
@@ -9,11 +9,11 @@ export async function POST(req) {
     await connectToDatabase();
     const { id, currentPassword, newPassword } = await req.json();
 
-    const getUserInfo = await User.findById(id);
+    const getUserInfo = await Student.findById(id);
     console.log(getUserInfo);
 
     if (await comparePassword(currentPassword, getUserInfo.password)) {
-      const updateData = await User.findByIdAndUpdate(
+      const updateData = await Student.findByIdAndUpdate(
         id,
         {
           password: await hashPassword(newPassword),

@@ -28,26 +28,26 @@ const api = axios.create({
 export const getStudents = async (
   params: IServiceParams = {}
 ): Promise<IApiResponse<IStudent[]>> => {
-  return await post<IStudent[]>("/api/admin", params);
+  return await post<IStudent[]>("/api/student", params);
 };
 
 export const addStudents = async (
   params: IRegisterParams
 ): Promise<IApiResponse<IStudent>> => {
-  return await post<IStudent>("/api/admin/addAdmin", params);
+  return await post<IStudent>("/api/student/addStudent", params);
 };
 
 export const deleteStudent = async (params: {
   id: string;
 }): Promise<IApiResponse<void>> => {
-  return await post<void>("/api/admin/deleteStudent", params);
+  return await post<void>("/api/student/deleteStudent", params);
 };
 
 export const editStudent = async (
   params: FormData | IServiceParams,
   hasFormData: boolean = false
 ): Promise<IApiResponse<IStudent>> => {
-  return await post<IStudent>("/api/admin/editAdmin", params, hasFormData);
+  return await post<IStudent>("/api/student/editStudent", params, hasFormData);
 };
 
 export const getBooks = async (

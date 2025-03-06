@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import User from "@/app/models/admin";
+import Student from "@/app/models/student";
 import { Base64 } from "base64-string";
 import { comparePassword } from "@/utils/helpers";
 
@@ -9,10 +9,10 @@ export async function POST(req) {
     await connectToDatabase();
     const { usn, password } = await req.json(); // Await req.json()
 
-    const user = await User.find({ usn }); // Use findOne() with an object filter
+    const user = await Student.find({ usn }); // Use findOne() with an object filter
 
     if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
+      return new Response(JSON.stringify({ error: "Student not found" }), {
         status: 404,
         headers: { "Content-Type": "application/json" },
       });

@@ -1,6 +1,6 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import Books from "@/app/models/books";
-import User from "@/app/models/admin";
+import User from "@/app/models/student";
 
 export async function POST(req) {
   try {

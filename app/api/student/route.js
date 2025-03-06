@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import User from "@/app/models/admin";
+import Student from "@/app/models/student";
 
 export async function POST(req) {
   try {
@@ -21,8 +21,8 @@ export async function POST(req) {
 
     // Fetch data and count in parallel with error handling
     const [users, totalUsers] = await Promise.all([
-      User.find(query).skip(skip).limit(limit).lean().exec(),
-      User.countDocuments(query),
+      Student.find(query).skip(skip).limit(limit).lean().exec(),
+      Student.countDocuments(query),
     ]);
 
     return new Response(
@@ -44,11 +44,11 @@ export async function POST(req) {
       }
     );
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching students:", error);
     return new Response(
       JSON.stringify({
         success: false,
-        error: "Failed to fetch users",
+        error: "Failed to fetch students",
         details: error.message,
       }),
       {

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { IUserDocument, UserModel } from "./types";
 
 // Define the schema for the students collection
-const UserSchema = new mongoose.Schema(
+const StudentSchema = new mongoose.Schema(
   {
     firstname: { type: String, required: true },
     middleinitial: { type: String, required: true },
@@ -25,6 +25,6 @@ const UserSchema = new mongoose.Schema(
 // Explicitly set the collection name to "students" for the lms_db database
 const User: UserModel =
   mongoose.models.User ||
-  mongoose.model<IUserDocument>("User", UserSchema, "students");
+  mongoose.model<IUserDocument>("User", StudentSchema, "students");
 
 export default User;

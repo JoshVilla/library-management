@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import User from "@/app/models/admin";
+import Student from "@/app/models/student";
 import cloudinary from "@/lib/cloudinaryConfig";
 import {
   deleteCloudinaryImage,
@@ -59,7 +59,7 @@ export async function POST(req) {
             )
             .end(buffer);
         });
-        const res = await User.findById(studentId);
+        const res = await Student.findById(studentId);
         if (res) {
           const publicId = getCloudinaryPublicId(res.pictureUrl);
           if (publicId) await deleteCloudinaryImage(publicId);
@@ -78,7 +78,7 @@ export async function POST(req) {
     }
 
     // Update student profile using USN
-    const updatedUser = await User.findOneAndUpdate(
+    const updatedUser = await Student.findOneAndUpdate(
       { usn: usn },
       { $set: userData },
       { new: true, runValidators: true }

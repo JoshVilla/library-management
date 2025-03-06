@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@/lib/mongodb";
-import User from "@/app/models/admin";
+import User from "@/app/models/student";
 import * as XLSX from "xlsx";
 import { NextResponse } from "next/server";
 
