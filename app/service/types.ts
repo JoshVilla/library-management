@@ -189,6 +189,9 @@ export interface IAdmin {
   username: string;
   password: string;
   isSuperAdmin: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 export interface IAdminLoginParams {

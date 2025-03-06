@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
 
     if (admin.username === username && isPasswordValid) {
       return NextResponse.json(
-        { message: "Login successful" },
+        { message: "Login successful", data: admin },
         { status: 200 }
       );
     }

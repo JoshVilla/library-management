@@ -19,6 +19,9 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { adminLogin } from "../service/api";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setAdminInfo } from "../redux/slices/adminInfoSlice";
+import { IAdmin } from "../service/types";
 // Define the form schema
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -28,6 +31,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const AdminLogin = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -56,6 +60,8 @@ const AdminLogin = () => {
           variant: "destructive",
         });
       } else {
+        console.log(response.data, "response.data");
+        dispatch(setAdminInfo(response.data as IAdmin));
         router.push("/admin");
         toast({
           title: "Login Successful",

@@ -3,17 +3,18 @@ import studentInfoReducer from "../slices/studentInfoSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"; // ✅ Uses localStorage
 import { persistReducer, persistStore } from "redux-persist";
-
+import adminInfoReducer from "../slices/adminInfoSlice";
 // ✅ Persist Config: Store both "user" and "graph"
 const persistConfig = {
   key: "root", // ✅ Keep as "root" since we have multiple slices
   storage,
-  whitelist: ["user"], // ✅ Persist both user & graph slices
+  whitelist: ["user", "adminInfo"], // ✅ Persist both user & graph slices
 };
 
 // ✅ Combine Reducers
 const rootReducer = combineReducers({
   user: studentInfoReducer,
+  adminInfo: adminInfoReducer,
 });
 
 // ✅ Apply persistReducer to combined reducer

@@ -20,6 +20,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import { IAdmin } from "@/app/service/types";
 interface DashboardData {
   name: string;
   value: number;
@@ -27,6 +30,10 @@ interface DashboardData {
 }
 
 export default function Home() {
+  const state = useSelector(
+    (state: RootState) => state.adminInfo.adminInfo
+  ) as IAdmin;
+  console.log(state, "state");
   const [data, setData] = useState<DashboardData[]>([]);
   const [featuredBooks, setFeaturedBooks] = useState<IBook[]>([]);
   const [isLoading, setIsLoading] = useState(true);

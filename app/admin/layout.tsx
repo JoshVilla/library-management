@@ -1,3 +1,5 @@
+"use client";
+
 import Sidebar from "@/components/sidebar/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { DoorOpen } from "lucide-react";
@@ -6,14 +8,35 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { menuProps, sidebarTitle } from "./menuProps";
-
-
+import { logoutAdmin } from "../redux/slices/adminInfoSlice";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { persistor } from "../redux/store";
+import { IAdmin } from "../service/types";
+import { RootState } from "../redux/store";
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const state = useSelector(
+    (state: RootState) => state.adminInfo.adminInfo
+  ) as IAdmin;
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const logout = () => {
+    dispatch(logoutAdmin());
+    persistor.purge();
+    persistor.flush();
+    router.push("/");
+  };
   return (
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
       <div className="flex-1 p-4">
-        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-end items-center gap-4 mb-4 rounded-lg">
+        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-between items-center gap-4 mb-4 rounded-lg">
+          <div>
+            <span className="text-md font-semibold">Hello! </span>
+            <span className="hover:underline cursor-pointer">
+              {state.username}
+            </span>
+          </div>
           <AlertDialogPrimitive.Root>
             <AlertDialogPrimitive.Trigger asChild>
               <Button variant="ghost" className="flex gap-2">
@@ -35,11 +58,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 </div>
                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 gap-2">
                   <AlertDialogPrimitive.Cancel asChild>
-                    <Button variant="outline" className="mt-0">Cancel</Button>
+                    <Button variant="outline" size="sm" className="mt-0">
+                      Cancel
+                    </Button>
                   </AlertDialogPrimitive.Cancel>
                   <AlertDialogPrimitive.Action asChild>
-                    <Button asChild>
-                      <Link href="/">Logout</Link>
+                    <Button onClick={logout} size="sm">
+                      Logout
                     </Button>
                   </AlertDialogPrimitive.Action>
                 </div>
