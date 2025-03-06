@@ -271,3 +271,9 @@ export const adminLogin = async (
 ): Promise<IApiResponse<IAdmin>> => {
   return await post<IAdmin>("/api/login/admin", params);
 };
+
+export const deleteAdmin = async (params: {
+  id: string;
+}): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/admin/deleteAdmin", params);
+};

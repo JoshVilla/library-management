@@ -18,12 +18,14 @@ import { searchProps } from "./searchProps";
 import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import PaginationComponent from "@/components/pagination/Pagination";
+import DeleteAdmin from "./deleteAdmin";
 
 const AdminManagement = () => {
-  const { data, setData, loading, pageState, setPageState, fetchData } =
+  const { data, setData, pageState, setPageState, fetchData, loading } =
     useFetchDataTable({
       apiFunction: getAdmins,
     });
+
   return (
     <div>
       <TitlePage title="Admin Management" />
@@ -33,7 +35,7 @@ const AdminManagement = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              {["Username", "Status"].map((heading) => (
+              {["Username", "Status", "Action"].map((heading) => (
                 <TableHead key={heading}>{heading}</TableHead>
               ))}
             </TableRow>
@@ -44,6 +46,9 @@ const AdminManagement = () => {
                 <TableCell>{admin.username}</TableCell>
                 <TableCell>
                   {admin.isSuperAdmin ? "Super Admin" : "Admin"}
+                </TableCell>
+                <TableCell>
+                  <DeleteAdmin id={admin._id} refresh={fetchData} />
                 </TableCell>
               </TableRow>
             ))}
