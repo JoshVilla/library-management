@@ -192,6 +192,7 @@ export interface IAdmin {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  pictureUrl: string | null;
 }
 
 export interface IAdminLoginParams {

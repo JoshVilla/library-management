@@ -28,7 +28,7 @@ const AdminManagement = () => {
     <div>
       <TitlePage title="Admin Management" />
       <SearchForm api={fetchData} result={setData} searchProps={searchProps} />
-      <AddAdmin />
+      <AddAdmin refresh={fetchData} />
       <div className="mt-10">
         <Table>
           <TableHeader>

@@ -26,6 +26,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     persistor.flush();
     router.push("/");
   };
+
+  const goToProfile = () => {
+    router.push("/admin/profile");
+  };
   return (
     <div className="min-h-screen flex">
       <Sidebar title={sidebarTitle} menuProp={menuProps} />
@@ -33,7 +37,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-between items-center gap-4 mb-4 rounded-lg">
           <div>
             <span className="text-md font-semibold">Hello! </span>
-            <span className="hover:underline cursor-pointer">
+            <span
+              className="hover:underline cursor-pointer"
+              onClick={goToProfile}
+            >
               {state.username}
             </span>
           </div>

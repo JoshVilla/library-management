@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Plus } from "lucide-react";
+import { Eye, EyeOff, Plus, Loader2 } from "lucide-react";
 import {
   Form,
   FormField,
@@ -28,8 +28,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { addAdmin } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
 
-const AddAdmin = () => {
+const AddAdmin = ({ refresh }: { refresh: () => void }) => {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm({
     defaultValues: {
@@ -40,12 +42,16 @@ const AddAdmin = () => {
   });
   const handleSubmit = async (data: any) => {
     try {
+      setLoading(true);
       const response = await addAdmin(data);
       if (response.data) {
+        setLoading(false);
         toast({
           title: "Admin added successfully",
           description: "Admin added successfully",
         });
+        refresh();
+        setOpenModal(false);
       } else if (response.error) {
         toast({
           title: "Error",
@@ -55,11 +61,13 @@ const AddAdmin = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div>
-      <Dialog>
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
         <DialogTrigger asChild>
           <Button size="sm">
             <Plus />
@@ -145,7 +153,13 @@ const AddAdmin = () => {
                 )}
               />
               <DialogFooter>
-                <Button type="submit">Add Admin</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Add Admin"
+                  )}
+                </Button>
               </DialogFooter>
             </form>
           </Form>
