@@ -45,6 +45,13 @@ const Login = () => {
           description: res.message,
           className: "bg-red-500 text-white",
         });
+      } else if (!res.user[0].didFirstLogin) {
+        router.push("/student/");
+        dispatch(setUserInfo(res.user[0]));
+        toast({
+          title: "Login Successful",
+          className: "bg-black text-white",
+        });
       } else {
         router.push("/student/");
         dispatch(setUserInfo(res.user[0]));

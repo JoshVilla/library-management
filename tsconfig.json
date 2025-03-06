@@ -30,7 +30,8 @@
     "src",
     "app",
     "app/redux/slices",
-    "app/types/**/*.d.ts"
+    "app/types/**/*.d.ts",
+    "components/welcome"
   ],
   "exclude": ["node_modules"]
 }

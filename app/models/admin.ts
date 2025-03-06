@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    didFirstLogin: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

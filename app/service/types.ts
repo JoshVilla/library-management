@@ -43,6 +43,7 @@ export interface IStudent {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  didFirstLogin: boolean;
 }
 
 export interface INotification {
@@ -137,6 +138,7 @@ export interface IApiResponse<T> {
   error?: string;
   isSuccess?: boolean;
   user?: IStudent[] | any;
+  notifications?: INotification[] | any;
 }
 
 export interface IServiceParams {
