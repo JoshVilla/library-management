@@ -20,6 +20,7 @@ import {
   StudentDashboard,
   IAddAdminParams,
   IAdmin,
+  IAdminLoginParams,
 } from "./types";
 import axios from "axios";
 
@@ -257,4 +258,16 @@ export const addAdmin = async (
   params: IAddAdminParams
 ): Promise<IApiResponse<IAdmin>> => {
   return await post<IAdmin>("/api/admin/addAdmin", params);
+};
+
+export const getAdmins = async (
+  params: IServiceParams = {}
+): Promise<IApiResponse<IAdmin[]>> => {
+  return await post<IAdmin[]>("/api/admin", params);
+};
+
+export const adminLogin = async (
+  params: IAdminLoginParams
+): Promise<IApiResponse<IAdmin>> => {
+  return await post<IAdmin>("/api/login/admin", params);
 };

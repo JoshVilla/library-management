@@ -186,7 +186,12 @@ export interface IAddAdminParams {
 
 export interface IAdmin {
   _id: string;
-  name: string;
+  username: string;
   password: string;
   isSuperAdmin: boolean;
+}
+
+export interface IAdminLoginParams {
+  username: string;
+  password: string;
 }

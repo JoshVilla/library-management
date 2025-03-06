@@ -21,6 +21,7 @@ import { searchProps } from "./searchProps";
 import Link from "next/link";
 import PaginationComponent from "@/components/pagination/Pagination";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
+import { BorrowedBook } from "@/app/service/types";
 const Page = () => {
   const { data, setData, loading, pageState, setPageState, fetchData } =
     useFetchDataTable({ apiFunction: getBorrowedBooks });
@@ -58,7 +59,7 @@ const Page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((dataTable) => (
+            {data.map((dataTable: BorrowedBook) => (
               <TableRow key={dataTable._id}>
                 <TableCell className="text-center">
                   {dataTable.studentName}

@@ -17,7 +17,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { adminLogin } from "../service/api";
+import { useRouter } from "next/navigation";
 // Define the form schema
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -27,6 +28,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const AdminLogin = () => {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,18 +40,32 @@ const AdminLogin = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const username = form.watch("username");
-  const password = form.watch("password");
 
-  const handleLogin = () => {
-    if (username === "admin" && password === "admin123") {
-      window.location.href = "/admin/";
-    } else {
-      toast({
-        title: "Login Failed",
-        description: "Check again your credentials",
-        variant: "destructive",
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const response = await adminLogin({
+        username: form.getValues("username"),
+        password: form.getValues("password"),
       });
+
+      if (response.error) {
+        toast({
+          title: "Login Failed",
+          description: response.error,
+          variant: "destructive",
+        });
+      } else {
+        router.push("/admin");
+        toast({
+          title: "Login Successful",
+          description: "You have successfully logged in",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

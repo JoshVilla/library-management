@@ -5,7 +5,10 @@ type UseFetchDataTableProps = {
   params?: Record<string, any>;
 };
 
-  function useFetchDataTable({ apiFunction, params = {} }: UseFetchDataTableProps) {
+function useFetchDataTable({
+  apiFunction,
+  params = {},
+}: UseFetchDataTableProps) {
   const [pageState, setPageState] = useState({
     currentPage: 1,
     totalPage: 0,
@@ -14,29 +17,26 @@ type UseFetchDataTableProps = {
   const [data, setData] = useState([]);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(
-    async (additionalParams = {}) => {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await apiFunction({ ...params, ...additionalParams });
-        if (response?.data) {
-
-          setData(response.data);
-          setPageState({
-            currentPage: response.pagination.currentPage || 1,
-            totalPage: response.pagination.totalPages || 0,
-          });
-        }
-      } catch (err: any) {
-        console.error("Fetch error:", err);
-        setError(err.message || "An error occurred while fetching data.");
-      } finally {
+  const fetchData = useCallback(async (additionalParams = {}) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await apiFunction({ ...params, ...additionalParams });
+      if (response?.data) {
         setLoading(false);
+        setData(response.data);
+        setPageState({
+          currentPage: response.pagination.currentPage || 1,
+          totalPage: response.pagination.totalPages || 0,
+        });
       }
-    },
-    []
-  );
+    } catch (err: any) {
+      console.error("Fetch error:", err);
+      setError(err.message || "An error occurred while fetching data.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();

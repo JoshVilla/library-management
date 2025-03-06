@@ -27,10 +27,11 @@ import { BorrowedBook, IBookRequest } from "../service/types";
 import { getBorrowedBooks } from "../service/api";
 const RequestTable = () => {
   const router = useRouter();
-  const { data, setData, loading, pageState, setPageState, fetchData } = useFetchDataTable({
-    apiFunction: getBorrowedBooks,
-    params: { isApproved: 2 }
-  });
+  const { data, setData, loading, pageState, setPageState, fetchData } =
+    useFetchDataTable({
+      apiFunction: getBorrowedBooks,
+      params: { isApproved: 2 },
+    });
   const tableHeaders = [
     "Name",
     "Usn",
@@ -51,12 +52,12 @@ const RequestTable = () => {
     <div className="w-full mt-10">
       {/*@ts-ignore */}
       <Table>
-         {/*@ts-ignore */}
+        {/*@ts-ignore */}
         <TableHeader>
           {/*@ts-ignore */}
           <TableRow>
             {tableHeaders.map((heading) => (
-                <TableHead key={heading} className="uppercase text-center">
+              <TableHead key={heading} className="uppercase text-center">
                 {heading}
               </TableHead>
             ))}
@@ -65,25 +66,18 @@ const RequestTable = () => {
         {/*@ts-ignore */}
         <TableBody>
           {data.map((request: BorrowedBook) => (
-
-             <TableRow key={request._id}>
-              {/*@ts-ignore */}
+            <TableRow key={request._id}>
               <TableCell className="text-center">
                 {request.studentName}
               </TableCell>
-              {/*@ts-ignore */}
               <TableCell className="text-center">{request.usn}</TableCell>
-              {/*@ts-ignore */}
               <TableCell className="text-center">{request.titleBook}</TableCell>
-              {/*@ts-ignore */}
               <TableCell className="text-center">
                 {renderDate(request.createdAt)}
               </TableCell>
-              {/*@ts-ignore */}
-                  <TableCell className="text-center">
+              <TableCell className="text-center">
                 <StatusBadge status={request.isApproved} />
               </TableCell>
-              {/*@ts-ignore */}
               <TableCell className="flex justify-center items-center gap-4">
                 <TooltipProvider>
                   <Tooltip>
