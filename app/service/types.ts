@@ -177,3 +177,16 @@ export interface StudentDashboard {
     failed: number;
   };
 }
+
+export interface IAddAdminParams {
+  name: string;
+  password: string;
+  isSuperAdmin: boolean;
+}
+
+export interface IAdmin {
+  _id: string;
+  name: string;
+  password: string;
+  isSuperAdmin: boolean;
+}

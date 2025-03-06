@@ -18,6 +18,8 @@ import {
   IBookRequest,
   BorrowedBook,
   StudentDashboard,
+  IAddAdminParams,
+  IAdmin,
 } from "./types";
 import axios from "axios";
 
@@ -249,4 +251,10 @@ export const studentDashboard = async (
     "/api/dashboard/studentDashboard",
     params
   );
+};
+
+export const addAdmin = async (
+  params: IAddAdminParams
+): Promise<IApiResponse<IAdmin>> => {
+  return await post<IAdmin>("/api/admin/addAdmin", params);
 };
