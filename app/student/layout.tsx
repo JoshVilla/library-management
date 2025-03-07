@@ -95,10 +95,15 @@ const Layout = ({ children }: Props) => {
         <WelcomeScreen userInfo={userInfo} />
       ) : (
         <div className="flex w-full">
-          <Sidebar title={sidebarTitle} menuProp={menuProps} />
+          <Sidebar
+            title={sidebarTitle}
+            menuProp={menuProps}
+            state={userInfo}
+            user="student"
+          />
           <div className="w-full">
-            <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]  flex justify-between items-center">
-              <div className="flex items-center gap-2">
+            <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]  flex justify-end items-center">
+              {/* <div className="flex items-center gap-2">
                 <span className="text-lg font-semibold">Hello! </span>
                 <Image
                   src={userInfo.pictureUrl ?? "/assets/defaultProfile.jpg"}
@@ -113,7 +118,7 @@ const Layout = ({ children }: Props) => {
                 >
                   {userInfo.firstname ? userInfo.firstname : "Guest"}
                 </span>
-              </div>
+              </div> */}
               <div className="flex items-center gap-10 relative">
                 {/* Notification Bell with Badge */}
                 <Popover open={openNotif} onOpenChange={setOpenNotif}>
@@ -172,39 +177,6 @@ const Layout = ({ children }: Props) => {
                     </div>
                   </PopoverContent>
                 </Popover>
-
-                {/* Logout Section */}
-                <div className="flex items-center cursor-pointer hover:underline">
-                  <DoorOpen />
-                  <AlertDialog>
-                    <AlertDialogTrigger>Logout</AlertDialogTrigger>
-                    {/*@ts-ignore */}
-                    <AlertDialogContent>
-                      {/*@ts-ignore */}
-                      <AlertDialogHeader>
-                        {/*@ts-ignore */}
-                        <AlertDialogTitle>
-                          Are you sure you want to log out?
-                        </AlertDialogTitle>
-                        {/*@ts-ignore */}
-                        <AlertDialogDescription>
-                          You will be signed out of your account. Any unsaved
-                          changes will be lost. Do you want to proceed with
-                          logging out?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      {/*@ts-ignore */}
-                      <AlertDialogFooter>
-                        {/*@ts-ignore */}
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        {/*@ts-ignore */}
-                        <AlertDialogAction onClick={logout}>
-                          Log out
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
               </div>
             </div>
             <div className="px-6 py-2">{children}</div>

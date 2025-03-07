@@ -93,7 +93,7 @@ const Page = () => {
           <div className="mt-2">{announcement.announcement}</div>
         </div>
       )}
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-col md:flex-row">
         <div className="w-full">
           {studentDashboardState?.countStatus && !isLoading ? (
             <StatusCount
@@ -101,66 +101,70 @@ const Page = () => {
               isLoading={isLoading}
             />
           ) : (
-            <div className="flex gap-4">
+            <div className="flex gap-4 ">
               {arrSkeleton.map((item, key: number) => (
                 <DashCardSkeleton key={`${item}-${key}`} />
               ))}
             </div>
           )}
         </div>
-        <div className="md:w-1/4 p-4">
+        <div className="md:w-1/2 p-4">
           <div className="text-xl font-semibold">Featured Books</div>
-          {isLoading ? (
-            <CarouselSkeleton />
-          ) : featuredBooks.length === 0 ? (
-            <div className=" text-sm text-gray-500 mt-10">
-              No featured books found
-            </div>
-          ) : (
-            <Carousel
-              plugins={[plugin.current]}
-              className="w-[270px] flex justify-center items-center my-6"
-              onMouseEnter={plugin.current.stop}
-              onMouseLeave={plugin.current.reset}
-            >
-              <CarouselContent className="flex items-center">
-                {featuredBooks.map((book) => (
-                  <CarouselItem key={book._id}>
-                    <div
-                      className="p-1 flex flex-col items-center justify-center h-full cursor-pointer"
-                      onClick={() => router.push(`/student/books/${book._id}`)}
-                    >
-                      <div className="relative">
-                        <Image
-                          src={
-                            book.pictureUrl ?? "/assets/book-placeholder.png"
-                          }
-                          alt={book.title}
-                          className="object-cover rounded-lg"
-                          width={150}
-                          height={150}
-                        />
-                      </div>
-                      <div className="mt-4 text-center">
-                        <div className="text-xs font-semibold ">
-                          {book.title}
+          <div>
+            {isLoading ? (
+              <CarouselSkeleton />
+            ) : featuredBooks.length === 0 ? (
+              <div className=" text-sm text-gray-500 mt-10">
+                No featured books found
+              </div>
+            ) : (
+              <Carousel
+                plugins={[plugin.current]}
+                className="w-[270px] flex justify-center items-center my-6 mx-auto"
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+              >
+                <CarouselContent className="flex items-center">
+                  {featuredBooks.map((book) => (
+                    <CarouselItem key={book._id}>
+                      <div
+                        className="p-1 flex flex-col items-center justify-center h-full cursor-pointer"
+                        onClick={() =>
+                          router.push(`/student/books/${book._id}`)
+                        }
+                      >
+                        <div className="relative">
+                          <Image
+                            src={
+                              book.pictureUrl ?? "/assets/book-placeholder.png"
+                            }
+                            alt={book.title}
+                            className="object-cover rounded-lg"
+                            width={150}
+                            height={150}
+                          />
                         </div>
-                        <div className="text-xs text-gray-500 ">
-                          {book.author}
+                        <div className="mt-4 text-center">
+                          <div className="text-xs font-semibold ">
+                            {book.title}
+                          </div>
+                          <div className="text-xs text-gray-500 ">
+                            {book.author}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {featuredBooks.length > 1 && (
-                <>
-                  <CarouselPrevious />
-                  <CarouselNext />
-                </>
-              )}
-            </Carousel>
-          )}
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {featuredBooks.length > 1 && (
+                  <>
+                    <CarouselPrevious />
+                    <CarouselNext />
+                  </>
+                )}
+              </Carousel>
+            )}
+          </div>
         </div>
       </div>
     </div>

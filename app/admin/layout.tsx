@@ -32,7 +32,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   };
   return (
     <div className="min-h-screen flex">
-      <Sidebar title={sidebarTitle} menuProp={menuProps} />
+      <Sidebar
+        title={sidebarTitle}
+        menuProp={menuProps}
+        state={state}
+        user="admin"
+      />
       <div className="flex-1 p-4">
         <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-between items-center gap-4 mb-4 rounded-lg">
           <div>
