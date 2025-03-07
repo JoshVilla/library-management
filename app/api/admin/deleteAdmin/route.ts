@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Admin deletion failed" },
+      { error: "Admin deletion failed" },
       { status: 500 }
     );
   }

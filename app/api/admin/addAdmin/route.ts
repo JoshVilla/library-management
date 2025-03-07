@@ -5,7 +5,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
-    const { username, password, isSuperAdmin } = await request.json();
+    const { username, password } = await request.json();
 
     // Hash the password
     const hashedPassword = await hashPassword(password);
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const admin = await Admin.create({
       username,
       password: hashedPassword,
-      isSuperAdmin: isSuperAdmin || false,
+      // isSuperAdmin: isSuperAdmin || false,
     });
 
     return NextResponse.json({ data: admin }, { status: 201 });

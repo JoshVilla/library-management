@@ -277,3 +277,10 @@ export const deleteAdmin = async (params: {
 }): Promise<IApiResponse<void>> => {
   return await post<void>("/api/admin/deleteAdmin", params);
 };
+
+export const editAdmin = async (
+  params: FormData | IServiceParams,
+  hasFormData: boolean = false
+): Promise<IApiResponse<IAdmin>> => {
+  return await post<IAdmin>("/api/admin/editAdmin", params, hasFormData);
+};
