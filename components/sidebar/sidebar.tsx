@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useTheme } from "next-themes";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { LogOut, Loader2 } from "lucide-react";
+import { LogOut, Loader2, Menu } from "lucide-react";
 import { IAdmin, IStudent } from "@/app/service/types";
 import { Button } from "../ui/button";
 import {
@@ -46,56 +46,107 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Mobile Sidebar Toggle
 
   const renderName = () => {
-    if (user === "student") {
-      return (state as IStudent)?.firstname;
-    }
-    return (state as IAdmin)?.username;
+    return user === "student"
+      ? (state as IStudent)?.firstname
+      : (state as IAdmin)?.username;
   };
 
   const logout = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      if (user === "student") {
-        dispatch(logoutUser());
-      } else {
-        dispatch(logoutAdmin());
-      }
+      dispatch(user === "student" ? logoutUser() : logoutAdmin());
       await persistor.purge();
       await persistor.flush();
       router.push("/");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
   const goToProfile = () => {
-    if (user === "student") {
-      router.push("/student/profile");
-    } else {
-      router.push("/admin/profile");
-    }
+    router.push(user === "student" ? "/student/profile" : "/admin/profile");
   };
 
   return (
-    <div
-      className={`hidden md:flex md:w-1/6 min-h-screen border-r ${textColor} flex-col`}
-    >
-      <div className="p-4">
-        <div className="text-2xl font-semibold py-6">{title}</div>
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        className="md:hidden fixed top-3 left-4 z-50 bg-gray-800 text-white p-2 rounded bg-[#f9f9f9] dark:bg-[#1a1a1a] "
+        onClick={() => setSidebarOpen(true)}
+      >
+        <Menu size={24} />
+      </button>
+
+      {/* Sidebar (Desktop) */}
+      <div
+        className={`hidden md:flex md:w-1/6 min-h-screen border-r ${textColor} flex-col`}
+      >
+        <div className="p-4">
+          <div className="text-2xl font-semibold py-6">{title}</div>
+        </div>
+
+        <div className="flex-1 flex flex-col justify-between p-4">
+          <ul className="flex flex-col gap-4">
+            {menuProp.map((menu) => (
+              <Link
+                key={menu.path}
+                href={menu.path}
+                className={`${hoverColor} p-3 rounded-lg cursor-pointer flex items-center gap-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap overflow-hidden`}
+              >
+                <div className="w-5 h-5">{menu.icon}</div>
+                <span className="font-medium truncate">{menu.label}</span>
+              </Link>
+            ))}
+          </ul>
+
+          <div className="pt-4 border-t flex items-center justify-between">
+            <div className="text-sm">
+              <span className="font-semibold">Hello! </span>
+              <span
+                className="hover:underline cursor-pointer"
+                onClick={goToProfile}
+              >
+                {renderName()}
+              </span>
+            </div>
+            <div>
+              <ThemeToggle />
+              <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+                <LogOut />
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-between p-4">
-        <ul className="flex flex-col gap-4">
+      {/* Sidebar (Mobile) */}
+      <div
+        className={`fixed top-0 left-0 w-2/3 sm:w-1/2 h-full bg-white bg-[#f9f9f9] dark:bg-[#1a1a1a]  z-50 flex flex-col p-4 shadow-lg transform transition-transform duration-300 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:hidden`}
+      >
+        <button
+          className="self-end text-lg mb-4"
+          onClick={() => setSidebarOpen(false)}
+        >
+          ✕
+        </button>
+
+        <div className="text-2xl font-semibold py-4">{title}</div>
+
+        <ul className="flex flex-col gap-4 flex-grow">
           {menuProp.map((menu) => (
             <Link
-              className={`${hoverColor} p-3 rounded-lg cursor-pointer flex items-center gap-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800`}
               key={menu.path}
               href={menu.path}
+              className={`${hoverColor} p-3 rounded-lg cursor-pointer flex items-center gap-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap overflow-hidden`}
+              onClick={() => setSidebarOpen(false)}
             >
               <div className="w-5 h-5">{menu.icon}</div>
-              <span className="font-medium">{menu.label}</span>
+              <span className="font-medium truncate">{menu.label}</span>
             </Link>
           ))}
         </ul>
@@ -119,6 +170,15 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
         </div>
       </div>
 
+      {/* Click outside to close Sidebar */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Logout Confirmation */}
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -145,7 +205,7 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 };
 
