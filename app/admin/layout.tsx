@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         user="admin"
       />
       <div className="flex-1 p-4">
-        <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-between items-center gap-4 mb-4 rounded-lg">
+        {/* <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a] flex justify-between items-center gap-4 mb-4 rounded-lg">
           <div>
             <span className="text-md font-semibold">Hello! </span>
             <span
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               </AlertDialogPrimitive.Content>
             </AlertDialogPrimitive.Portal>
           </AlertDialogPrimitive.Root>
-        </div>
+        </div> */}
         {children}
       </div>
       <Toaster />

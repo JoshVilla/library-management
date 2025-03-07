@@ -70,6 +70,14 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
     }
   };
 
+  const goToProfile = () => {
+    if (user === "student") {
+      router.push("/student/profile");
+    } else {
+      router.push("/admin/profile");
+    }
+  };
+
   return (
     <div
       className={`hidden md:flex md:w-1/6 min-h-screen border-r ${textColor} flex-col`}
@@ -95,7 +103,10 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
         <div className="pt-4 border-t flex items-center justify-between">
           <div className="text-sm">
             <span className="font-semibold">Hello! </span>
-            <span className="hover:underline cursor-pointer">
+            <span
+              className="hover:underline cursor-pointer"
+              onClick={goToProfile}
+            >
               {renderName()}
             </span>
           </div>
