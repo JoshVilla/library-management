@@ -14,8 +14,7 @@ export async function POST(request: NextRequest) {
     const id = formData.get("id");
     const picture = formData.get("picture");
     const currentPassword = formData.get("currentPassword");
-
-    console.log(id, currentPassword);
+    const isSuperAdmin = formData.get("isSuperAdmin");
 
     let params: any = {};
     if (formData.get("username")) params.username = formData.get("username");
@@ -56,9 +55,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const oldAdminPassword = await Admin.findById(id);
-
     if (params.password) {
+      const oldAdminPassword = await Admin.findById(id);
       const isCurrentPasswordMatch = await comparePassword(
         currentPassword,
         oldAdminPassword?.password
@@ -73,8 +71,6 @@ export async function POST(request: NextRequest) {
         params.password = await hashPassword(params.password);
       }
     }
-
-    console.log(params);
 
     const newAdmin = await Admin.findByIdAndUpdate(id, params, {
       new: true,

@@ -27,11 +27,17 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { addAdmin } from "@/app/service/api";
 import { useToast } from "@/hooks/use-toast";
-
+import { useSelector } from "react-redux";
+import { IAdmin } from "@/app/service/types";
+import AlertAccess from "../components/alertAccess";
 const AddAdmin = ({ refresh }: { refresh: () => void }) => {
   const { toast } = useToast();
+  const state = useSelector(
+    (state: any) => state.adminInfo.adminInfo
+  ) as IAdmin;
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm({
     defaultValues: {
@@ -65,15 +71,23 @@ const AddAdmin = ({ refresh }: { refresh: () => void }) => {
       setLoading(false);
     }
   };
+
+  const handleOpenModal = () => {
+    console.log(state.isSuperAdmin, "state");
+    if (state.isSuperAdmin) {
+      setOpenModal(!openModal);
+    } else {
+      setOpenAlert(true);
+    }
+  };
+
   return (
     <div>
+      <Button size="sm" onClick={handleOpenModal}>
+        <Plus />
+        Add Admin
+      </Button>
       <Dialog open={openModal} onOpenChange={setOpenModal}>
-        <DialogTrigger asChild>
-          <Button size="sm">
-            <Plus />
-            Add Admin
-          </Button>
-        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>New Admin</DialogTitle>
@@ -165,6 +179,9 @@ const AddAdmin = ({ refresh }: { refresh: () => void }) => {
           </Form>
         </DialogContent>
       </Dialog>
+      {openAlert && (
+        <AlertAccess openAlert={openAlert} setOpenAlert={setOpenAlert} />
+      )}
     </div>
   );
 };
