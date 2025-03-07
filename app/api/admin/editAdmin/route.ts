@@ -72,6 +72,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    const countSuperAdmin = await Admin.countDocuments({
+      isSuperAdmin: true,
+    });
+
+    if (isSuperAdmin === "false" && countSuperAdmin === 1) {
+      return NextResponse.json(
+        { error: "There must be at least one super admin" },
+        { status: 400 }
+      );
+    }
     const newAdmin = await Admin.findByIdAndUpdate(id, params, {
       new: true,
       runValidators: true,

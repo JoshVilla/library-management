@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { IAdmin } from "@/app/service/types";
 import AlertAccess from "../components/alertAccess";
+
 const DeleteAdmin = ({ id, refresh }: { id: string; refresh: () => void }) => {
   const state = useSelector(
     (state: RootState) => state.adminInfo.adminInfo

@@ -19,8 +19,14 @@ import EmptyData from "@/components/empty-data/emptyData";
 import LoadingComp from "@/components/loading/loadingComp";
 import PaginationComponent from "@/components/pagination/Pagination";
 import DeleteAdmin from "./deleteAdmin";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/redux/store";
+import ChangeStatus from "./changeStatus";
 
 const AdminManagement = () => {
+  const state = useSelector(
+    (state: RootState) => state.adminInfo.adminInfo
+  ) as IAdmin;
   const { data, setData, pageState, setPageState, fetchData, loading } =
     useFetchDataTable({
       apiFunction: getAdmins,
@@ -43,12 +49,21 @@ const AdminManagement = () => {
           <TableBody>
             {data.map((admin: IAdmin) => (
               <TableRow key={admin._id}>
-                <TableCell>{admin.username}</TableCell>
+                <TableCell>
+                  {`${admin.username} ${
+                    state._id === admin._id ? "(You)" : ""
+                  }`}
+                </TableCell>
                 <TableCell>
                   {admin.isSuperAdmin ? "Super Admin" : "Admin"}
                 </TableCell>
-                <TableCell>
+                <TableCell className="flex gap-2 items-center">
                   <DeleteAdmin id={admin._id} refresh={fetchData} />
+                  <ChangeStatus
+                    id={admin._id}
+                    defaultValue={admin.isSuperAdmin.toString()}
+                    refresh={fetchData}
+                  />
                 </TableCell>
               </TableRow>
             ))}
