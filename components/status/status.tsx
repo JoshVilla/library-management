@@ -1,8 +1,10 @@
 import { STATUS } from "@/utils/constant";
 import React from "react";
 
-const Status = ({ status }) => {
-  let style = {};
+const Status = ({ status }: { status: any }) => {
+  let style = {
+    backgroundColor: "",
+  };
   let text = "";
 
   if (status === STATUS.PENDING) {

@@ -47,7 +47,7 @@ interface SearchProps {
 }
 
 interface SearchFormProps<T> {
-  searchProps: SearchProps[];
+  searchProps: SearchProp[];
   api: (params?: any) => Promise<{ data: T[] }>;
   result: (data: T[]) => void;
 }
@@ -67,11 +67,10 @@ const createFormSchema = (searchProps: SearchProp[]) => {
   return z.object(schemaObj);
 };
 
-const SearchForm: React.FC<SearchFormProps> = ({
-  api,
-  result,
-  searchProps,
-}) => {
+{
+  /*@ts-ignore */
+}
+const SearchForm: React.FC<any> = ({ api, result, searchProps }) => {
   const formSchema = createFormSchema(searchProps);
   type FormValues = z.infer<typeof formSchema>;
 

@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const FileUploadModal = ({ api, refresh }) => {
   const { toast } = useToast();
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -65,9 +65,11 @@ const FileUploadModal = ({ api, refresh }) => {
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
-        <Button size="sm"><Upload /> Upload Excel File</Button>
+        <Button size="sm">
+          <Upload /> Upload Excel File
+        </Button>
       </DialogTrigger>
-      {/* @ts-ignore */ }
+      {/* @ts-ignore */}
       <DialogContent className="max-w-md">
         {/* @ts-ignore */}
         <DialogHeader>

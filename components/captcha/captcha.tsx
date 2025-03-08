@@ -11,7 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
-const Captcha = ({ onVerified, open, setOpen }) => {
+const Captcha = ({
+  onVerified,
+  open,
+  setOpen,
+}: {
+  onVerified: (isMatch: boolean) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) => {
   const [captcha, setCaptcha] = useState("");
   const [inputCaptcha, setInputCaptcha] = useState("");
   const { toast } = useToast();

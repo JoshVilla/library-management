@@ -1,7 +1,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { STATUS } from "@/utils/constant";
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status }: { status: string | number }) => {
   let text = "";
   let className = "";
   if (status === STATUS.INPROGRESS) {
