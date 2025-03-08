@@ -35,15 +35,21 @@ import SearchForm from "@/components/searchForm/searchForm";
 import { searchProps } from "./searchProps";
 import StatusBadge from "@/components/statusBadge/page";
 import useFetchDataTable from "@/hooks/useFetchDataTable";
-import { IStudent, IBookRequest, IUpdateRequestParams } from "@/app/service/types";
+import {
+  IStudent,
+  IBookRequest,
+  IUpdateRequestParams,
+} from "@/app/service/types";
 
 const Page: React.FC = () => {
   const { toast } = useToast();
-  const state = useSelector((state: RootState) => state.user.userInfo) as IStudent;
-  
+  const state = useSelector(
+    (state: RootState) => state.user.userInfo
+  ) as IStudent;
+
   const { data, loading, fetchData, setData } = useFetchDataTable({
     apiFunction: getBorrowedBooks,
-    params: { studentId: state._id }
+    params: { studentId: state._id },
   });
 
   const renderDateRange = (from: string, to: string): JSX.Element => {
@@ -98,7 +104,7 @@ const Page: React.FC = () => {
           result={setData}
         />
         <div className="mt-6 rounded-md border">
-            {/* @ts-ignore */}
+          {/* @ts-ignore */}
           <Table>
             {/* @ts-ignore */}
             <TableHeader>
@@ -111,8 +117,8 @@ const Page: React.FC = () => {
                   "Date to Borrow",
                   "Created At",
                   "Actions",
-                ].map((heading:string) => (
-                   <TableHead key={heading} className="uppercase text-center">
+                ].map((heading: string) => (
+                  <TableHead key={heading} className="uppercase text-center">
                     {heading}
                   </TableHead>
                 ))}
@@ -121,13 +127,13 @@ const Page: React.FC = () => {
             {/* @ts-ignore */}
             <TableBody>
               {data.map((request: IBookRequest) => (
-                  <TableRow key={request._id}>
+                <TableRow key={request._id}>
                   {/* @ts-ignore */}
-                  <TableCell className="text-center">
+                  <TableCell className="text-center min-w-[200px]">
                     {request.titleBook}
                   </TableCell>
                   {/* @ts-ignore */}
-                  <TableCell className="text-center">
+                  <TableCell className="text-center min-w-[200px]">
                     {request.authorBook}
                   </TableCell>
                   {/* @ts-ignore */}
@@ -135,11 +141,11 @@ const Page: React.FC = () => {
                     <StatusBadge status={request.isApproved} />
                   </TableCell>
                   {/* @ts-ignore */}
-                  <TableCell className="text-center">
+                  <TableCell className="text-center min-w-[200px]">
                     {renderDateRange(request.fromDate, request.toDate)}
                   </TableCell>
                   {/* @ts-ignore */}
-                  <TableCell className="text-center">
+                  <TableCell className="text-center min-w-[200px]">
                     {renderDate(request.createdAt)}
                   </TableCell>
                   {/* @ts-ignore */}
@@ -149,7 +155,10 @@ const Page: React.FC = () => {
                     request.isApproved === STATUS.CANCELLED ? null : (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <button type="button" className="hover:opacity-70 transition-opacity">
+                          <button
+                            type="button"
+                            className="hover:opacity-70 transition-opacity"
+                          >
                             <Ban width={15} />
                           </button>
                         </AlertDialogTrigger>
@@ -159,12 +168,13 @@ const Page: React.FC = () => {
                           <AlertDialogHeader>
                             {/* @ts-ignore */}
                             <AlertDialogTitle>
-                              Are you absolutely sure you want to cancel your request?
+                              Are you absolutely sure you want to cancel your
+                              request?
                             </AlertDialogTitle>
                             {/* @ts-ignore */}
                             <AlertDialogDescription>
-                              This action cannot be undone. This will permanently
-                              cancel your request.
+                              This action cannot be undone. This will
+                              permanently cancel your request.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           {/* @ts-ignore */}

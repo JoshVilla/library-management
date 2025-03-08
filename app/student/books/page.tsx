@@ -73,8 +73,12 @@ const Page = () => {
                   />
                 </div>
               </TableCell>
-              <TableCell className="text-center">{book.title}</TableCell>
-              <TableCell className="text-center">{book.author}</TableCell>
+              <TableCell className="text-center min-w-[200px]">
+                {book.title}
+              </TableCell>
+              <TableCell className="text-center min-w-[200px]">
+                {book.author}
+              </TableCell>
               <TableCell className="text-center">
                 {" "}
                 <Badge variant="outline">{book.category}</Badge>
@@ -107,7 +111,7 @@ const Page = () => {
             pageState={pageState}
             onChangePage={(page) => {
               fetchData({ page });
-              setPageState((prev) => ({ currentPage: page, ...prev }));
+              setPageState((prev) => ({ ...prev, currentPage: page }));
             }}
           />
         </div>
