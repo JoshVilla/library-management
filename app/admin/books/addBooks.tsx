@@ -118,8 +118,11 @@ const AddBooksForm = ({ successfulAdd }) => {
     <div>
       <Dialog open={openDialog} onOpenChange={handleCloseDialog}>
         <DialogTrigger asChild>
-          <Button variant="outline" className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg">
-          <Plus /> Add Books
+          <Button
+            variant="outline"
+            className=" bg-black dark:bg-white text-white dark:text-black text-sm px-4 py-2 rounded-lg"
+          >
+            <Plus /> Add Books
           </Button>
         </DialogTrigger>
         {/*ts-ignore */}
@@ -170,7 +173,7 @@ const AddBooksForm = ({ successfulAdd }) => {
                       key={fieldName.name}
                       control={form.control}
                       name={fieldName.name}
-                      rules={fieldName.rules || null}
+                      rules={fieldName.rules || undefined}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>{fieldName.label}</FormLabel>
@@ -214,7 +217,7 @@ const AddBooksForm = ({ successfulAdd }) => {
                                 <SelectGroup>
                                   {/*ts-ignore */}
                                   <SelectLabel>Categories</SelectLabel>
-                                  {fieldName.categories.map((category) => (
+                                  {fieldName.categories?.map((category) => (
                                     <SelectItem key={category} value={category}>
                                       {category}
                                     </SelectItem>
