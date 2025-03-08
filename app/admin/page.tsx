@@ -4,7 +4,14 @@ import DashCard from "@/components/dashCard/dashCard";
 import TitlePage from "@/components/titlePage/titlePage";
 import { Users, BookOpen } from "lucide-react"; // Import relevant icons
 import { useEffect, useRef, useState } from "react";
-import { dashboard, updateMonthlyBorrowedBooksStats } from "@/app/service/api";
+import {
+  dashboard,
+  updateMonthlyBorrowedBooksStats,
+  getAdminNote,
+  addAdminNote,
+  deleteAdminNote,
+  updateAdminNote,
+} from "@/app/service/api";
 import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
 import CarouselSkeleton from "@/components/skeleton/carousel";
 import RequestTable from "./requestTable";
@@ -23,6 +30,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { IAdmin } from "@/app/service/types";
+import StickyNote from "@/components/stickyNote/stickyNote";
 interface DashboardData {
   name: string;
   value: number;
@@ -92,6 +100,13 @@ export default function Home() {
     }
   };
 
+  const stickyNoteApi = {
+    getNote: getAdminNote,
+    addNote: addAdminNote,
+    deleteNote: deleteAdminNote,
+    updateNote: updateAdminNote,
+  };
+
   useEffect(() => {
     fetchData();
     updateMonthlyBorrowedBooks();
@@ -120,6 +135,9 @@ export default function Home() {
           </div>
         </div>
         <div className="w-full md:w-1/4 flex flex-col gap-4 justify-center items-center">
+          <div className="w-full">
+            <StickyNote userId={state._id} api={stickyNoteApi} />
+          </div>
           <Graphs />
           <div>
             <div className="text-xl font-semibold my-10">Featured Books</div>

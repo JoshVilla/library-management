@@ -199,3 +199,30 @@ export interface IAdminLoginParams {
   username: string;
   password: string;
 }
+
+export interface IAdminNote {
+  _id: string;
+  note: string;
+  color: string;
+  adminId: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isCompleted: boolean;
+}
+
+export interface IAddAdminNoteParams {
+  note: string;
+  color: string;
+  adminId: string;
+}
+
+export interface IDeleteAdminNoteParams {
+  noteId: string;
+}
+
+export interface IUpdateAdminNoteParams {
+  noteId: string;
+  note?: string;
+  color?: string;
+}

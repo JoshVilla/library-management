@@ -21,6 +21,10 @@ import {
   IAddAdminParams,
   IAdmin,
   IAdminLoginParams,
+  IAdminNote,
+  IAddAdminNoteParams,
+  IDeleteAdminNoteParams,
+  IUpdateAdminNoteParams,
 } from "./types";
 import axios from "axios";
 
@@ -283,4 +287,28 @@ export const editAdmin = async (
   hasFormData: boolean = false
 ): Promise<IApiResponse<IAdmin>> => {
   return await post<IAdmin>("/api/admin/editAdmin", params, hasFormData);
+};
+
+export const getAdminNote = async (
+  params: IServiceParams = {}
+): Promise<IApiResponse<IAdminNote[]>> => {
+  return await post<IAdminNote[]>("/api/note/admin", params);
+};
+
+export const addAdminNote = async (
+  params: IAddAdminNoteParams
+): Promise<IApiResponse<IAdminNote>> => {
+  return await post<IAdminNote>("/api/note/admin/addNote", params);
+};
+
+export const deleteAdminNote = async (
+  params: IDeleteAdminNoteParams
+): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/note/admin/deleteNote", params);
+};
+
+export const updateAdminNote = async (
+  params: IUpdateAdminNoteParams
+): Promise<IApiResponse<IAdminNote>> => {
+  return await post<IAdminNote>("/api/note/admin/editNote", params);
 };
