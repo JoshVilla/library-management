@@ -106,7 +106,10 @@ const Request = () => {
     if (!from && !to) return "";
     const newFrom = new Date(from);
     const newTo = new Date(to);
-    return `${format(newFrom, "MMM dd, yyyy")} - ${format(newTo, "MMM dd, yyyy")}`;
+    return `${format(newFrom, "MMM dd, yyyy")} - ${format(
+      newTo,
+      "MMM dd, yyyy"
+    )}`;
   }, []);
 
   const messageOfUpdatingStatus = useCallback((status: number) => {
@@ -119,29 +122,36 @@ const Request = () => {
     return messages[status] || "";
   }, []);
 
-  const handleAddNotification = useCallback(async (data: FormValues) => {
-    try {
-      const { titleBook, authorBook, studentId, toDate, fromDate } = requestDetails;
-      await addNotification({
-        message: messageOfUpdatingStatus(data.isApproved),
-        studentId,
-        titleBook,
-        authorBook,
-        borrowDuration: `${renderDate(fromDate)}-${renderDate(toDate)}`,
-        reason: data.reasonToChangeStatus,
-      });
-    } catch (error) {
-      console.error("Error adding notification:", error);
-      throw error;
-    }
-  }, [requestDetails, messageOfUpdatingStatus, renderDate]);
+  const handleAddNotification = useCallback(
+    async (data: FormValues) => {
+      try {
+        const { titleBook, authorBook, studentId, toDate, fromDate } =
+          requestDetails;
+        await addNotification({
+          message: messageOfUpdatingStatus(data.isApproved),
+          studentId,
+          titleBook,
+          authorBook,
+          borrowDuration: `${renderDate(fromDate)}-${renderDate(toDate)}`,
+          reason: data.reasonToChangeStatus,
+        });
+      } catch (error) {
+        console.error("Error adding notification:", error);
+        throw error;
+      }
+    },
+    [requestDetails, messageOfUpdatingStatus, renderDate]
+  );
 
   const handleUpdate = async (data: FormValues) => {
     try {
       setLoading(true);
-      const res = await updateRequestBook({ id: params.id, ...data });
+      const res = await updateRequestBook({
+        id: params.id as string,
+        ...data,
+      });
       await handleAddNotification(data);
-      
+
       if (res) {
         await fetchData();
         setOpenModal(false);
@@ -165,20 +175,25 @@ const Request = () => {
   const handleUpdateStatus = async (value: number) => {
     try {
       setLoading(true);
-      const res = await updateRequestBook({ id: params.id, isApproved: value });
-      
+      const res = await updateRequestBook({
+        id: params.id as string,
+        isApproved: value,
+      });
+
       if (res) {
         if (value === STATUS.INPROGRESS) {
-          await updateQuantity({ bookCode: requestDetails.bookCode });
+          await updateQuantity({ id: requestDetails.bookId, quantity: 1 });
         }
-        
+
         await fetchData();
         toast({
           title: res.message,
           className: "bg-black text-white",
         });
-        
-        if ([STATUS.CANCELLED, STATUS.FAILED, STATUS.RETURNED].includes(value)) {
+
+        if (
+          [STATUS.CANCELLED, STATUS.FAILED, STATUS.RETURNED].includes(value)
+        ) {
           await handleAddNotification({
             isApproved: value,
             reasonToChangeStatus: messageOfUpdatingStatus(value),
@@ -201,58 +216,63 @@ const Request = () => {
     fetchData();
   }, [fetchData]);
 
-  const statusActions = useMemo(() => ({
-    [STATUS.APPROVED]: (
-      <div className="space-y-1 mt-2">
-        <div className="text-xs text-gray-500">
-          Once the student gets the book, change the status to Borrowing in Progress
+  const statusActions = useMemo(
+    () => ({
+      [STATUS.APPROVED]: (
+        <div className="space-y-1 mt-2">
+          <div className="text-xs text-gray-500">
+            Once the student gets the book, change the status to Borrowing in
+            Progress
+          </div>
+          <div className="space-x-6">
+            <Button
+              variant="link"
+              className="text-xs text-blue-500 p-0 h-auto"
+              onClick={() => handleUpdateStatus(STATUS.INPROGRESS)}
+              disabled={loading}
+            >
+              Change Status
+            </Button>
+            <Button
+              variant="link"
+              className="text-xs text-blue-500 p-0 h-auto"
+              onClick={() => handleUpdateStatus(STATUS.CANCELLED)}
+              disabled={loading}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
-        <div className="space-x-6">
-          <Button
-            variant="link"
-            className="text-xs text-blue-500 p-0 h-auto"
-            onClick={() => handleUpdateStatus(STATUS.INPROGRESS)}
-            disabled={loading}
-          >
-            Change Status
-          </Button>
-          <Button
-            variant="link"
-            className="text-xs text-blue-500 p-0 h-auto"
-            onClick={() => handleUpdateStatus(STATUS.CANCELLED)}
-            disabled={loading}
-          >
-            Cancel
-          </Button>
+      ),
+      [STATUS.INPROGRESS]: (
+        <div className="space-y-1 mt-2">
+          <div className="text-xs text-gray-500">
+            Update the status depending on whether the student successfully
+            returned the book.
+          </div>
+          <div className="space-x-6">
+            <Button
+              variant="link"
+              className="text-xs text-blue-500 p-0 h-auto"
+              onClick={() => handleUpdateStatus(STATUS.RETURNED)}
+              disabled={loading}
+            >
+              Successfully returned the book
+            </Button>
+            <Button
+              variant="link"
+              className="text-xs text-blue-500 p-0 h-auto"
+              onClick={() => handleUpdateStatus(STATUS.FAILED)}
+              disabled={loading}
+            >
+              Failed to return the book
+            </Button>
+          </div>
         </div>
-      </div>
-    ),
-    [STATUS.INPROGRESS]: (
-      <div className="space-y-1 mt-2">
-        <div className="text-xs text-gray-500">
-          Update the status depending on whether the student successfully returned the book.
-        </div>
-        <div className="space-x-6">
-          <Button
-            variant="link"
-            className="text-xs text-blue-500 p-0 h-auto"
-            onClick={() => handleUpdateStatus(STATUS.RETURNED)}
-            disabled={loading}
-          >
-            Successfully returned the book
-          </Button>
-          <Button
-            variant="link"
-            className="text-xs text-blue-500 p-0 h-auto"
-            onClick={() => handleUpdateStatus(STATUS.FAILED)}
-            disabled={loading}
-          >
-            Failed to return the book
-          </Button>
-        </div>
-      </div>
-    ),
-  }), [handleUpdateStatus, loading]);
+      ),
+    }),
+    [handleUpdateStatus, loading]
+  );
 
   return (
     <div>
@@ -271,7 +291,7 @@ const Request = () => {
                     </DialogTrigger>
                     {/*@ts-ignore */}
                     <DialogContent>
-                      {/*@ts-ignore */} 
+                      {/*@ts-ignore */}
                       <DialogHeader>
                         {/*@ts-ignore */}
                         <DialogTitle>Change Status</DialogTitle>
@@ -288,12 +308,12 @@ const Request = () => {
                                     {/*@ts-ignore */}
                                     <RadioGroup
                                       onValueChange={field.onChange}
-                                      defaultValue={requestDetails.isApproved}
+                                      defaultValue={requestDetails.isApproved?.toString()}
                                       className="flex flex-col space-y-1"
                                     >
                                       <FormItem className="flex items-center space-x-3 space-y-0">
                                         <FormControl>
-                                          <RadioGroupItem value={1} />
+                                          <RadioGroupItem value={"1"} />
                                         </FormControl>
                                         <FormLabel className="font-normal">
                                           Approve
@@ -301,7 +321,7 @@ const Request = () => {
                                       </FormItem>
                                       <FormItem className="flex items-center space-x-3 space-y-0">
                                         <FormControl>
-                                          <RadioGroupItem value={0} />
+                                          <RadioGroupItem value={"0"} />
                                         </FormControl>
                                         <FormLabel className="font-normal">
                                           Cancel
@@ -328,7 +348,11 @@ const Request = () => {
                             />
                             {/*@ts-ignore */}
                             <DialogFooter>
-                              <Button type="submit" disabled={loading} className="mt-4">
+                              <Button
+                                type="submit"
+                                disabled={loading}
+                                className="mt-4"
+                              >
                                 {loading ? "Saving..." : "Save changes"}
                               </Button>
                             </DialogFooter>
@@ -339,7 +363,11 @@ const Request = () => {
                   </Dialog>
                 )}
               </div>
-              {statusActions[requestDetails.isApproved]}
+              {
+                statusActions[
+                  requestDetails.isApproved as keyof typeof statusActions
+                ]
+              }
             </div>
             <div className="text-gray-500 text-sm">
               Requested last: {renderDate(requestDetails.createdAt)}

@@ -232,8 +232,6 @@ const Page = () => {
     return filteredProfile;
   };
 
-  console.log(isLoading, "isLoading");
-
   return (
     <div>
       <TitlePage title="Profile" hasBack />
@@ -258,7 +256,7 @@ const Page = () => {
                   {editMode["image"] && (
                     <FormField
                       control={form.control}
-                      name="picture"
+                      name={"picture" as keyof IStudent}
                       render={({ field }) => (
                         <FormItem>
                           <FormControl>

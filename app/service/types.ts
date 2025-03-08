@@ -55,7 +55,9 @@ export interface INotification {
   borrowDuration: string;
   createdAt: string;
   updatedAt: string;
+  authorBook?: string;
   __v: number;
+  id?: string;
 }
 
 export interface IBook {
@@ -103,7 +105,7 @@ export interface IRequestBookParams {
 }
 
 export interface IUpdateRequestParams {
-  id: string;
+  id?: string;
   isApproved: number;
 }
 
@@ -113,12 +115,12 @@ export interface IAnnouncementParams {
 }
 
 export interface INotificationParams {
-  studentId: string;
-  authorBook: string;
-  message: string;
-  reason: string;
-  titleBook: string;
-  borrowDuration: string;
+  studentId?: string;
+  authorBook?: string;
+  message?: string;
+  reason?: string;
+  titleBook?: string;
+  borrowDuration?: string;
 }
 
 export interface IChangePasswordParams {

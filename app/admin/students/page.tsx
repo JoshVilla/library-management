@@ -192,12 +192,12 @@ const Page = () => {
                 )}
                 className="space-y-4"
               >
-                {formFields.map((fieldName) => (
+                {formFields.map((fieldName: any) => (
                   <FormField
                     key={fieldName.name}
                     control={form.control}
                     name={fieldName.name}
-                    rules={fieldName.rules.pattern}
+                    rules={fieldName.rules?.pattern}
                     render={({ field }) => {
                       return (
                         <FormItem>

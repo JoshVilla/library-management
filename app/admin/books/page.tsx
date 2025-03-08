@@ -197,7 +197,7 @@ const Page = () => {
                 ) : (
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="icon">
+                      <Button variant="ghost">
                         <Trash width={15} fill="currentColor" />
                       </Button>
                     </AlertDialogTrigger>
@@ -222,7 +222,7 @@ const Page = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 )}
-                <Button variant="icon">
+                <Button variant="ghost">
                   <Link href={`/admin/books/${book._id}`}>
                     <Eye />
                   </Link>
@@ -235,7 +235,7 @@ const Page = () => {
                   }}
                 >
                   <DialogTrigger asChild>
-                    <Button variant="icon">
+                    <Button variant="ghost">
                       <Settings />
                     </Button>
                   </DialogTrigger>

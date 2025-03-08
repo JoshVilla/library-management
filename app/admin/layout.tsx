@@ -20,16 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   ) as IAdmin;
   const dispatch = useDispatch();
   const router = useRouter();
-  const logout = () => {
-    dispatch(logoutAdmin());
-    persistor.purge();
-    persistor.flush();
-    router.push("/");
-  };
 
-  const goToProfile = () => {
-    router.push("/admin/profile");
-  };
   return (
     <div className="min-h-screen flex">
       <Sidebar

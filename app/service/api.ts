@@ -204,7 +204,7 @@ export const getMonthlyBorrowedBooksStats = async (
 };
 
 export const updateQuantity = async (params: {
-  id: string;
+  id?: string;
   quantity: number;
 }): Promise<IApiResponse<void>> => {
   return await post<void>("/api/book/reduceQuantityBook", params);

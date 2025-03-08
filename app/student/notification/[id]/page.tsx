@@ -6,16 +6,17 @@ import { Separator } from "@/components/ui/separator";
 import { renderDate } from "@/utils/helpers";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { INotification } from "@/app/service/types";
 
 const Page = () => {
   const params = useParams();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<INotification | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const fetchData = async () => {
     try {
-      const res = await notificationItem({ id: params.id });
-      if (res) {
-        setData(res.notification);
+      const res = await notificationItem({ id: params.id as string });
+      if (res.data) {
+        setData(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -28,7 +29,6 @@ const Page = () => {
     fetchData();
   }, [params.id]);
 
-  console.log(data);
   return (
     <div>
       <TitlePage title="Notification Details" hasBack />
