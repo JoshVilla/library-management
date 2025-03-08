@@ -49,7 +49,7 @@ const RequestTable = () => {
   };
 
   return (
-    <div className="w-full mt-10">
+    <div className="mt-10">
       {/*@ts-ignore */}
       <Table>
         {/*@ts-ignore */}

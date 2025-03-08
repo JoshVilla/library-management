@@ -22,7 +22,7 @@ type Report = {
   totalNotReturned: number;
   totalPending: number;
   totalReturned: number;
-}
+};
 const transformDataForChart = (data) => {
   return [
     {

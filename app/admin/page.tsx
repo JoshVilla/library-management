@@ -119,7 +119,7 @@ export default function Home() {
             <RequestTable />
           </div>
         </div>
-        <div className="md:w-1/4 flex flex-col gap-4 justify-center items-center">
+        <div className="w-full md:w-1/4 flex flex-col gap-4 justify-center items-center">
           <Graphs />
           <div>
             <div className="text-xl font-semibold my-10">Featured Books</div>
