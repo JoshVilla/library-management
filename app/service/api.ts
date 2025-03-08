@@ -121,9 +121,9 @@ export const getBorrowedBooks = async (
 };
 
 export const updateRequestBook = async (
-  params: BorrowedBook
-): Promise<IApiResponse<void>> => {
-  return await post<void>("/api/borrowBook/updateStatus", params);
+  params: IUpdateRequestParams
+): Promise<IApiResponse<IBookRequest>> => {
+  return await post<IBookRequest>("/api/borrowBook/updateStatus", params);
 };
 
 export const deleteRequest = async (params: {
