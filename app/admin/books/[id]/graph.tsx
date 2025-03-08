@@ -3,7 +3,6 @@ import { DatePickerWithRange } from "@/components/dateRangePicker/dateRangePicke
 import { useParams } from "next/navigation";
 
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -16,9 +15,12 @@ import { Button } from "@/components/ui/button";
 const Graph = () => {
   const params = useParams();
   const [dataChart, setDataChart] = useState([]);
-  const [date, setDate] = useState({ to: "", from: "" });
+  const [date, setDate] = useState<{ to: string; from: string }>({
+    to: "",
+    from: "",
+  });
 
-  const chartConfig = {
+  const chartConfigs = {
     returned: {
       label: "Returned",
       color: "#000000",
@@ -36,7 +38,7 @@ const Graph = () => {
   const fetchData = async () => {
     try {
       const res = await weeklyBookStats({ bookId: params.id, ...date });
-      const formattedData = res.map((item) => {
+      const formattedData = res.data.map((item) => {
         return {
           week: `${item.day} ${item.week}`,
           returned: item.returned,
@@ -60,14 +62,17 @@ const Graph = () => {
       <div>
         <div className="flex gap-3 items-center">
           <DatePickerWithRange
-            onDateChange={(date) => setDate({ to: date.to, from: date.from })}
+            onDateChange={(date) =>
+              setDate({ to: date.to || "", from: date.from || "" })
+            }
           />
           <Button size="sm" onClick={fetchData}>
             Search
           </Button>
         </div>
         <div className="mt-4">
-          <ChartContainer config={chartConfig} className="h-80">
+          {/*@ts-ignore */}
+          <ChartContainer config={chartConfigs} className="h-80">
             <LineChart
               accessibilityLayer
               data={dataChart}

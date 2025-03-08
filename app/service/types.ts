@@ -139,6 +139,7 @@ export interface IApiResponse<T> {
   isSuccess?: boolean;
   user?: IStudent[] | any;
   notifications?: INotification[] | any;
+  status?: number;
 }
 
 export interface IServiceParams {
@@ -222,6 +223,33 @@ export interface IDeleteAdminNoteParams {
 }
 
 export interface IUpdateAdminNoteParams {
+  noteId: string;
+  note?: string;
+  color?: string;
+}
+
+export interface IStudentNote {
+  _id: string;
+  note: string;
+  color: string;
+  adminId: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  isCompleted: boolean;
+}
+
+export interface IAddStudentNoteParams {
+  note: string;
+  color: string;
+  userId: string;
+}
+
+export interface IDeleteStudentNoteParams {
+  noteId: string;
+}
+
+export interface IUpdateStudentNoteParams {
   noteId: string;
   note?: string;
   color?: string;

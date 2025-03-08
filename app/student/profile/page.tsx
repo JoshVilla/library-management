@@ -183,7 +183,9 @@ const Page = () => {
           description: res.message,
           className: "bg-green-500 text-white",
         });
-        dispatch(setUserInfo(res.data));
+        if (res.data) {
+          dispatch(setUserInfo(res.data));
+        }
         passworForm.reset();
         setPasswordValue({
           new: "",
@@ -305,6 +307,7 @@ const Page = () => {
                             <FormItem>
                               <FormLabel>{label}</FormLabel>
                               <FormControl>
+                                {/* @ts-ignore */}
                                 <Input {...field} className="h-8 w-64" />
                               </FormControl>
                             </FormItem>
