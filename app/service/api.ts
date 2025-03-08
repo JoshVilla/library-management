@@ -25,6 +25,10 @@ import {
   IAddAdminNoteParams,
   IDeleteAdminNoteParams,
   IUpdateAdminNoteParams,
+  IAddStudentNoteParams,
+  IStudentNote,
+  IDeleteStudentNoteParams,
+  IUpdateStudentNoteParams,
 } from "./types";
 import axios from "axios";
 
@@ -311,4 +315,28 @@ export const updateAdminNote = async (
   params: IUpdateAdminNoteParams
 ): Promise<IApiResponse<IAdminNote>> => {
   return await post<IAdminNote>("/api/note/admin/editNote", params);
+};
+
+export const getStudentNote = async (
+  params: IServiceParams = {}
+): Promise<IApiResponse<IStudentNote[]>> => {
+  return await post<IStudentNote[]>("/api/note/student", params);
+};
+
+export const addStudentNote = async (
+  params: IAddStudentNoteParams
+): Promise<IApiResponse<IStudentNote>> => {
+  return await post<IStudentNote>("/api/note/student/addNote", params);
+};
+
+export const deleteStudentNote = async (
+  params: IDeleteStudentNoteParams
+): Promise<IApiResponse<void>> => {
+  return await post<void>("/api/note/student/deleteNote", params);
+};
+
+export const updateStudentNote = async (
+  params: IUpdateStudentNoteParams
+): Promise<IApiResponse<IStudentNote>> => {
+  return await post<IStudentNote>("/api/note/student/editNote", params);
 };

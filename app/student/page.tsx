@@ -1,7 +1,15 @@
 "use client";
 import TitlePage from "@/components/titlePage/titlePage";
 import React, { useEffect, useState, useRef } from "react";
-import { getAnnouncement, studentDashboard, getBooks } from "../service/api";
+import {
+  getAnnouncement,
+  studentDashboard,
+  getBooks,
+  getStudentNote,
+  addStudentNote,
+  deleteStudentNote,
+  updateStudentNote,
+} from "../service/api";
 import { format } from "date-fns";
 import {
   IAnnouncement,
@@ -24,6 +32,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { useRouter } from "next/navigation";
 import DashCardSkeleton from "@/components/skeleton/dashCardSkeleton";
 import CarouselSkeleton from "@/components/skeleton/carousel";
+import StickyNote from "@/components/stickyNote/stickyNote";
 const Page = () => {
   const router = useRouter();
   const state = useSelector(
@@ -38,6 +47,14 @@ const Page = () => {
     new Array(6).fill("card")
   );
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+
+  const apiStickyNote = {
+    getNote: getStudentNote,
+    addNote: addStudentNote,
+    deleteNote: deleteStudentNote,
+    updateNote: updateStudentNote,
+  };
+
   const fetchAnnouncement = async () => {
     try {
       const response = await getAnnouncement({ isPinned: true });
@@ -109,6 +126,7 @@ const Page = () => {
           )}
         </div>
         <div className="md:w-1/2 p-4">
+          <StickyNote userId={state._id} api={apiStickyNote} />
           <div className="text-xl font-semibold">Featured Books</div>
           <div>
             {isLoading ? (
