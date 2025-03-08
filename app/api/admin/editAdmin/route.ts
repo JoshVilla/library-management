@@ -24,31 +24,30 @@ export async function POST(request: NextRequest) {
 
     if (picture) {
       try {
-        {
-          /* @ts-ignore */
+        if (picture instanceof File) {
+          const buffer = Buffer.from(await picture.arrayBuffer()); // Ensure correct buffer conversion
+          const imageUrl = await new Promise((resolve, reject) => {
+            cloudinary.v2.uploader
+              .upload_stream({ folder: "admin_pictures" }, (error, result) => {
+                if (error) {
+                  console.error("Cloudinary upload failed:", error);
+                  reject(new Error("Failed to upload image"));
+                } else {
+                  console.log(
+                    "Cloudinary upload successful:",
+                    result?.secure_url
+                  );
+                  resolve(result?.secure_url);
+                }
+              })
+              .end(buffer);
+          });
+          await replaceNewImagefromCurrentImage(Admin, id);
+          params.pictureUrl = imageUrl;
         }
-        const buffer = Buffer.from(await picture.arrayBuffer()); // Ensure correct buffer conversion
-        const imageUrl = await new Promise((resolve, reject) => {
-          cloudinary.v2.uploader
-            .upload_stream({ folder: "admin_pictures" }, (error, result) => {
-              if (error) {
-                console.error("Cloudinary upload failed:", error);
-                reject(new Error("Failed to upload image"));
-              } else {
-                console.log(
-                  "Cloudinary upload successful:",
-                  result?.secure_url
-                );
-                resolve(result?.secure_url);
-              }
-            })
-            .end(buffer);
-        });
-        await replaceNewImagefromCurrentImage(Admin, id);
-        params.pictureUrl = imageUrl;
       } catch (error: any) {
         console.error("Error uploading to Cloudinary:", error);
-        return new Response(
+        return NextResponse.json(
           { error: "Failed to upload image" },
           { status: 500 }
         );
