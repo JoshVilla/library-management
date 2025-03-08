@@ -105,7 +105,11 @@ const AddAdmin = ({ refresh }: { refresh: () => void }) => {
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Enter Username" />
+                        <Input
+                          {...field}
+                          placeholder="Enter Username"
+                          autoComplete="off"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

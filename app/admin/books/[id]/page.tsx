@@ -37,7 +37,7 @@ const Page = () => {
   const params = useParams();
   const { toast } = useToast();
   const form = useForm();
-  const [bookData, setBookData] = useState(null);
+  const [bookData, setBookData] = useState<IBook | null>(null);
   const [isModify, setIsModify] = useState(false);
   const [loading, setLoading] = useState(false);
   const [infoState, setInfoState] = useState({});
@@ -411,9 +411,9 @@ const Page = () => {
           </div>
         </div>
       )}
-      <div>
+      {/* <div>
         <Graph />
-      </div>
+      </div> */}
     </div>
   );
 };

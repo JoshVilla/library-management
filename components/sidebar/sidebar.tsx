@@ -84,7 +84,7 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
       <div
         className={`hidden md:flex md:w-1/6 min-h-screen border-r ${textColor} flex-col`}
       >
-        <div className="p-4">
+        <div className="p-4 lg:block hidden">
           <div className="text-2xl font-semibold py-6">{title}</div>
         </div>
 
@@ -94,10 +94,12 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
               <Link
                 key={menu.path}
                 href={menu.path}
-                className={`${hoverColor} p-3 rounded-lg cursor-pointer flex items-center gap-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap overflow-hidden`}
+                className={`${hoverColor} p-3 rounded-lg cursor-pointer flex justify-center lg:justify-start items-center gap-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 whitespace-nowrap overflow-hidden`}
               >
                 <div className="w-5 h-5">{menu.icon}</div>
-                <span className="font-medium truncate">{menu.label}</span>
+                <span className="font-medium truncate lg:block hidden">
+                  {menu.label}
+                </span>
               </Link>
             ))}
           </ul>

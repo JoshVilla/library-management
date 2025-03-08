@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { IAdminNote } from "@/app/service/types";
+import { IAdminNote, IStudentNote } from "@/app/service/types";
 import { Badge } from "../ui/badge";
 
 type StickyNoteProps = {
@@ -44,7 +44,7 @@ const StickyNote = ({ userId, api }: StickyNoteProps) => {
   const [choosenColor, setChoosenColor] = useState("13203e");
   const [note, setNote] = useState("");
   const [id, setId] = useState("");
-  const [data, setData] = useState<IAdminNote[]>([]);
+  const [data, setData] = useState<IAdminNote[] | IStudentNote[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const colors = [
@@ -363,7 +363,11 @@ const StickyNote = ({ userId, api }: StickyNoteProps) => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOpenDeleteDialog(false)}
+            >
               Cancel
             </Button>
             <Button
