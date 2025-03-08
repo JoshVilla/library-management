@@ -40,7 +40,7 @@ const Page = () => {
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
-    }
+    },
   });
   const [isLoading, setIsLoading] = useState({
     edit: false,
@@ -235,13 +235,13 @@ const Page = () => {
   return (
     <div>
       <TitlePage title="Profile" hasBack />
-      <div className="mt-10 flex">
+      <div className="mt-10 flex flex-col md:flex-row">
         <div className="flex-1">
           <div>
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(handleSave)}
-                className="flex gap-10"
+                className="flex gap-10 flex-col md:flex-row justify-center md:justify-start"
               >
                 {/* Profile Image */}
                 <div className="text-center">
@@ -250,7 +250,7 @@ const Page = () => {
                     width={300}
                     height={300}
                     alt="profile"
-                    className="w-64 h-64 rounded-full object-cover"
+                    className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover mx-auto md:mx-0"
                     priority
                   />
                   {editMode["image"] && (
@@ -312,7 +312,9 @@ const Page = () => {
                         />
                       ) : (
                         <div>
-                          <div className="text-gray-500 text-sm">{label}</div>
+                          <div className="text-gray-500 text-sm min-w-[200px]">
+                            {label}
+                          </div>
                           <div>{state[name]}</div>
                         </div>
                       )}
@@ -334,7 +336,7 @@ const Page = () => {
             </Form>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 mt-10 md:mt-0">
           <div>
             <div className="text-lg font-semibold">Other Information</div>
             <Separator />
@@ -388,7 +390,11 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.current ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {showPassword.current ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
                           </button>
                         </div>
                       </FormControl>
@@ -426,7 +432,11 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.new ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {showPassword.new ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
                           </button>
                         </div>
                       </FormControl>
@@ -468,7 +478,11 @@ const Page = () => {
                               }))
                             }
                           >
-                            {showPassword.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                            {showPassword.confirm ? (
+                              <EyeOff size={20} />
+                            ) : (
+                              <Eye size={20} />
+                            )}
                           </button>
                         </div>
                       </FormControl>
