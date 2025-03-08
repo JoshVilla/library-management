@@ -64,7 +64,7 @@ const Page = () => {
         description: res.message,
         variant: "destructive", // Use "destructive" for errors
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast({
         title: "Error",
