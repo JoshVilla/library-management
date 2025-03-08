@@ -32,6 +32,7 @@ import { useForm } from "react-hook-form";
 import { bookCategories } from "@/utils/constant";
 import Captcha from "@/components/captcha/captcha";
 import Graph from "./graph";
+import { IBook } from "@/app/service/types";
 
 const Page = () => {
   const params = useParams();
@@ -40,7 +41,7 @@ const Page = () => {
   const [bookData, setBookData] = useState<IBook | null>(null);
   const [isModify, setIsModify] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [infoState, setInfoState] = useState({});
+  const [infoState, setInfoState] = useState<any>({});
   const [openCaptcha, setOpenCaptcha] = useState(false);
 
   const validateImageFile = (file) => {
@@ -86,12 +87,12 @@ const Page = () => {
   const handleModify = async () => {
     try {
       setLoading(true);
-      const cleanedData = Object.fromEntries(
+      const cleanedData: any = Object.fromEntries(
         Object.entries({ ...form.getValues(), id: params.id }).filter(
           ([_, value]) => value !== undefined
         )
       );
-      console.log(cleanedData, "cleanedData");
+
       const formData = new FormData();
 
       if (cleanedData.picture) {
