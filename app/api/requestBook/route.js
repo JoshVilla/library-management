@@ -30,6 +30,12 @@ export async function POST(req) {
       bookCode,
     });
 
+    if (!reason) {
+      return new Response(JSON.stringify({ error: "Reason is required" }), {
+        status: 400,
+      });
+    }
+
     await newBorrow.save();
     return new Response(JSON.stringify({ message: "Request successfully" }), {
       status: 201,

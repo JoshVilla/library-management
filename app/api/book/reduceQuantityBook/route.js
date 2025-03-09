@@ -5,9 +5,9 @@ export async function POST(req) {
   try {
     await connectToDatabase(); // Ensure DB connection
 
-    const { bookCode, quantityToReduce = 1 } = await req.json(); // Get bookCode & quantity to reduce from request body
+    const { bookCode, quantity = 1, action = "reduce" } = await req.json(); // Get bookCode & quantity to reduce from request body
 
-    if (!bookCode || quantityToReduce <= 0) {
+    if (!bookCode || quantity <= 0) {
       return new Response(JSON.stringify({ error: "Invalid request data" }), {
         status: 400,
       });
@@ -22,14 +22,18 @@ export async function POST(req) {
       });
     }
 
-    if (book.available < quantityToReduce) {
+    if (action === "reduce" && book.available < quantity) {
       return new Response(JSON.stringify({ error: "Not enough stock" }), {
         status: 400,
       });
     }
 
     // Reduce the quantity
-    book.available -= quantityToReduce;
+    if (action === "reduce") {
+      book.available -= quantity;
+    } else if (action === "add") {
+      book.available += quantity;
+    }
     await book.save();
 
     return new Response(

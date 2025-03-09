@@ -102,11 +102,12 @@ export interface IRequestBookParams {
   titleBook: string;
   authorBook: string;
   bookCode: number;
+  reason: string;
 }
 
 export interface IUpdateRequestParams {
   id?: string;
-  isApproved: number;
+  isApproved: number | string;
 }
 
 export interface IAnnouncementParams {

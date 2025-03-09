@@ -72,7 +72,7 @@ const Captcha = ({
         </DialogHeader>
 
         {/* Captcha Display */}
-        <div className="flex justify-center items-center bg-gray-200 p-3 rounded-md text-2xl font-bold tracking-widest">
+        <div className="dark:bg-gray-800 flex justify-center items-center bg-gray-200 p-3 rounded-md text-2xl font-bold tracking-widest">
           {captcha}
         </div>
 

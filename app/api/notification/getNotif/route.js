@@ -9,7 +9,7 @@ export async function POST(req) {
 
     const res = await Notification.findById(id);
 
-    return new Response(JSON.stringify({ notification: res }), {
+    return new Response(JSON.stringify({ data: res }), {
       status: 200,
     });
   } catch (error) {

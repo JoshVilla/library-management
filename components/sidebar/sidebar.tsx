@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "@/app/redux/slices/studentInfoSlice";
 import { persistor } from "@/app/redux/store";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 export interface IMenuSideBar {
   icon: React.ReactElement;
   path: string;
@@ -70,6 +70,12 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
     router.push(user === "student" ? "/student/profile" : "/admin/profile");
   };
 
+  const renderImage = () => {
+    return user === "student"
+      ? (state as IStudent)?.pictureUrl ?? "/assets/defaultProfile.jpg"
+      : (state as IAdmin)?.pictureUrl ?? "/assets/admin-profile-default.png";
+  };
+
   return (
     <>
       {/* Mobile Menu Button */}
@@ -105,8 +111,14 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
           </ul>
 
           <div className="pt-4 border-t flex items-center justify-between">
-            <div className="text-sm">
-              <span className="font-semibold">Hello! </span>
+            <div className="text-sm flex items-center gap-2 ">
+              <Image
+                src={renderImage()}
+                alt="profile"
+                width={22}
+                height={22}
+                className="rounded-full"
+              />
               <span
                 className="hover:underline cursor-pointer"
                 onClick={goToProfile}
@@ -154,8 +166,14 @@ const Sidebar = ({ menuProp, title, state, user }: Props) => {
         </ul>
 
         <div className="pt-4 border-t flex items-center justify-between">
-          <div className="text-sm">
-            <span className="font-semibold">Hello! </span>
+          <div className="text-sm flex items-center gap-2">
+            <Image
+              src={renderImage()}
+              alt="profile"
+              width={22}
+              height={22}
+              className="rounded-full"
+            />
             <span
               className="hover:underline cursor-pointer"
               onClick={goToProfile}

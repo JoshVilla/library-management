@@ -40,6 +40,7 @@ import {
   IBookRequest,
   IUpdateRequestParams,
 } from "@/app/service/types";
+import PaginationComponent from "@/components/pagination/Pagination";
 
 const Page: React.FC = () => {
   const { toast } = useToast();
@@ -47,10 +48,11 @@ const Page: React.FC = () => {
     (state: RootState) => state.user.userInfo
   ) as IStudent;
 
-  const { data, loading, fetchData, setData } = useFetchDataTable({
-    apiFunction: getBorrowedBooks,
-    params: { studentId: state._id },
-  });
+  const { data, loading, fetchData, setData, pageState, setPageState } =
+    useFetchDataTable({
+      apiFunction: getBorrowedBooks,
+      params: { studentId: state._id },
+    });
 
   const renderDateRange = (from: string, to: string): JSX.Element => {
     const newFrom = new Date(from);
@@ -72,13 +74,18 @@ const Page: React.FC = () => {
     try {
       const params: IUpdateRequestParams = { id, isApproved: 0 };
       const res = await updateRequestBook(params);
-      if (res.success) {
+      if (res.message) {
         await fetchData();
         toast({
-          title: "Request Cancelled Successfully",
+          title: res.message,
+          description: "Request cancelled successfully",
         });
       } else {
-        throw new Error("Failed to cancel request");
+        toast({
+          title: res.error,
+          description: "Failed to cancel request",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Error cancelling request:", error);
@@ -103,12 +110,9 @@ const Page: React.FC = () => {
           api={fetchData}
           result={setData}
         />
-        <div className="mt-6 rounded-md border">
-          {/* @ts-ignore */}
+        <div className="mt-6 ">
           <Table>
-            {/* @ts-ignore */}
             <TableHeader>
-              {/* @ts-ignore */}
               <TableRow>
                 {[
                   "Title",
@@ -152,6 +156,9 @@ const Page: React.FC = () => {
                   <TableCell className="flex justify-center gap-6 items-center">
                     {isExpired(request.fromDate) ||
                     request.isApproved === STATUS.APPROVED ||
+                    request.isApproved === STATUS.INPROGRESS ||
+                    request.isApproved === STATUS.RETURNED ||
+                    request.isApproved === STATUS.REJECTED ||
                     request.isApproved === STATUS.CANCELLED ? null : (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -200,6 +207,16 @@ const Page: React.FC = () => {
           </Table>
           {data.length === 0 && !loading && <EmptyData />}
           {loading && <LoadingComp />}
+          <div className="mt-10">
+            <PaginationComponent
+              pageState={pageState}
+              onChangePage={(page) => {
+                setData([]);
+                fetchData({ page });
+                setPageState((prev) => ({ ...prev, currentPage: page }));
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

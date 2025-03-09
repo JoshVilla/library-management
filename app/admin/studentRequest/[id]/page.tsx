@@ -59,7 +59,7 @@ interface RequestDetails {
 
 // Form schema
 const formSchema = z.object({
-  isApproved: z.number(),
+  isApproved: z.string(),
   reasonToChangeStatus: z.string(),
 });
 
@@ -75,7 +75,7 @@ const Request = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      isApproved: requestDetails.isApproved || 0,
+      isApproved: requestDetails.isApproved?.toString() || "0",
       reasonToChangeStatus: "",
     },
   });
@@ -112,7 +112,7 @@ const Request = () => {
     )}`;
   }, []);
 
-  const messageOfUpdatingStatus = useCallback((status: number) => {
+  const messageOfUpdatingStatus = useCallback((status: number | string) => {
     const messages = {
       [STATUS.APPROVED]: "The Librarian approved your request.",
       [STATUS.CANCELLED]: "The Librarian cancelled your request.",
@@ -182,7 +182,18 @@ const Request = () => {
 
       if (res) {
         if (value === STATUS.INPROGRESS) {
-          await updateQuantity({ id: requestDetails.bookId, quantity: 1 });
+          await updateQuantity({
+            bookCode: requestDetails.bookCode as string,
+            quantity: 1,
+            action: "reduce",
+          });
+        }
+        if (value === STATUS.RETURNED) {
+          await updateQuantity({
+            bookCode: requestDetails.bookCode as string,
+            quantity: 1,
+            action: "add",
+          });
         }
 
         await fetchData();
@@ -195,7 +206,7 @@ const Request = () => {
           [STATUS.CANCELLED, STATUS.FAILED, STATUS.RETURNED].includes(value)
         ) {
           await handleAddNotification({
-            isApproved: value,
+            isApproved: value.toString(),
             reasonToChangeStatus: messageOfUpdatingStatus(value),
           });
         }

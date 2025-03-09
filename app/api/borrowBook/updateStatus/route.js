@@ -7,7 +7,7 @@ export async function POST(req) {
 
     if (!req.body) {
       return new Response(
-        JSON.stringify({ message: "Invalid request body", status: 400 }),
+        JSON.stringify({ error: "Invalid request body", status: 400 }),
         { status: 400 }
       );
     }
@@ -16,13 +16,13 @@ export async function POST(req) {
 
     if (!id) {
       return new Response(
-        JSON.stringify({ message: "Missing request ID", status: 400 }),
+        JSON.stringify({ error: "Missing request ID", status: 400 }),
         { status: 400 }
       );
     }
 
     const params = {};
-    if (isApproved !== undefined) params.isApproved = isApproved; // Allow `0`
+    if (isApproved !== undefined) params.isApproved = Number(isApproved); // Allow `0`
     if (reasonToChangeStatus)
       params.reasonToChangeStatus = reasonToChangeStatus;
 
@@ -34,7 +34,7 @@ export async function POST(req) {
 
     if (!updatedRequest) {
       return new Response(
-        JSON.stringify({ message: "Request not found", status: 404 }),
+        JSON.stringify({ error: "Request not found", status: 404 }),
         { status: 404 }
       );
     }

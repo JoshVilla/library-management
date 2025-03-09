@@ -170,10 +170,16 @@ const Page = () => {
         bookCode: bookInfo.bookCode,
         fromDate: data.fromDate.toISOString(),
         toDate: data.toDate.toISOString(),
+        reason: data.reason,
       };
 
       const res = await requestBook(borrowParams);
-
+      if (res.error) {
+        toast({
+          title: res.error,
+          className: "bg-black text-white",
+        });
+      }
       if (res) {
         toast({
           title: res.message,
@@ -181,8 +187,12 @@ const Page = () => {
         });
         form.reset();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast({
+        title: error.message,
+        className: "bg-black text-white",
+      });
     } finally {
       setLoadingState((prev) => ({ ...prev, borrowing: false }));
     }

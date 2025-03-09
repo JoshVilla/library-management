@@ -103,22 +103,6 @@ const Layout = ({ children }: Props) => {
           />
           <div className="w-full">
             <div className="p-4 bg-[#f9f9f9] dark:bg-[#1a1a1a]  flex justify-end items-center">
-              {/* <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold">Hello! </span>
-                <Image
-                  src={userInfo.pictureUrl ?? "/assets/defaultProfile.jpg"}
-                  width={20}
-                  height={20}
-                  alt="pic"
-                  className="rounded-full"
-                />
-                <span
-                  className="cursor-pointer hover:underline"
-                  onClick={() => router.push("/student/profile")}
-                >
-                  {userInfo.firstname ? userInfo.firstname : "Guest"}
-                </span>
-              </div> */}
               <div className="flex items-center gap-10 relative">
                 {/* Notification Bell with Badge */}
                 <Popover open={openNotif} onOpenChange={setOpenNotif}>
